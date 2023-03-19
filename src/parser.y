@@ -22,6 +22,8 @@
     int paramNo = 0;
     int fpParamNo = 0;
     int notZeroNum = 0;
+    extern int yylineno;
+    extern char* yytext;
     #include <iostream>
 }
 
@@ -238,6 +240,10 @@ UnaryExp
         se = identifiers->lookup($1);
         if(se == nullptr)
             fprintf(stderr, "function \"%s\" is undefined\n", (char*)$1);
+            if (strcmp($1, "_sysy_starttime") == 0 || strcmp($1, "_sysy_stoptime") == 0) {
+            ExprNode* param = new Constant(new ConstantSymbolEntry(TypeSystem::intType, yylineno));
+            $$ = new CallExpr(se, param);
+        } else
         $$ = new CallExpr(se);
     }
     | ADD UnaryExp {$$ = $2;}
@@ -254,6 +260,21 @@ UnaryExp
     | NOT UnaryExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
         $$ = new UnaryExpr(se, UnaryExpr::NOT, $2);
+        ExprNode* tmpExpr;
+        if ($2->getType()->isFloat()) {
+
+            SymbolEntry* zero =
+                new ConstantSymbolEntry(TypeSystem::constFloatType, 0);
+            SymbolEntry* temp = new TemporarySymbolEntry(
+                TypeSystem::boolType, SymbolTable::getLabel());
+            BinaryExpr* cmpZero = new BinaryExpr(temp, BinaryExpr::NOTEQUAL,
+                                                    $2, new Constant(zero));
+
+            $$ = new UnaryExpr(se, UnaryExpr::NOT, cmpZero);
+        } else {
+            tmpExpr = new UnaryExpr(se, UnaryExpr::NOT, $2);
+            $$ = tmpExpr->const_fold();
+        }
     }
     ;
 MulExp
@@ -370,6 +391,7 @@ FuncRParams
 Type
     : INT {
         $$ = TypeSystem::intType;
+        declType = TypeSystem::intType;
     }
     | VOID {
         $$ = TypeSystem::voidType;
@@ -409,7 +431,7 @@ ConstDefList
 VarDef
     : ID {
         SymbolEntry* se;
-        se = new IdentifierSymbolEntry(TypeSystem::intType, $1, identifiers->getLevel());
+        se = new IdentifierSymbolEntry(declType, $1, identifiers->getLevel());
         if(!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         $$ = new DeclStmt(new Id(se));
@@ -423,7 +445,7 @@ VarDef
             vec.push_back(temp->getValue());
             temp = (ExprNode*)(temp->getNext());
         }
-        Type *type = TypeSystem::intType;
+        Type *type = declType;
         Type* temp1;
         while(!vec.empty()){
             temp1 = new ArrayType(type, vec.back());
@@ -435,8 +457,8 @@ VarDef
         arrayType = (ArrayType*)type;
         se = new IdentifierSymbolEntry(type, $1, identifiers->getLevel());
         ((IdentifierSymbolEntry*)se)->setAllZero();
-        double *p = new double[type->getSize()];
-        ((IdentifierSymbolEntry*)se)->setArrayValue(p);
+        // double *p = new double[type->getSize()];
+        // ((IdentifierSymbolEntry*)se)->setArrayValue(p);
         if(!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         $$ = new DeclStmt(new Id(se));
@@ -444,11 +466,17 @@ VarDef
     }
     | ID ASSIGN InitVal {
         SymbolEntry* se;
-        se = new IdentifierSymbolEntry(TypeSystem::intType, $1, identifiers->getLevel());
+        se = new IdentifierSymbolEntry(declType, $1, identifiers->getLevel());
         if(!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         // 这里要不要存值不确定
-        ((IdentifierSymbolEntry*)se)->setValue($3->getValue());
+        double val = $3->getValue();
+        if (declType->isInt() && $3->getType()->isFloat()) {
+            float temp = (float)val;
+            int temp1 = (int)temp;
+            val = (double)temp1;
+        }
+        ((IdentifierSymbolEntry*)se)->setValue(val);
         $$ = new DeclStmt(new Id(se), $3);
         delete []$1;
     }
@@ -460,7 +488,7 @@ VarDef
             vec.push_back(temp->getValue());
             temp = (ExprNode*)(temp->getNext());
         }
-        Type* type = TypeSystem::intType;
+        Type* type = declType;
         Type* temp1;
         for(auto it = vec.rbegin(); it != vec.rend(); it++) {
             temp1 = new ArrayType(type, *it);
@@ -474,12 +502,16 @@ VarDef
         se = new IdentifierSymbolEntry(type, $1, identifiers->getLevel());
         $<se>$ = se;
         arrayValue = new double[arrayType->getSize()];
+        notZeroNum = 0;
     }
       InitVal {
         ((IdentifierSymbolEntry*)$<se>4)->setArrayValue(arrayValue);
-        if(((InitValueListExpr*)$5)->isEmpty())
+        ((IdentifierSymbolEntry*)$<se>4)->setNotZeroNum(notZeroNum);
+        if ((notZeroNum == 0) || ((InitValueListExpr*)$5)->isEmpty()){
             ((IdentifierSymbolEntry*)$<se>4)->setAllZero();
-        if(!identifiers->install($1, $<se>4))
+            ((InitValueListExpr*)$5)->setAllZero();
+        }
+        if (!identifiers->install($1, $<se>4))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         $$ = new DeclStmt(new Id($<se>4), $5);
         delete []$1;
@@ -487,17 +519,37 @@ VarDef
     ;
 ConstDef
     : ID ASSIGN ConstInitVal {
+        if (declType->isFloat()) {
+            declType = TypeSystem::constFloatType;
+        } else if (declType->isInt()) {
+            declType = TypeSystem::constIntType;
+        } else {
+            // error
+        }
         SymbolEntry* se;
-        se = new IdentifierSymbolEntry(TypeSystem::constIntType, $1, identifiers->getLevel());
+        se = new IdentifierSymbolEntry(declType, $1, identifiers->getLevel());
         ((IdentifierSymbolEntry*)se)->setConst();
         if(!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         identifiers->install($1, se);
-        ((IdentifierSymbolEntry*)se)->setValue($3->getValue());
+        double val = $3->getValue();
+        if (declType->isInt() && $3->getType()->isFloat()) {
+            float temp = (float)val;
+            int temp1 = (int)temp;
+            val = (double)temp1;
+        }
+        ((IdentifierSymbolEntry*)se)->setValue(val);
         $$ = new DeclStmt(new Id(se), $3);
         delete []$1;
     }
     | ID ArrayIndices ASSIGN  {
+        if (declType->isFloat()) {
+            declType = TypeSystem::constFloatType;
+        } else if (declType->isInt()) {
+            declType = TypeSystem::constIntType;
+        } else {
+            // error
+        }
         SymbolEntry* se;
         std::vector<int> vec;
         ExprNode* temp = $2;
@@ -505,7 +557,7 @@ ConstDef
             vec.push_back(temp->getValue());
             temp = (ExprNode*)(temp->getNext());
         }
-        Type* type = TypeSystem::constIntType;
+        Type* type = declType;
         Type* temp1;
         for(auto it = vec.rbegin(); it != vec.rend(); it++) {
             temp1 = new ArrayType(type, *it, true);
@@ -520,10 +572,16 @@ ConstDef
         ((IdentifierSymbolEntry*)se)->setConst();
         $<se>$ = se;
         arrayValue = new double[arrayType->getSize()];
+        notZeroNum = 0;
     }
       ConstInitVal {
         ((IdentifierSymbolEntry*)$<se>4)->setArrayValue(arrayValue);
-        if(!identifiers->install($1, $<se>4))
+        ((IdentifierSymbolEntry*)$<se>4)->setNotZeroNum(notZeroNum);
+        if ((notZeroNum == 0) || ((InitValueListExpr*)$5)->isEmpty()){
+            ((IdentifierSymbolEntry*)$<se>4)->setAllZero();
+            ((InitValueListExpr*)$5)->setAllZero();
+        }
+        if (!identifiers->install($1, $<se>4))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         identifiers->install($1, $<se>4);
         $$ = new DeclStmt(new Id($<se>4), $5);
@@ -603,14 +661,14 @@ InitVal
             // 如果只用一个{}初始化数组，那么栈一定为空
             // 此时也没必要再加入栈了
             memset(arrayValue, 0, arrayType->getSize());
-            idx += arrayType->getSize() / TypeSystem::intType->getSize();
+            idx += arrayType->getSize() / declType->getSize();
             se = new ConstantSymbolEntry(arrayType);
             list = new InitValueListExpr(se);
         }else{
             // 栈不空说明肯定不是只有{}
             // 此时需要确定{}到底占了几个元素
             Type* type = ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType();
-            int len = type->getSize() / TypeSystem::intType->getSize();
+            int len = type->getSize() / declType->getSize();
             memset(arrayValue + idx, 0, type->getSize());
             idx += len;
             se = new ConstantSymbolEntry(type);
@@ -649,7 +707,7 @@ InitVal
             while(stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt){
                 stk.pop();
             }
-        int size = ((ArrayType*)($$->getSymbolEntry()->getType()))->getSize()/ TypeSystem::intType->getSize();
+        int size = ((ArrayType*)($$->getSymbolEntry()->getType()))->getSize()/ declType->getSize();
         while(idx % size != 0)
             arrayValue[idx++] = 0;
         if(!stk.empty())
@@ -723,14 +781,14 @@ ConstInitVal
             // 如果只用一个{}初始化数组，那么栈一定为空
             // 此时也没必要再加入栈了
             memset(arrayValue, 0, arrayType->getSize());
-            idx += arrayType->getSize() / TypeSystem::constIntType->getSize();
+            idx += arrayType->getSize() / declType->getSize();
             se = new ConstantSymbolEntry(arrayType);
             list = new InitValueListExpr(se);
         }else{
             // 栈不空说明肯定不是只有{}
             // 此时需要确定{}到底占了几个元素
             Type* type = ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType();
-            int len = type->getSize() / TypeSystem::constIntType->getSize();
+            int len = type->getSize() / declType->getSize();
             memset(arrayValue + idx, 0, type->getSize());
             idx += len;
             se = new ConstantSymbolEntry(type);

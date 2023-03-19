@@ -34,6 +34,7 @@ class MachineOperand {
     int reg_no;        // register no
     std::string label; // address label
 
+    int op;                               // Instruction opcode
     bool param = false;
     bool fpu = false; // floating point
     float fval;
@@ -48,7 +49,7 @@ class MachineOperand {
     MachineOperand(std::string label);
     MachineOperand(int tp, float fval);
     MachineOperand() = default;
-
+    int getOp() { return op; }
     bool operator==(const MachineOperand &) const;
     bool operator<(const MachineOperand &) const;
     bool isImm() { return this->type == IMM; };
@@ -62,6 +63,7 @@ class MachineOperand {
         this->fval = fval;
         this->fpu = true;
     }
+    int getType() { return type; }
     bool isFloat() { return this->fpu; };
     int getReg() { return this->reg_no; };
     void setReg(int regno) {
@@ -127,6 +129,8 @@ class MachineInstruction {
     std::vector<MachineOperand *> &getUse() { return use_list; };
     void insertBefore(MachineInstruction *);
     void insertAfter(MachineInstruction *);
+    int getType() { return type; }
+    int getOp() { return op; }
     MachineBlock *getParent() const { return parent; };
     // 简单起见这样写了
     bool isBX() const { return type == BRANCH && op == 2; };
@@ -354,7 +358,7 @@ class MachineFunction {
     void InsertBlock(MachineBlock *block) {
         this->block_list.push_back(block);
     };
-    void addSavedRegs(int regno) { saved_regs.insert(regno); };
+    void addSavedRegs(int regno);
     void output();
     std::vector<MachineOperand *> getSavedRegs();
     std::vector<MachineOperand*> getSavedFpRegs();

@@ -6,7 +6,7 @@
 	.align 4
 	.size a, 4
 a:
-	.word 0
+	.word 1
 	.global b
 	.align 4
 	.size b, 4
@@ -16,17 +16,17 @@ b:
 	.align 4
 	.size c, 4
 c:
-	.word 0
+	.word 1
 	.global d
 	.align 4
 	.size d, 4
 d:
-	.word 0
+	.word 2
 	.global e
 	.align 4
 	.size e, 4
 e:
-	.word 0
+	.word 4
 	.text
 	.global main
 	.type main , %function

@@ -6,162 +6,162 @@
 	.align 4
 	.size a1, 4
 a1:
-	.word 0
+	.word 1
 	.global a2
 	.align 4
 	.size a2, 4
 a2:
-	.word 0
+	.word 2
 	.global a3
 	.align 4
 	.size a3, 4
 a3:
-	.word 0
+	.word 3
 	.global a4
 	.align 4
 	.size a4, 4
 a4:
-	.word 0
+	.word 4
 	.global a5
 	.align 4
 	.size a5, 4
 a5:
-	.word 0
+	.word 5
 	.global a6
 	.align 4
 	.size a6, 4
 a6:
-	.word 0
+	.word 6
 	.global a7
 	.align 4
 	.size a7, 4
 a7:
-	.word 0
+	.word 7
 	.global a8
 	.align 4
 	.size a8, 4
 a8:
-	.word 0
+	.word 8
 	.global a9
 	.align 4
 	.size a9, 4
 a9:
-	.word 0
+	.word 9
 	.global a10
 	.align 4
 	.size a10, 4
 a10:
-	.word 0
+	.word 10
 	.global a11
 	.align 4
 	.size a11, 4
 a11:
-	.word 0
+	.word 11
 	.global a12
 	.align 4
 	.size a12, 4
 a12:
-	.word 0
+	.word 12
 	.global a13
 	.align 4
 	.size a13, 4
 a13:
-	.word 0
+	.word 13
 	.global a14
 	.align 4
 	.size a14, 4
 a14:
-	.word 0
+	.word 14
 	.global a15
 	.align 4
 	.size a15, 4
 a15:
-	.word 0
+	.word 15
 	.global a16
 	.align 4
 	.size a16, 4
 a16:
-	.word 0
+	.word 16
 	.global a17
 	.align 4
 	.size a17, 4
 a17:
-	.word 0
+	.word 1
 	.global a18
 	.align 4
 	.size a18, 4
 a18:
-	.word 0
+	.word 2
 	.global a19
 	.align 4
 	.size a19, 4
 a19:
-	.word 0
+	.word 3
 	.global a20
 	.align 4
 	.size a20, 4
 a20:
-	.word 0
+	.word 4
 	.global a21
 	.align 4
 	.size a21, 4
 a21:
-	.word 0
+	.word 5
 	.global a22
 	.align 4
 	.size a22, 4
 a22:
-	.word 0
+	.word 6
 	.global a23
 	.align 4
 	.size a23, 4
 a23:
-	.word 0
+	.word 7
 	.global a24
 	.align 4
 	.size a24, 4
 a24:
-	.word 0
+	.word 8
 	.global a25
 	.align 4
 	.size a25, 4
 a25:
-	.word 0
+	.word 9
 	.global a26
 	.align 4
 	.size a26, 4
 a26:
-	.word 0
+	.word 10
 	.global a27
 	.align 4
 	.size a27, 4
 a27:
-	.word 0
+	.word 11
 	.global a28
 	.align 4
 	.size a28, 4
 a28:
-	.word 0
+	.word 12
 	.global a29
 	.align 4
 	.size a29, 4
 a29:
-	.word 0
+	.word 13
 	.global a30
 	.align 4
 	.size a30, 4
 a30:
-	.word 0
+	.word 14
 	.global a31
 	.align 4
 	.size a31, 4
 a31:
-	.word 0
+	.word 15
 	.global a32
 	.align 4
 	.size a32, 4
 a32:
-	.word 0
+	.word 16
 	.text
 	.global func
 	.type func , %function

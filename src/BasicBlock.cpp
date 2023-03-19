@@ -20,9 +20,10 @@ void BasicBlock::insertBack(Instruction* inst) {
 }
 // insert the instruction dst after src.
 void BasicBlock::insertAfter(Instruction* dst, Instruction* src) {
+    // if(src->getNext()==NULL)
+    // std::cout<<"src->getNext()->setPrev(dst);\n";
     dst->setNext(src->getNext());
     src->getNext()->setPrev(dst);
-
     dst->setPrev(src);
     src->setNext(dst);
 
@@ -121,6 +122,7 @@ void BasicBlock::addAlloc(Instruction* alloc) {
         insertFront(alloc);
         lastAlloc = alloc;
     } else {
+        // std::cout<<"lastAlloc\n";
         insertAfter(alloc, lastAlloc);
         lastAlloc = alloc;
     }

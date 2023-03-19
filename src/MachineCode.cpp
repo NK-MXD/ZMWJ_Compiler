@@ -1,8 +1,10 @@
 #include "MachineCode.h"
 #include <iostream>
 #include "Type.h"
+#include <sstream>
 extern FILE* yyout;
-
+using std::string;
+using std::stringstream;
 int MachineBlock::label = 0;
 StackMInstruction::StackMInstruction(MachineBlock* p,
                                      int op,
@@ -124,15 +126,35 @@ MachineOperand::MachineOperand(int tp, float fval) {
 bool MachineOperand::operator==(const MachineOperand& a) const {
     if (this->type != a.type)
         return false;
-    if (this->type == IMM)
-        return this->val == a.val;
+    if (this->fpu != a.fpu) {
+        return false;
+    }
+    if (this->type == IMM) {
+        if (this->fpu) {
+            return this->fval == a.fval;
+        } else {
+            return this->val == a.val;
+        }
+    } else if (this->type == LABEL)
+        return this->label == a.label;
     return this->reg_no == a.reg_no;
 }
 
 bool MachineOperand::operator<(const MachineOperand& a) const {
     if (this->type == a.type) {
-        if (this->type == IMM)
-            return this->val < a.val;
+        if (this->type == IMM) {
+            if (this->fpu && a.fpu) {
+                return this->fval < a.fval;
+            } else if (!this->fpu && !a.fpu) {
+                return this->val < a.val;
+            } else if (this->fpu && !a.fpu) {
+                return this->fval < a.val;
+            } else if (!this->fpu && a.fpu) {
+                return this->val < a.fval;
+            }
+        } else if (this->type == LABEL) {
+            return this->label < a.label;
+        }
         return this->reg_no < a.reg_no;
     }
     return this->type < a.type;
@@ -145,25 +167,43 @@ bool MachineOperand::operator<(const MachineOperand& a) const {
 }
 
 void MachineOperand::PrintReg() {
-    switch (reg_no) {
-        case 11:
-            fprintf(yyout, "fp");
-            break;
-        case 13:
-            fprintf(yyout, "sp");
-            break;
-        case 14:
-            fprintf(yyout, "lr");
-            break;
-        case 15:
-            fprintf(yyout, "pc");
-            break;
-        default:
-            fprintf(yyout, "r%d", reg_no);
-            break;
+    if (reg_no >= 16) {
+        int sreg_no = reg_no - 16;
+        if (sreg_no <= 31) {
+            fprintf(yyout, "s%d", sreg_no);
+        } else if (sreg_no == 32) {
+            fprintf(yyout, "FPSCR");
+        }
+    } else if (reg_no == 11) {
+        fprintf(yyout, "fp");
+
+    } else if (reg_no == 13) {
+        fprintf(yyout, "sp");
+
+    } else if (reg_no == 14) {
+        fprintf(yyout, "lr");
+
+    } else if (reg_no == 15) {
+        fprintf(yyout, "pc");
+
+    } else {
+        fprintf(yyout, "r%d", reg_no);
     }
 }
-
+void MachineFunction::addSavedRegs(int regno) {
+    if (regno < 16) {
+        // Q&A about this alignment:
+        // https://forums.raspberrypi.com/viewtopic.php?t=169192
+        saved_regs.insert(regno);
+        if (regno <= 11 && regno % 2 != 0) {
+            saved_regs.insert(regno + 1);
+        } else if (regno <= 11 && regno > 0 && regno % 2 == 0) {
+            saved_regs.insert(regno - 1);
+        }
+    } else {
+        saved_fpregs.insert(regno);
+    }
+};
 void MachineOperand::output() {
     /* HINT：print operand
      * Example:
@@ -172,7 +212,12 @@ void MachineOperand::output() {
      * lable addr_a -> print addr_a; */
     switch (this->type) {
         case IMM:
-            fprintf(yyout, "#%d", this->val);
+            if (!fpu) {
+                fprintf(yyout, "#%lld", this->val);
+            } else {
+                uint32_t temp = reinterpret_cast<uint32_t&>(this->fval);
+                fprintf(yyout, "#%u", temp);
+            }
             break;
         case VREG:
             fprintf(yyout, "v%d", this->reg_no);
@@ -186,7 +231,8 @@ void MachineOperand::output() {
             else if (this->label.substr(0, 1) == "@")
                 fprintf(yyout, "%s", this->label.c_str() + 1);
             else
-                fprintf(yyout, "addr_%s%d", this->label.c_str(), parent->getParent()->getParent()->getParent()->getN());
+                fprintf(yyout, "addr_%s%d", this->label.c_str(),
+                        parent->getParent()->getParent()->getParent()->getN());
         default:
             break;
     }
@@ -751,6 +797,45 @@ std::vector<MachineOperand*> MachineFunction::getSavedRegs() {
         regs.push_back(reg);
     }
     return regs;
+}
+
+string MachineOperand::toStr() {
+    stringstream ss;
+    switch (this->type) {
+        case IMM:
+            if (!fpu) {
+                ss << "#" << this->val;
+            } else {
+                uint32_t temp = reinterpret_cast<uint32_t&>(this->fval);
+                ss << "#" << temp;
+            }
+            break;
+        case VREG:
+            ss << "v" << this->reg_no;
+            break;
+        case REG:
+            if ( this->reg_no >= 16) {
+                int sreg_no = reg_no - 16;
+                if (sreg_no <= 31) {
+                    ss << "s" << sreg_no;
+                } else if (sreg_no == 32) {
+                    ss << "FPSCR";
+                }
+            } else if (reg_no == 11) {
+                ss << "fp";
+            } else if (reg_no == 13) {
+                ss << "sp";
+            } else if (reg_no == 14) {
+                ss << "lr";
+            } else if (reg_no == 15) {
+                ss << "pc";
+            } else {
+                ss << "r" << reg_no;
+            }
+        default:
+            break;
+    }
+    return ss.str();
 }
 
 void MachineUnit::PrintGlobalDecl() {

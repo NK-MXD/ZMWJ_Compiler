@@ -7,7 +7,7 @@
 	.align 4
 	.size N, 4
 N:
-	.word 0
+	.word 10000
 	.text
 	.global long_array
 	.type long_array , %function

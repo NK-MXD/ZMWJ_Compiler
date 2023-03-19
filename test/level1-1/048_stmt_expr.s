@@ -12,7 +12,7 @@ k:
 	.align 4
 	.size n, 4
 n:
-	.word 0
+	.word 10
 	.text
 	.global main
 	.type main , %function
