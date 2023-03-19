@@ -15,3 +15,7 @@ void Operand::removeUse(Instruction *inst)
         uses.erase(i);
 }
 
+void Operand::removeDef(Instruction* inst) {
+    def = nullptr;
+}
+

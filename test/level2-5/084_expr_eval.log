@@ -1,0 +1,2 @@
+cannot initialize a variable of type 'i32' with an rvalue of type 'i32'
+cannot initialize a variable of type 'i32' with an rvalue of type 'i32'

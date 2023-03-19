@@ -1,0 +1,12 @@
+test/level2-6/198_matrix_add.s: Assembler messages:
+test/level2-6/198_matrix_add.s:24: Error: ARM register expected -- `push {r4,r5,r6,r7,r21,r22,r23,fp,lr}'
+test/level2-6/198_matrix_add.s:60: Error: syntax error -- `vldr.32 r21,[r5]'
+test/level2-6/198_matrix_add.s:66: Error: syntax error -- `vldr.32 r22,[r5]'
+test/level2-6/198_matrix_add.s:72: Error: syntax error -- `vstr.32 r23,[r5]'
+test/level2-6/198_matrix_add.s:78: Error: syntax error -- `vldr.32 r21,[r5]'
+test/level2-6/198_matrix_add.s:84: Error: syntax error -- `vldr.32 r22,[r5]'
+test/level2-6/198_matrix_add.s:90: Error: syntax error -- `vstr.32 r23,[r5]'
+test/level2-6/198_matrix_add.s:96: Error: syntax error -- `vldr.32 r21,[r5]'
+test/level2-6/198_matrix_add.s:102: Error: syntax error -- `vldr.32 r22,[r5]'
+test/level2-6/198_matrix_add.s:108: Error: syntax error -- `vstr.32 r23,[r5]'
+test/level2-6/198_matrix_add.s:123: Error: ARM register expected -- `pop {r4,r5,r6,r7,r21,r22,r23,fp,lr}'

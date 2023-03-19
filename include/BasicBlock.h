@@ -16,12 +16,22 @@ private:
     Instruction *head;
     Function *parent;
     int no;
+    // for phi::changeSrcBlock
+    std::map<BasicBlock*, BasicBlock*> phiBlocks;
+    bool mark;
+    // 不含这个块内的store
+    std::set<Operand*> stores;
+    // 包含这个块内的store
+    std::set<Operand*> stores1;
+    // used for entry
+    Instruction* lastAlloc;
 
 public:
     BasicBlock(Function *);
     ~BasicBlock();
     void insertFront(Instruction *);
     void insertBack(Instruction *);
+    void insertAfter(Instruction*, Instruction*);
     void insertBefore(Instruction *, Instruction *);
     void remove(Instruction *);
     bool empty() const { return head->getNext() == head;}
@@ -45,6 +55,19 @@ public:
     int getNumOfPred() const { return pred.size(); };
     int getNumOfSucc() const { return succ.size(); };
     void genMachineCode(AsmBuilder*);
+    void deleteBack(int num = 1);
+    void setMark() { mark = true; }
+    void unsetMark() { mark = false; }
+    bool isMark() { return mark; }
+    bool isBefore(Instruction* a, Instruction* b);
+    std::set<Operand*>& getStores() { return stores; }
+    std::set<Operand*>& getStores1() { return stores1; }
+    void addStore(Operand* ope) { stores.insert(ope); }
+    void addStore1(Operand* ope) { stores1.insert(ope); }
+    void removeStore(Operand* ope) { stores.erase(ope); }
+    bool inStore(Operand* ope) { return stores.count(ope); }
+    void replaceIns(Instruction* old, Instruction* new_);
+    void addAlloc(Instruction* alloc);
 };
 
 #endif
