@@ -1749,8 +1749,3 @@ void PhiInstruction::output() const {
     }
     fprintf(yyout, "\n");
 }
-void BinaryInstruction::replaceDef(Operand* new_) {
-    operands[0]->removeDef(this);
-    operands[0] = new_;
-    new_->setDef(this);
-}
