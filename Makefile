@@ -50,10 +50,10 @@ $(BINARY):$(OBJ)
 app:$(LEXER) $(PARSER) $(BINARY)
 
 run:app
-	@$(BINARY) -o example.s -S example.sy -O2
+	@$(BINARY) -o example.s -S example.sy
 
 run1:app
-	@$(BINARY) -o example.s -S example.sy -O2
+	@$(BINARY) -o example.s -S example.sy
 	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
 	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example
 	echo $$?

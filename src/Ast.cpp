@@ -441,19 +441,6 @@ void BinaryExpr::genCode() {
                 opcode = BinaryInstruction::MOD;
                 break;
         }
-        // if(opcode == BinaryInstruction::MOD && !(expr2->getSymbolEntry()->isConstant() && (int(expr2->getValue()) & int(expr2->getValue() - 1)) == 0)){
-        //     // c1 = a / b
-        //     Operand* dst0 = new Operand(new TemporarySymbolEntry(
-        //         TypeSystem::intType, SymbolTable::getLabel()));
-        //     Operand* dst1 = new Operand(new TemporarySymbolEntry(
-        //         TypeSystem::intType, SymbolTable::getLabel()));
-        //     new BinaryInstruction(BinaryInstruction::DIV, dst0, src1, src2, bb);
-        //     // c2 = c1 * b
-        //     new BinaryInstruction(BinaryInstruction::MUL, dst1, dst0, src2, bb);
-        //     // c = a - c2
-        //     new BinaryInstruction(BinaryInstruction::SUB, dst, src1, dst1, bb);
-        // }
-        // else
         new BinaryInstruction(opcode, dst, src1, src2, bb);
     }
 }

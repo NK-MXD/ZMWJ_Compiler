@@ -1385,6 +1385,8 @@ main:
 	add r5, r4, r7
 	ldr r4, [r5]
 	sub r5, r4, #1
+<<<<<<< HEAD
+=======
 	ldr r4, =-260
 	ldr r6, [fp, r4]
 	ldr r4, =-256
@@ -1411,6 +1413,7 @@ main:
 	add r5, r4, r7
 	ldr r4, [r5]
 	sub r5, r4, #2
+>>>>>>> master
 	ldr r6, =-260
 	ldr r4, [fp, r6]
 	ldr r6, =-256
@@ -1418,19 +1421,58 @@ main:
 	mul r8, r4, r7
 	add r4, fp, r6
 	add r6, r4, r8
+<<<<<<< HEAD
+	mov r4, #0
+=======
 	mov r4, #1
+>>>>>>> master
 	mov r7, #4
 	mul r8, r4, r7
 	add r4, r6, r8
 	str r5, [r4]
+<<<<<<< HEAD
+	ldr r4, =-260
+	ldr r5, [fp, r4]
+	sub r4, r5, #1
+	ldr r5, =-256
+	mov r6, #8
+	mul r7, r4, r6
+	add r4, fp, r5
+	add r5, r4, r7
+	mov r4, #0
+	mov r6, #4
+	mul r7, r4, r6
+	add r4, r5, r7
+	ldr r5, [r4]
+	sub r4, r5, #2
+	ldr r5, =-260
+	ldr r6, [fp, r5]
+	ldr r5, =-256
+	mov r7, #8
+	mul r8, r6, r7
+	add r6, fp, r5
+	add r5, r6, r8
+	mov r6, #1
+	mov r7, #4
+	mul r8, r6, r7
+	add r6, r5, r8
+	str r4, [r6]
+=======
+>>>>>>> master
 	ldr r5, =-260
 	ldr r4, [fp, r5]
 	add r5, r4, #1
 	ldr r4, =-260
 	str r5, [fp, r4]
+<<<<<<< HEAD
+	ldr r5, =-260
+	ldr r4, [fp, r5]
+	cmp r4, #32
+=======
 	ldr r4, =-260
 	ldr r5, [fp, r4]
 	cmp r5, #32
+>>>>>>> master
 	movlt r4, #1
 	movge r4, #0
 	blt .L977

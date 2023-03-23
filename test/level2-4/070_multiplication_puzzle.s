@@ -6,12 +6,21 @@
 	.align 4
 	.size a, 24
 a:
+<<<<<<< HEAD
+	.word 10
+	.word 1
+	.word 50
+	.word 50
+	.word 20
+	.word 5
+=======
 	.word 0
 	.word 0
 	.word 0
 	.word 0
 	.word 0
 	.word 0
+>>>>>>> master
 	.comm dp, 400, 4
 	.text
 	.global main

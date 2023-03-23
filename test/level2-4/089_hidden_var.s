@@ -11,10 +11,17 @@ b:
 	.align 4
 	.size c, 16
 c:
+<<<<<<< HEAD
+	.word 6
+	.word 7
+	.word 8
+	.word 9
+=======
 	.word 0
 	.word 0
 	.word 0
 	.word 0
+>>>>>>> master
 	.text
 	.global main
 	.type main , %function

@@ -698,20 +698,21 @@ InitVal
     } 
       InitValList RBRACE {
         leftCnt--;
-        while(stk.top() != $<exprtype>2 && stk.size() > (long unsigned int)(leftCnt + 1))
+        while (stk.top() != $<exprtype>2 && stk.size() > (long unsigned int)(leftCnt + 1))
             stk.pop();
-        if(stk.top() == $<exprtype>2)
+        if (stk.top() == $<exprtype>2)
             stk.pop();
         $$ = $<exprtype>2;
-        if(!stk.empty())
-            while(stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt){
+        if (!stk.empty())
+            while (stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt) {
                 stk.pop();
             }
-        int size = ((ArrayType*)($$->getSymbolEntry()->getType()))->getSize()/ declType->getSize();
-        while(idx % size != 0)
+        int size = ((ArrayType*)($$->getSymbolEntry()->getType()))->getSize() / declType->getSize();
+        while (idx % size != 0)
             arrayValue[idx++] = 0;
-        if(!stk.empty())
-            arrayType = (ArrayType*)(((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
+        if (!stk.empty())
+            arrayType = (ArrayType*)(
+                ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
     }
     ;
 
@@ -864,16 +865,17 @@ FuncDef
         std::vector<Type*> vec;
         std::vector<SymbolEntry*> vec1;
         DeclStmt* temp = (DeclStmt*)$5;
-        while(temp){
+        while (temp) {
             vec.push_back(temp->getId()->getSymbolEntry()->getType());
             vec1.push_back(temp->getId()->getSymbolEntry());
             temp = (DeclStmt*)(temp->getNext());
         }
         funcType = new FunctionType($1, vec, vec1);
-        SymbolEntry* se = new IdentifierSymbolEntry(funcType, $2, identifiers->getPrev()->getLevel());
+        SymbolEntry* se = new IdentifierSymbolEntry(
+            funcType, $2, identifiers->getPrev()->getLevel());
         ((IdentifierSymbolEntry*)se)->setIntParamNo(paramNo);
         ((IdentifierSymbolEntry*)se)->setFloatParamNo(fpParamNo);
-        if(!identifiers->getPrev()->install($2, se)){
+        if (!identifiers->getPrev()->install($2, se)) {
             fprintf(stderr, "redefinition of \'%s %s\'\n", $2, se->getType()->toStr().c_str());
         }
         $<se>$ = se; 
