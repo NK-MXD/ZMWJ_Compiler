@@ -5,9 +5,9 @@
 	.global sort
 	.type sort , %function
 sort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L546:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -29,8 +29,8 @@ sort:
 	str r5, [fp, #-16]
 	b .L557
 .L552:
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L555:
 	b .L552
@@ -123,7 +123,7 @@ sort:
 	.global param32_rec
 	.type param32_rec , %function
 param32_rec:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #224
 .L592:
@@ -131,61 +131,61 @@ param32_rec:
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #36]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #40]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #44]
-	str r3, [fp, #-28]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #48]
-	str r3, [fp, #-32]
+	str r3, [fp, #-28]
 	ldr r3, [fp, #52]
-	str r3, [fp, #-36]
+	str r3, [fp, #-32]
 	ldr r3, [fp, #56]
-	str r3, [fp, #-40]
+	str r3, [fp, #-36]
 	ldr r3, [fp, #60]
-	str r3, [fp, #-44]
+	str r3, [fp, #-40]
 	ldr r3, [fp, #64]
-	str r3, [fp, #-48]
+	str r3, [fp, #-44]
 	ldr r3, [fp, #68]
-	str r3, [fp, #-52]
+	str r3, [fp, #-48]
 	ldr r3, [fp, #72]
-	str r3, [fp, #-56]
+	str r3, [fp, #-52]
 	ldr r3, [fp, #76]
-	str r3, [fp, #-60]
+	str r3, [fp, #-56]
 	ldr r3, [fp, #80]
-	str r3, [fp, #-64]
+	str r3, [fp, #-60]
 	ldr r3, [fp, #84]
-	str r3, [fp, #-68]
+	str r3, [fp, #-64]
 	ldr r3, [fp, #88]
-	str r3, [fp, #-72]
+	str r3, [fp, #-68]
 	ldr r3, [fp, #92]
-	str r3, [fp, #-76]
+	str r3, [fp, #-72]
 	ldr r3, [fp, #96]
-	str r3, [fp, #-80]
+	str r3, [fp, #-76]
 	ldr r3, [fp, #100]
-	str r3, [fp, #-84]
+	str r3, [fp, #-80]
 	ldr r3, [fp, #104]
-	str r3, [fp, #-88]
+	str r3, [fp, #-84]
 	ldr r3, [fp, #108]
-	str r3, [fp, #-92]
+	str r3, [fp, #-88]
 	ldr r3, [fp, #112]
-	str r3, [fp, #-96]
+	str r3, [fp, #-92]
 	ldr r3, [fp, #116]
-	str r3, [fp, #-100]
+	str r3, [fp, #-96]
 	ldr r3, [fp, #120]
-	str r3, [fp, #-104]
+	str r3, [fp, #-100]
 	ldr r3, [fp, #124]
-	str r3, [fp, #-108]
+	str r3, [fp, #-104]
 	ldr r3, [fp, #128]
-	str r3, [fp, #-112]
+	str r3, [fp, #-108]
 	ldr r3, [fp, #132]
-	str r3, [fp, #-116]
+	str r3, [fp, #-112]
 	ldr r3, [fp, #136]
-	str r3, [fp, #-120]
+	str r3, [fp, #-116]
 	ldr r3, [fp, #140]
-	str r3, [fp, #-124]
+	str r3, [fp, #-120]
 	ldr r3, [fp, #144]
+	str r3, [fp, #-124]
+	ldr r3, [fp, #148]
 	str r3, [fp, #-128]
 	ldr r4, [fp, #-4]
 	cmp r4, #0
@@ -197,7 +197,7 @@ param32_rec:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #224
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L626:
 	ldr r4, [fp, #-4]
@@ -324,7 +324,7 @@ param32_rec:
 	mov r4, r0
 	mov r0, r4
 	add sp, sp, #224
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F0
 .LTORG
@@ -335,69 +335,69 @@ param32_rec:
 	.global param32_arr
 	.type param32_arr , %function
 param32_arr:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #132
+	sub sp, sp, #136
 .L631:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #28]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #32]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #36]
-	str r3, [fp, #-28]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #40]
-	str r3, [fp, #-32]
+	str r3, [fp, #-28]
 	ldr r3, [fp, #44]
-	str r3, [fp, #-36]
+	str r3, [fp, #-32]
 	ldr r3, [fp, #48]
-	str r3, [fp, #-40]
+	str r3, [fp, #-36]
 	ldr r3, [fp, #52]
-	str r3, [fp, #-44]
+	str r3, [fp, #-40]
 	ldr r3, [fp, #56]
-	str r3, [fp, #-48]
+	str r3, [fp, #-44]
 	ldr r3, [fp, #60]
-	str r3, [fp, #-52]
+	str r3, [fp, #-48]
 	ldr r3, [fp, #64]
-	str r3, [fp, #-56]
+	str r3, [fp, #-52]
 	ldr r3, [fp, #68]
-	str r3, [fp, #-60]
+	str r3, [fp, #-56]
 	ldr r3, [fp, #72]
-	str r3, [fp, #-64]
+	str r3, [fp, #-60]
 	ldr r3, [fp, #76]
-	str r3, [fp, #-68]
+	str r3, [fp, #-64]
 	ldr r3, [fp, #80]
-	str r3, [fp, #-72]
+	str r3, [fp, #-68]
 	ldr r3, [fp, #84]
-	str r3, [fp, #-76]
+	str r3, [fp, #-72]
 	ldr r3, [fp, #88]
-	str r3, [fp, #-80]
+	str r3, [fp, #-76]
 	ldr r3, [fp, #92]
-	str r3, [fp, #-84]
+	str r3, [fp, #-80]
 	ldr r3, [fp, #96]
-	str r3, [fp, #-88]
+	str r3, [fp, #-84]
 	ldr r3, [fp, #100]
-	str r3, [fp, #-92]
+	str r3, [fp, #-88]
 	ldr r3, [fp, #104]
-	str r3, [fp, #-96]
+	str r3, [fp, #-92]
 	ldr r3, [fp, #108]
-	str r3, [fp, #-100]
+	str r3, [fp, #-96]
 	ldr r3, [fp, #112]
-	str r3, [fp, #-104]
+	str r3, [fp, #-100]
 	ldr r3, [fp, #116]
-	str r3, [fp, #-108]
+	str r3, [fp, #-104]
 	ldr r3, [fp, #120]
-	str r3, [fp, #-112]
+	str r3, [fp, #-108]
 	ldr r3, [fp, #124]
-	str r3, [fp, #-116]
+	str r3, [fp, #-112]
 	ldr r3, [fp, #128]
-	str r3, [fp, #-120]
+	str r3, [fp, #-116]
 	ldr r3, [fp, #132]
-	str r3, [fp, #-124]
+	str r3, [fp, #-120]
 	ldr r3, [fp, #136]
+	str r3, [fp, #-124]
+	ldr r3, [fp, #140]
 	str r3, [fp, #-128]
 	ldr r4, [fp, #-4]
 	mov r5, #0
@@ -914,8 +914,8 @@ param32_arr:
 	str r5, [fp, #-132]
 	ldr r4, [fp, #-132]
 	mov r0, r4
-	add sp, sp, #132
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #136
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 	b .F2
 .LTORG
@@ -924,37 +924,37 @@ param32_arr:
 	.global param16
 	.type param16 , %function
 param16:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #228
+	sub sp, sp, #232
 .L793:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #36]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #40]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #44]
-	str r3, [fp, #-28]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #48]
-	str r3, [fp, #-32]
+	str r3, [fp, #-28]
 	ldr r3, [fp, #52]
-	str r3, [fp, #-36]
+	str r3, [fp, #-32]
 	ldr r3, [fp, #56]
-	str r3, [fp, #-40]
+	str r3, [fp, #-36]
 	ldr r3, [fp, #60]
-	str r3, [fp, #-44]
+	str r3, [fp, #-40]
 	ldr r3, [fp, #64]
-	str r3, [fp, #-48]
+	str r3, [fp, #-44]
 	ldr r3, [fp, #68]
-	str r3, [fp, #-52]
+	str r3, [fp, #-48]
 	ldr r3, [fp, #72]
-	str r3, [fp, #-56]
+	str r3, [fp, #-52]
 	ldr r3, [fp, #76]
-	str r3, [fp, #-60]
+	str r3, [fp, #-56]
 	ldr r3, [fp, #80]
+	str r3, [fp, #-60]
+	ldr r3, [fp, #84]
 	str r3, [fp, #-64]
 	add r0, fp, #-128
 	mov r1, #0
@@ -1236,8 +1236,8 @@ param16:
 	add sp, sp, #112
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #228
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	add sp, sp, #232
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F3
 .LTORG
@@ -1246,7 +1246,7 @@ param16:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	ldr r4, =408
 	sub sp, sp, r4
@@ -1363,9 +1363,9 @@ main:
 	str r4, [fp, r5]
 	b .L976
 .L976:
-	ldr r5, =-260
-	ldr r4, [fp, r5]
-	cmp r4, #32
+	ldr r4, =-260
+	ldr r5, [fp, r4]
+	cmp r5, #32
 	movlt r4, #1
 	movge r4, #0
 	blt .L977
@@ -1385,35 +1385,6 @@ main:
 	add r5, r4, r7
 	ldr r4, [r5]
 	sub r5, r4, #1
-<<<<<<< HEAD
-=======
-	ldr r4, =-260
-	ldr r6, [fp, r4]
-	ldr r4, =-256
-	mov r7, #8
-	mul r8, r6, r7
-	add r6, fp, r4
-	add r4, r6, r8
-	mov r6, #0
-	mov r7, #4
-	mul r8, r6, r7
-	add r6, r4, r8
-	str r5, [r6]
-	ldr r5, =-260
-	ldr r4, [fp, r5]
-	sub r5, r4, #1
-	ldr r4, =-256
-	mov r6, #8
-	mul r7, r5, r6
-	add r5, fp, r4
-	add r4, r5, r7
-	mov r5, #0
-	mov r6, #4
-	mul r7, r5, r6
-	add r5, r4, r7
-	ldr r4, [r5]
-	sub r5, r4, #2
->>>>>>> master
 	ldr r6, =-260
 	ldr r4, [fp, r6]
 	ldr r6, =-256
@@ -1421,16 +1392,11 @@ main:
 	mul r8, r4, r7
 	add r4, fp, r6
 	add r6, r4, r8
-<<<<<<< HEAD
 	mov r4, #0
-=======
-	mov r4, #1
->>>>>>> master
 	mov r7, #4
 	mul r8, r4, r7
 	add r4, r6, r8
 	str r5, [r4]
-<<<<<<< HEAD
 	ldr r4, =-260
 	ldr r5, [fp, r4]
 	sub r4, r5, #1
@@ -1445,34 +1411,26 @@ main:
 	add r4, r5, r7
 	ldr r5, [r4]
 	sub r4, r5, #2
-	ldr r5, =-260
-	ldr r6, [fp, r5]
-	ldr r5, =-256
+	ldr r6, =-260
+	ldr r5, [fp, r6]
+	ldr r6, =-256
 	mov r7, #8
-	mul r8, r6, r7
-	add r6, fp, r5
-	add r5, r6, r8
-	mov r6, #1
-	mov r7, #4
-	mul r8, r6, r7
+	mul r8, r5, r7
+	add r5, fp, r6
 	add r6, r5, r8
-	str r4, [r6]
-=======
->>>>>>> master
+	mov r5, #1
+	mov r7, #4
+	mul r8, r5, r7
+	add r5, r6, r8
+	str r4, [r5]
 	ldr r5, =-260
 	ldr r4, [fp, r5]
 	add r5, r4, #1
 	ldr r4, =-260
 	str r5, [fp, r4]
-<<<<<<< HEAD
 	ldr r5, =-260
 	ldr r4, [fp, r5]
 	cmp r4, #32
-=======
-	ldr r4, =-260
-	ldr r5, [fp, r4]
-	cmp r5, #32
->>>>>>> master
 	movlt r4, #1
 	movge r4, #0
 	blt .L977
@@ -1955,7 +1913,7 @@ main:
 	mov r0, #0
 	ldr r1, =408
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F5
 .LTORG
@@ -1965,3 +1923,4 @@ main:
 .L992:
 	b .L978
 
+	.ident "ZWJM"

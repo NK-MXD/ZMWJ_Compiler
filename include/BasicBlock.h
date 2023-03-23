@@ -68,6 +68,8 @@ public:
     bool inStore(Operand* ope) { return stores.count(ope); }
     void replaceIns(Instruction* old, Instruction* new_);
     void addAlloc(Instruction* alloc);
+    std::vector<BasicBlock *>& getSuccBlock() { return succ;};
+    std::vector<BasicBlock *>& getPredBlock() { return pred;};
 };
 
 #endif

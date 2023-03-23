@@ -5,9 +5,9 @@
 	.global fsqrt
 	.type fsqrt , %function
 fsqrt:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L32:
 	str r0, [fp, #-4]
 	ldr r4, =0
@@ -50,8 +50,8 @@ fsqrt:
 .L38:
 	ldr r4, [fp, #-12]
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L41:
 	b .L38
@@ -61,7 +61,7 @@ fsqrt:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L49:
@@ -82,6 +82,7 @@ main:
 	bl putch
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

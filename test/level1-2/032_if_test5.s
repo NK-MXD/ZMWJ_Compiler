@@ -5,7 +5,7 @@
 	.global if_if_Else
 	.type if_if_Else , %function
 if_if_Else:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L14:
@@ -35,7 +35,7 @@ if_if_Else:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L22:
 	b .L18
@@ -51,14 +51,13 @@ if_if_Else:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L28:
 	bl if_if_Else
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #0
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

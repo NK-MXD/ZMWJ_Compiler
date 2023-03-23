@@ -5,9 +5,9 @@
 	.global dec2bin
 	.type dec2bin , %function
 dec2bin:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L37:
 	str r0, [fp, #-4]
 	ldr r4, =0
@@ -54,8 +54,8 @@ dec2bin:
 .L45:
 	ldr r4, [fp, #-8]
 	mov r0, r4
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L48:
 	b .L45
@@ -65,7 +65,7 @@ dec2bin:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L54:
@@ -86,6 +86,7 @@ main:
 	bl putch
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

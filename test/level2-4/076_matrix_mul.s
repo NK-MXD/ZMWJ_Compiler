@@ -21,7 +21,7 @@ N:
 	.global mul
 	.type mul , %function
 mul:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #40
 .L219:
@@ -29,15 +29,15 @@ mul:
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #32]
-	str r3, [fp, #-20]
-	ldr r3, [fp, #36]
-	str r3, [fp, #-24]
 	ldr r3, [fp, #40]
-	str r3, [fp, #-28]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #44]
-	str r3, [fp, #-32]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #48]
+	str r3, [fp, #-28]
+	ldr r3, [fp, #52]
+	str r3, [fp, #-32]
+	ldr r3, [fp, #56]
 	str r3, [fp, #-36]
 	ldr r4, =0
 	str r4, [fp, #-40]
@@ -466,7 +466,7 @@ mul:
 	str r5, [r6]
 	mov r0, #0
 	add sp, sp, #40
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F0
 .LTORG
@@ -481,9 +481,9 @@ addr_N0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #148
+	sub sp, sp, #152
 .L347:
 	ldr r4, =3
 	ldr r5, addr_N1
@@ -787,8 +787,8 @@ addr_N1:
 	mov r0, r4
 	bl putch
 	mov r0, #0
-	add sp, sp, #148
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	add sp, sp, #152
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L402:
 	b .L399
@@ -801,3 +801,4 @@ addr_L2:
 	.word L
 addr_N2:
 	.word N
+	.ident "ZWJM"

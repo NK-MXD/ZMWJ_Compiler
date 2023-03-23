@@ -24,7 +24,7 @@ BUFFER_LEN:
 	.global read_program
 	.type read_program , %function
 read_program:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L94:
@@ -72,7 +72,7 @@ read_program:
 	ldr r4, =0
 	str r4, [r5]
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L102:
 	b .L99
@@ -82,7 +82,7 @@ read_program:
 	.global interpret
 	.type interpret , %function
 interpret:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L109:
@@ -118,7 +118,7 @@ interpret:
 	b .L129
 .L116:
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L120:
 	b .L116
@@ -380,9 +380,8 @@ addr_ptr0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L205:
 	bl read_program
 	mov r4, #0
@@ -394,8 +393,7 @@ main:
 	mov r0, r5
 	bl interpret
 	mov r0, #0
-	add sp, sp, #0
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 addr_TAPE_LEN1:
@@ -408,3 +406,4 @@ addr_program1:
 	.word program
 addr_ptr1:
 	.word ptr
+	.ident "ZWJM"

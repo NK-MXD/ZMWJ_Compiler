@@ -12,9 +12,9 @@ N:
 	.global long_array
 	.type long_array , %function
 long_array:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	ldr r4, =120020
+	ldr r4, =120024
 	sub sp, sp, r4
 .L136:
 	str r0, [fp, #-4]
@@ -238,9 +238,9 @@ addr_N0:
 	ldr r5, =-120012
 	ldr r4, [fp, r5]
 	mov r0, r4
-	ldr r1, =120020
+	ldr r1, =120024
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L189:
 	b .L186
@@ -516,17 +516,16 @@ addr_N1:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L254:
 	mov r0, #9
 	bl long_array
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #0
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
 addr_N2:
 	.word N
+	.ident "ZWJM"

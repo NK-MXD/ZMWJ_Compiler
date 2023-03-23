@@ -11,7 +11,7 @@ s:
 	.global get_ans_se
 	.type get_ans_se , %function
 get_ans_se:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L190:
@@ -49,7 +49,7 @@ get_ans_se:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #16
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L199:
 	b .L196
@@ -57,7 +57,7 @@ get_ans_se:
 	.global get_ans
 	.type get_ans , %function
 get_ans:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L200:
@@ -89,7 +89,7 @@ get_ans:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #16
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L209:
 	b .L206
@@ -97,9 +97,9 @@ get_ans:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #36
+	sub sp, sp, #40
 .L210:
 	ldr r4, =0
 	sub r5, r4, #-2147483648
@@ -350,8 +350,8 @@ main:
 	ldr r4, [fp, #-36]
 	add r6, r5, r4
 	mov r0, r6
-	add sp, sp, #36
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #40
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 	b .F0
 .LTORG
@@ -361,3 +361,4 @@ addr_s0:
 
 addr_s1:
 	.word s
+	.ident "ZWJM"

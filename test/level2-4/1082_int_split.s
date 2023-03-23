@@ -16,9 +16,9 @@ newline:
 	.global split
 	.type split , %function
 split:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L45:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -65,8 +65,8 @@ split:
 	b .L61
 .L51:
 	mov r0, #0
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L54:
 	b .L51
@@ -76,9 +76,9 @@ split:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #28
+	sub sp, sp, #32
 .L62:
 	ldr r4, =4
 	ldr r5, addr_N0
@@ -137,8 +137,8 @@ main:
 	b .L78
 .L69:
 	mov r0, #0
-	add sp, sp, #28
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #32
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L72:
 	b .L69
@@ -149,3 +149,4 @@ addr_N0:
 	.word N
 addr_newline0:
 	.word newline
+	.ident "ZWJM"

@@ -6,27 +6,18 @@
 	.align 4
 	.size a, 24
 a:
-<<<<<<< HEAD
 	.word 10
 	.word 1
 	.word 50
 	.word 50
 	.word 20
 	.word 5
-=======
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
->>>>>>> master
 	.comm dp, 400, 4
 	.text
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L75:
@@ -64,7 +55,7 @@ main:
 	bl putint
 	mov r0, #0
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L87:
 	b .L84
@@ -261,3 +252,4 @@ addr_a1:
 	.word a
 addr_dp1:
 	.word dp
+	.ident "ZWJM"

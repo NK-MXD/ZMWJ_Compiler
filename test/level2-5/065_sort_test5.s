@@ -11,7 +11,7 @@ n:
 	.global swap
 	.type swap , %function
 swap:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L143:
@@ -46,15 +46,15 @@ swap:
 	str r4, [r6]
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global heap_ajust
 	.type heap_ajust , %function
 heap_ajust:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L154:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -86,8 +86,8 @@ heap_ajust:
 	b .L171
 .L162:
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L165:
 	b .L162
@@ -139,8 +139,8 @@ heap_ajust:
 	b .L167
 .L179:
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L180:
 	ldr r4, [fp, #-4]
@@ -177,9 +177,9 @@ heap_ajust:
 	.global heap_sort
 	.type heap_sort , %function
 heap_sort:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L197:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -273,8 +273,8 @@ heap_sort:
 	b .L228
 .L217:
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L220:
 	b .L217
@@ -284,7 +284,7 @@ heap_sort:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #48
 .L229:
@@ -427,7 +427,7 @@ main:
 .L234:
 	mov r0, #0
 	add sp, sp, #48
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L237:
 	b .L234
@@ -436,3 +436,4 @@ main:
 
 addr_n0:
 	.word n
+	.ident "ZWJM"

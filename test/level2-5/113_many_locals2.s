@@ -11,9 +11,9 @@ n:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #132
+	sub sp, sp, #136
 .L164:
 	bl getint
 	mov r4, r0
@@ -229,8 +229,8 @@ main:
 	bl putch
 	ldr r4, [fp, #-104]
 	mov r0, r4
-	add sp, sp, #132
-	pop {r4, r5, fp, lr}
+	add sp, sp, #136
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 	b .F0
 .LTORG
@@ -244,3 +244,4 @@ addr_n0:
 
 addr_n1:
 	.word n
+	.ident "ZWJM"

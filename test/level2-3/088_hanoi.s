@@ -5,7 +5,7 @@
 	.global move
 	.type move , %function
 move:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L38:
@@ -24,13 +24,13 @@ move:
 	mov r0, #32
 	bl putch
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
 	.global hanoi
 	.type hanoi , %function
 hanoi:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L41:
@@ -80,7 +80,7 @@ hanoi:
 	b .L48
 .L48:
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L51:
 	b .L47
@@ -88,9 +88,9 @@ hanoi:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L52:
 	bl getint
 	mov r4, r0
@@ -124,11 +124,12 @@ main:
 	b .L64
 .L56:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L59:
 	b .L56
 .L64:
 	b .L56
 
+	.ident "ZWJM"

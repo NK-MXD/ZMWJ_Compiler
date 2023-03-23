@@ -5,7 +5,7 @@
 	.global f
 	.type f , %function
 f:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L28:
@@ -16,13 +16,13 @@ f:
 	mul r6, r4, r5
 	mov r0, r6
 	add sp, sp, #8
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global g
 	.type g , %function
 g:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L31:
@@ -35,13 +35,13 @@ g:
 	sub r5, r4, r7
 	mov r0, r5
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global h
 	.type h , %function
 h:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L34:
@@ -73,15 +73,14 @@ h:
 	mov r4, r0
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L37:
 	mov r0, #11
 	mov r1, #3
@@ -90,7 +89,7 @@ main:
 	mov r0, r4
 	bl putint
 	mov r0, #0
-	add sp, sp, #0
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

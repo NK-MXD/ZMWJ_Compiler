@@ -35,9 +35,9 @@ c:
 	.global isdigit
 	.type isdigit , %function
 isdigit:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L390:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -48,13 +48,13 @@ isdigit:
 	b .L397
 .L392:
 	mov r0, #1
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L393:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L394:
 	ldr r4, [fp, #-4]
@@ -71,9 +71,9 @@ isdigit:
 	.global power
 	.type power , %function
 power:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L401:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -104,8 +104,8 @@ power:
 .L407:
 	ldr r4, [fp, #-12]
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, r5, r6, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L410:
 	b .L407
@@ -115,9 +115,9 @@ power:
 	.global getstr
 	.type getstr , %function
 getstr:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L416:
 	str r0, [fp, #-4]
 	bl getch
@@ -156,8 +156,8 @@ getstr:
 .L422:
 	ldr r4, [fp, #-12]
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L426:
 	b .L422
@@ -176,9 +176,9 @@ getstr:
 	.global intpush
 	.type intpush , %function
 intpush:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L443:
 	str r0, [fp, #-4]
 	ldr r4, addr_intt0
@@ -195,16 +195,16 @@ intpush:
 	add r6, r5, r8
 	mov r5, r6
 	str r4, [r5]
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global chapush
 	.type chapush , %function
 chapush:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L445:
 	str r0, [fp, #-4]
 	ldr r4, addr_chat0
@@ -221,16 +221,15 @@ chapush:
 	add r6, r5, r8
 	mov r5, r6
 	str r4, [r5]
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global intpop
 	.type intpop , %function
 intpop:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L447:
 	ldr r4, addr_intt0
 	ldr r5, [r4]
@@ -247,16 +246,14 @@ intpop:
 	mov r5, r4
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #0
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global chapop
 	.type chapop , %function
 chapop:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L449:
 	ldr r4, addr_chat0
 	ldr r5, [r4]
@@ -273,16 +270,15 @@ chapop:
 	mov r5, r4
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #0
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global intadd
 	.type intadd , %function
 intadd:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L451:
 	str r0, [fp, #-4]
 	ldr r4, addr_intt0
@@ -321,16 +317,15 @@ intadd:
 	add r5, r4, r8
 	mov r4, r5
 	str r6, [r4]
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global find
 	.type find , %function
 find:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L455:
 	bl chapop
 	mov r4, r0
@@ -370,13 +365,11 @@ find:
 	b .L460
 .L456:
 	mov r0, #0
-	add sp, sp, #0
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L457:
 	mov r0, #1
-	add sp, sp, #0
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L460:
 	b .L457
@@ -384,9 +377,9 @@ find:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L461:
 	ldr r4, =0
 	ldr r5, addr_intt0
@@ -1423,8 +1416,8 @@ addr_get23:
 	mov r0, r4
 	bl putint
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L926:
 	b .L922
@@ -1841,3 +1834,4 @@ addr_get6:
 	.word get
 addr_get26:
 	.word get2
+	.ident "ZWJM"

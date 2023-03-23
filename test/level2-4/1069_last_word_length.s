@@ -5,7 +5,7 @@
 	.global lengthOfLastWord
 	.type lengthOfLastWord , %function
 lengthOfLastWord:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L68:
@@ -20,7 +20,7 @@ lengthOfLastWord:
 .L71:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L72:
 	ldr r4, [fp, #-8]
@@ -80,7 +80,7 @@ lengthOfLastWord:
 .L105:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L106:
 	ldr r4, [fp, #-12]
@@ -115,7 +115,7 @@ lengthOfLastWord:
 	sub r6, r4, r5
 	mov r0, r6
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L116:
 	b .L113
@@ -131,7 +131,7 @@ lengthOfLastWord:
 	sub r5, r4, r7
 	mov r0, r5
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L118:
 	ldr r4, [fp, #-16]
@@ -153,9 +153,9 @@ lengthOfLastWord:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #44
+	sub sp, sp, #48
 .L130:
 	ldr r4, =0
 	sub r5, r4, #4
@@ -256,7 +256,8 @@ main:
 	str r4, [fp, #-4]
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #44
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #48
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

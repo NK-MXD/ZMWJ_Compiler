@@ -16,9 +16,9 @@ newline:
 	.global factor
 	.type factor , %function
 factor:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L32:
 	str r0, [fp, #-4]
 	ldr r4, =0
@@ -49,8 +49,8 @@ factor:
 .L38:
 	ldr r4, [fp, #-12]
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L41:
 	b .L38
@@ -80,9 +80,9 @@ factor:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L54:
 	ldr r4, =4
 	ldr r5, addr_N0
@@ -97,11 +97,12 @@ main:
 	bl factor
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, r5, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 addr_N0:
 	.word N
 addr_newline0:
 	.word newline
+	.ident "ZWJM"

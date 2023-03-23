@@ -12,7 +12,7 @@ n:
 	.global init
 	.type init , %function
 init:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L174:
@@ -56,7 +56,7 @@ init:
 	b .L191
 .L179:
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L182:
 	b .L179
@@ -66,9 +66,9 @@ init:
 	.global findfa
 	.type findfa , %function
 findfa:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L192:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -87,8 +87,8 @@ findfa:
 .L194:
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L195:
 	ldr r4, [fp, #-4]
@@ -116,8 +116,8 @@ findfa:
 	mov r5, r4
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L200:
 	b .L195
@@ -125,7 +125,7 @@ findfa:
 	.global mmerge
 	.type mmerge , %function
 mmerge:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L203:
@@ -160,7 +160,7 @@ mmerge:
 	b .L209
 .L209:
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L212:
 	b .L209
@@ -168,9 +168,9 @@ mmerge:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #36
+	sub sp, sp, #40
 .L213:
 	ldr r4, =1
 	str r4, [fp, #-4]
@@ -209,8 +209,8 @@ main:
 	b .L227
 .L220:
 	mov r0, #0
-	add sp, sp, #36
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #40
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L222:
 	b .L220
@@ -587,3 +587,4 @@ addr_array2:
 	.word array
 addr_n2:
 	.word n
+	.ident "ZWJM"

@@ -11,7 +11,7 @@ n:
 	.global bubblesort
 	.type bubblesort , %function
 bubblesort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L71:
@@ -36,7 +36,7 @@ bubblesort:
 .L77:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L80:
 	b .L77
@@ -141,7 +141,7 @@ bubblesort:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #48
 .L119:
@@ -279,7 +279,7 @@ main:
 .L124:
 	mov r0, #0
 	add sp, sp, #48
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L127:
 	b .L124
@@ -288,3 +288,4 @@ main:
 
 addr_n0:
 	.word n
+	.ident "ZWJM"

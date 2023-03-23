@@ -37,9 +37,8 @@ TOKEN_OTHER:
 	.global next_char
 	.type next_char , %function
 next_char:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L205:
 	bl getch
 	mov r4, r0
@@ -48,16 +47,15 @@ next_char:
 	ldr r4, addr_last_char0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #0
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global is_space
 	.type is_space , %function
 is_space:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L206:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -68,13 +66,13 @@ is_space:
 	b .L214
 .L208:
 	mov r0, #1
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L209:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L211:
 	ldr r4, [fp, #-4]
@@ -91,9 +89,9 @@ is_space:
 	.global is_num
 	.type is_num , %function
 is_num:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L218:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -104,13 +102,13 @@ is_num:
 	b .L226
 .L220:
 	mov r0, #1
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L221:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L223:
 	ldr r4, [fp, #-4]
@@ -127,9 +125,8 @@ is_num:
 	.global next_token
 	.type next_token , %function
 next_token:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L230:
 	b .L231
 .L231:
@@ -194,8 +191,7 @@ next_token:
 	ldr r4, addr_cur_token0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #0
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L247:
 	b .L244
@@ -245,9 +241,8 @@ next_token:
 	.global panic
 	.type panic , %function
 panic:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L261:
 	mov r0, #112
 	bl putch
@@ -266,16 +261,15 @@ panic:
 	ldr r4, =0
 	sub r5, r4, #1
 	mov r0, r5
-	add sp, sp, #0
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global get_op_prec
 	.type get_op_prec , %function
 get_op_prec:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L262:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -286,8 +280,8 @@ get_op_prec:
 	b .L269
 .L264:
 	mov r0, #10
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L265:
 	ldr r4, [fp, #-4]
@@ -309,13 +303,13 @@ get_op_prec:
 	b .L265
 .L273:
 	mov r0, #20
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L274:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L275:
 	ldr r4, [fp, #-4]
@@ -341,7 +335,7 @@ get_op_prec:
 	.global stack_push
 	.type stack_push , %function
 stack_push:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L286:
@@ -373,13 +367,13 @@ stack_push:
 	add r6, r5, r8
 	str r4, [r6]
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 
 	.global stack_pop
 	.type stack_pop , %function
 stack_pop:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L295:
@@ -412,15 +406,15 @@ stack_pop:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global stack_peek
 	.type stack_peek , %function
 stack_peek:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L305:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -435,16 +429,16 @@ stack_peek:
 	add r5, r4, r7
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global stack_size
 	.type stack_size , %function
 stack_size:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L311:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -454,16 +448,16 @@ stack_size:
 	add r5, r4, r7
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global eval_op
 	.type eval_op , %function
 eval_op:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L315:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -479,8 +473,8 @@ eval_op:
 	ldr r5, [fp, #-12]
 	add r6, r4, r5
 	mov r0, r6
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L320:
 	ldr r4, [fp, #-4]
@@ -496,8 +490,8 @@ eval_op:
 	ldr r5, [fp, #-12]
 	sub r6, r4, r5
 	mov r0, r6
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L325:
 	ldr r4, [fp, #-4]
@@ -513,8 +507,8 @@ eval_op:
 	ldr r5, [fp, #-12]
 	mul r6, r4, r5
 	mov r0, r6
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L330:
 	ldr r4, [fp, #-4]
@@ -530,8 +524,8 @@ eval_op:
 	ldr r5, [fp, #-12]
 	sdiv r6, r4, r5
 	mov r0, r6
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L335:
 	ldr r4, [fp, #-4]
@@ -549,13 +543,13 @@ eval_op:
 	mul r7, r6, r5
 	sub r5, r4, r7
 	mov r0, r5
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L340:
 	mov r0, #0
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L343:
 	b .L340
@@ -563,9 +557,9 @@ eval_op:
 	.global eval
 	.type eval , %function
 eval:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	ldr r4, =2076
+	ldr r4, =2080
 	sub sp, sp, r4
 .L344:
 	ldr r4, =-1024
@@ -593,9 +587,9 @@ eval:
 	bl panic
 	mov r4, r0
 	mov r0, r4
-	ldr r1, =2076
+	ldr r1, =2080
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L350:
 	mov r4, #0
@@ -810,9 +804,9 @@ addr_cur_token0:
 	bl panic
 	mov r4, r0
 	mov r0, r4
-	ldr r1, =2076
+	ldr r1, =2080
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L399:
 	mov r4, #0
@@ -935,9 +929,9 @@ addr_cur_token0:
 	bl stack_peek
 	mov r4, r0
 	mov r0, r4
-	ldr r1, =2076
+	ldr r1, =2080
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L413:
 	b .L411
@@ -947,9 +941,9 @@ addr_cur_token0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L424:
 	bl getint
 	mov r4, r0
@@ -984,8 +978,8 @@ main:
 	b .L435
 .L428:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L430:
 	b .L428
@@ -1004,3 +998,4 @@ addr_other1:
 	.word other
 addr_cur_token1:
 	.word cur_token
+	.ident "ZWJM"

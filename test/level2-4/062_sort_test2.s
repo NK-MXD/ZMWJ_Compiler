@@ -11,7 +11,7 @@ n:
 	.global insertsort
 	.type insertsort , %function
 insertsort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L68:
@@ -43,7 +43,7 @@ insertsort:
 .L73:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L76:
 	b .L73
@@ -126,7 +126,7 @@ insertsort:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #48
 .L120:
@@ -264,7 +264,7 @@ main:
 .L125:
 	mov r0, #0
 	add sp, sp, #48
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L128:
 	b .L125
@@ -273,3 +273,4 @@ main:
 
 addr_n0:
 	.word n
+	.ident "ZWJM"

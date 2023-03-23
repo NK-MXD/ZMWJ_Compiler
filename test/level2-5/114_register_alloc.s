@@ -166,9 +166,9 @@ a32:
 	.global func
 	.type func , %function
 func:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #156
+	sub sp, sp, #160
 .L581:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -906,8 +906,8 @@ addr_a320:
 	ldr r6, [r5]
 	sub r5, r4, r6
 	mov r0, r5
-	add sp, sp, #156
-	pop {r4, r5, r6, fp, lr}
+	add sp, sp, #160
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 	b .F1
 .LTORG
@@ -980,7 +980,7 @@ addr_a321:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L621:
@@ -1006,7 +1006,7 @@ main:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 addr_a12:
@@ -1073,3 +1073,4 @@ addr_a312:
 	.word a31
 addr_a322:
 	.word a32
+	.ident "ZWJM"

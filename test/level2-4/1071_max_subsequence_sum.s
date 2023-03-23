@@ -5,9 +5,9 @@
 	.global maxSubArray
 	.type maxSubArray , %function
 maxSubArray:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L58:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -19,8 +19,8 @@ maxSubArray:
 	b .L65
 .L61:
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L62:
 	ldr r4, [fp, #-8]
@@ -39,8 +39,8 @@ maxSubArray:
 	add r5, r4, r7
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L67:
 	ldr r4, [fp, #-4]
@@ -75,8 +75,8 @@ maxSubArray:
 .L80:
 	ldr r4, [fp, #-16]
 	mov r0, r4
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L83:
 	b .L80
@@ -126,9 +126,9 @@ maxSubArray:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #44
+	sub sp, sp, #48
 .L102:
 	ldr r4, =0
 	sub r5, r4, #4
@@ -229,7 +229,8 @@ main:
 	str r4, [fp, #-4]
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #44
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #48
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

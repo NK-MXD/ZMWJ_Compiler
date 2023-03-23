@@ -5,7 +5,7 @@
 	.global get_next
 	.type get_next , %function
 get_next:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L99:
@@ -48,7 +48,7 @@ get_next:
 	b .L119
 .L107:
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L111:
 	b .L107
@@ -116,7 +116,7 @@ get_next:
 	.global KMP
 	.type KMP , %function
 KMP:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	ldr r4, =16400
 	sub sp, sp, r4
@@ -179,7 +179,7 @@ KMP:
 	mov r0, r5
 	ldr r1, =16400
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L151:
 	b .L147
@@ -252,7 +252,7 @@ KMP:
 	mov r0, r4
 	ldr r1, =16400
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L164:
 	b .L155
@@ -280,7 +280,7 @@ KMP:
 	.global read_str
 	.type read_str , %function
 read_str:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L185:
@@ -326,7 +326,7 @@ read_str:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L192:
 	b .L190
@@ -350,7 +350,7 @@ read_str:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	ldr r4, =32768
 	sub sp, sp, r4
@@ -396,6 +396,7 @@ main:
 	mov r0, #0
 	ldr r1, =32768
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

@@ -11,9 +11,9 @@ n:
 	.global QuickSort
 	.type QuickSort , %function
 QuickSort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #28
+	sub sp, sp, #32
 .L120:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -40,8 +40,8 @@ QuickSort:
 	b .L134
 .L125:
 	mov r0, #0
-	add sp, sp, #28
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #32
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L128:
 	b .L125
@@ -242,9 +242,9 @@ addr_n0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #52
+	sub sp, sp, #56
 .L225:
 	ldr r4, =10
 	ldr r5, addr_n1
@@ -387,8 +387,8 @@ main:
 	b .L242
 .L231:
 	mov r0, #0
-	add sp, sp, #52
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #56
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L234:
 	b .L231
@@ -397,3 +397,4 @@ main:
 
 addr_n1:
 	.word n
+	.ident "ZWJM"

@@ -20,7 +20,7 @@ mod:
 	.global equal
 	.type equal , %function
 equal:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L246:
@@ -36,12 +36,12 @@ equal:
 .L249:
 	mov r0, #1
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L250:
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L253:
 	b .L250
@@ -49,7 +49,7 @@ equal:
 	.global dfs
 	.type dfs , %function
 dfs:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #32
 .L254:
@@ -57,9 +57,9 @@ dfs:
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #36]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #40]
+	str r3, [fp, #-20]
+	ldr r3, [fp, #44]
 	str r3, [fp, #-24]
 	ldr r4, [fp, #-4]
 	ldr r5, addr_dp0
@@ -125,7 +125,7 @@ dfs:
 	ldr r5, [r4]
 	mov r0, r5
 	add sp, sp, #32
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L262:
 	ldr r4, [fp, #-4]
@@ -147,7 +147,7 @@ dfs:
 .L278:
 	mov r0, #1
 	add sp, sp, #32
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L279:
 	ldr r4, =0
@@ -442,7 +442,7 @@ addr_cns0:
 	ldr r5, [r4]
 	mov r0, r5
 	add sp, sp, #32
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F1
 .LTORG
@@ -463,9 +463,9 @@ addr_cns1:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #36
+	sub sp, sp, #40
 .L320:
 	bl getint
 	mov r4, r0
@@ -794,8 +794,8 @@ addr_cns2:
 	bl putint
 	ldr r4, [fp, #-32]
 	mov r0, r4
-	add sp, sp, #36
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	add sp, sp, #40
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L409:
 	b .L406
@@ -812,3 +812,4 @@ addr_list3:
 	.word list
 addr_cns3:
 	.word cns
+	.ident "ZWJM"

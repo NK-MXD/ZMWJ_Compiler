@@ -21,9 +21,9 @@ d:
 	.global set_a
 	.type set_a , %function
 set_a:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L121:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -32,16 +32,16 @@ set_a:
 	ldr r4, addr_a0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global set_b
 	.type set_b , %function
 set_b:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L123:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -50,16 +50,16 @@ set_b:
 	ldr r4, addr_b0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global set_d
 	.type set_d , %function
 set_d:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L125:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -68,14 +68,14 @@ set_d:
 	ldr r4, addr_d0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L127:
@@ -533,7 +533,7 @@ addr_d1:
 	bl putch
 	mov r0, #0
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L280:
 	ldr r4, [fp, #-20]
@@ -564,3 +564,4 @@ addr_b2:
 	.word b
 addr_d2:
 	.word d
+	.ident "ZWJM"

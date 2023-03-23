@@ -16,9 +16,9 @@ b:
 	.global inc_a
 	.type inc_a , %function
 inc_a:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L46:
 	ldr r4, addr_a0
 	ldr r5, [r4]
@@ -32,16 +32,16 @@ inc_a:
 	ldr r4, addr_a0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L48:
 	ldr r4, =5
 	str r4, [fp, #-4]
@@ -77,8 +77,8 @@ main:
 	ldr r4, addr_a0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #4
-	pop {r4, r5, r6, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L55:
 	b .L52
@@ -187,3 +187,4 @@ addr_a0:
 	.word a
 addr_b0:
 	.word b
+	.ident "ZWJM"

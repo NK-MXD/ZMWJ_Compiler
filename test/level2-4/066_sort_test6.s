@@ -11,7 +11,7 @@ n:
 	.global counting_sort
 	.type counting_sort , %function
 counting_sort:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #64
 .L105:
@@ -233,7 +233,7 @@ addr_n0:
 .L156:
 	mov r0, #0
 	add sp, sp, #64
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L159:
 	b .L156
@@ -243,7 +243,7 @@ addr_n0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #88
 .L176:
@@ -393,7 +393,7 @@ main:
 .L182:
 	mov r0, #0
 	add sp, sp, #88
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L185:
 	b .L182
@@ -402,3 +402,4 @@ main:
 
 addr_n1:
 	.word n
+	.ident "ZWJM"

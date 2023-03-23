@@ -5,9 +5,9 @@
 	.global uniquePaths
 	.type uniquePaths , %function
 uniquePaths:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #52
+	sub sp, sp, #56
 .L83:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -19,8 +19,8 @@ uniquePaths:
 	b .L91
 .L86:
 	mov r0, #1
-	add sp, sp, #52
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #56
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L87:
 	ldr r4, =0
@@ -141,8 +141,8 @@ uniquePaths:
 	add r5, r4, r7
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #52
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #56
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L127:
 	b .L124
@@ -228,7 +228,7 @@ uniquePaths:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L149:
@@ -244,6 +244,7 @@ main:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

@@ -11,7 +11,7 @@ n:
 	.global gcd
 	.type gcd , %function
 gcd:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L50:
@@ -78,7 +78,7 @@ gcd:
 	sdiv r5, r6, r4
 	mov r0, r5
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L67:
 	b .L64
@@ -88,7 +88,7 @@ gcd:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L73:
@@ -106,8 +106,9 @@ main:
 	mov r4, r0
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 addr_n0:
 	.word n
+	.ident "ZWJM"

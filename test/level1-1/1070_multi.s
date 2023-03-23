@@ -5,7 +5,7 @@
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L14:
@@ -41,10 +41,11 @@ main:
 	bl putint
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L22:
 	b .L19
 .L27:
 	b .L19
 
+	.ident "ZWJM"

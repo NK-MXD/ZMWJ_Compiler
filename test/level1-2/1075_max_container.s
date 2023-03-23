@@ -5,7 +5,7 @@
 	.global maxArea
 	.type maxArea , %function
 maxArea:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L71:
@@ -50,7 +50,7 @@ maxArea:
 	ldr r4, [fp, #-20]
 	mov r0, r4
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L82:
 	b .L79
@@ -140,9 +140,9 @@ maxArea:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #44
+	sub sp, sp, #48
 .L119:
 	mov r4, #0
 	mov r5, #-44
@@ -240,7 +240,8 @@ main:
 	str r4, [fp, #-4]
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #44
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #48
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

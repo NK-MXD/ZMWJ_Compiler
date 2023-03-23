@@ -12,16 +12,15 @@ a:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L2:
 	ldr r4, addr_a0
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #0
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 addr_a0:
 	.word a
+	.ident "ZWJM"

@@ -5,7 +5,7 @@
 	.global foo
 	.type foo , %function
 foo:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #136
 .L158:
@@ -139,13 +139,13 @@ foo:
 	add r5, r6, r4
 	mov r0, r5
 	add sp, sp, #136
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #112
 .L195:
@@ -284,6 +284,7 @@ main:
 	bl putch
 	mov r0, #0
 	add sp, sp, #112
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

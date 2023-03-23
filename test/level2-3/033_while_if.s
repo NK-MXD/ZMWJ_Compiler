@@ -7,20 +7,20 @@
 get_one:
 	push {fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L40:
 	str r0, [fp, #-4]
 	mov r0, #1
-	add sp, sp, #4
+	add sp, sp, #8
 	pop {fp, lr}
 	bx lr
 
 	.global deepWhileBr
 	.type deepWhileBr , %function
 deepWhileBr:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L42:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -48,8 +48,8 @@ deepWhileBr:
 .L48:
 	ldr r4, [fp, #-12]
 	mov r0, r4
-	add sp, sp, #20
-	pop {r4, r5, r6, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L51:
 	b .L48
@@ -106,9 +106,9 @@ deepWhileBr:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L74:
 	ldr r4, =2
 	str r4, [fp, #-4]
@@ -123,7 +123,8 @@ main:
 	mov r0, r4
 	bl putint
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
+	.ident "ZWJM"
