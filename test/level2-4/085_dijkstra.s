@@ -40,7 +40,7 @@ INF:
 	.global Dijkstra
 	.type Dijkstra , %function
 Dijkstra:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L140:
@@ -131,7 +131,7 @@ Dijkstra:
 	b .L166
 .L159:
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L162:
 	b .L159
@@ -365,7 +365,7 @@ addr_w0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L229:
@@ -584,7 +584,7 @@ addr_w1:
 	bl putch
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L284:
 	b .L281
@@ -609,3 +609,4 @@ addr_v22:
 	.word v2
 addr_w2:
 	.word w
+	.ident "ZWJM"

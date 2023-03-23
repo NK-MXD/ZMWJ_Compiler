@@ -25,9 +25,9 @@ public:
     Mem2Reg(Unit* _unit) : unit(_unit){};
     void execute();
     void execute(Function* function);
-    // 寄存器重命名
-    void rename(Function* function);
-    void rename(BasicBlock *bb);
+    // // 寄存器重命名
+    // void rename(Function* function);
+    // void rename(BasicBlock *bb);
 };
 
 #endif

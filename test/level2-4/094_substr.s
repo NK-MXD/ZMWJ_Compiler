@@ -5,7 +5,7 @@
 	.global MAX
 	.type MAX , %function
 MAX:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L111:
@@ -22,7 +22,7 @@ MAX:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L115:
 	ldr r4, [fp, #-4]
@@ -38,13 +38,13 @@ MAX:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L121:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L125:
 	b .L121
@@ -52,9 +52,9 @@ MAX:
 	.global max_sum_nonadjacent
 	.type max_sum_nonadjacent , %function
 max_sum_nonadjacent:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #76
+	sub sp, sp, #80
 .L126:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -164,8 +164,8 @@ max_sum_nonadjacent:
 	add r4, r5, r7
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #76
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #80
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L143:
 	b .L140
@@ -175,7 +175,7 @@ max_sum_nonadjacent:
 	.global longest_common_subseq
 	.type longest_common_subseq , %function
 longest_common_subseq:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	ldr r4, =1048
 	sub sp, sp, r4
@@ -223,7 +223,7 @@ longest_common_subseq:
 	mov r0, r5
 	ldr r1, =1048
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L169:
 	b .L166
@@ -379,7 +379,7 @@ longest_common_subseq:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #120
 .L208:
@@ -515,6 +515,7 @@ main:
 	bl putch
 	mov r0, #0
 	add sp, sp, #120
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

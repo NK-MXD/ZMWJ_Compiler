@@ -5,9 +5,9 @@
 	.global fun
 	.type fun , %function
 fun:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L28:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -39,8 +39,8 @@ fun:
 .L34:
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L37:
 	b .L34
@@ -50,9 +50,9 @@ fun:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L43:
 	bl getint
 	mov r4, r0
@@ -71,7 +71,8 @@ main:
 	mov r0, r4
 	bl putint
 	mov r0, #0
-	add sp, sp, #12
-	pop {r4, r5, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

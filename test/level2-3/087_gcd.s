@@ -5,7 +5,7 @@
 	.global gcd
 	.type gcd , %function
 gcd:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L26:
@@ -21,7 +21,7 @@ gcd:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L30:
 	ldr r4, [fp, #-8]
@@ -36,7 +36,7 @@ gcd:
 	mov r4, r0
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L33:
 	b .L30
@@ -44,9 +44,9 @@ gcd:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L34:
 	bl getint
 	mov r4, r0
@@ -87,11 +87,12 @@ main:
 	b .L48
 .L38:
 	mov r0, #0
-	add sp, sp, #12
-	pop {r4, r5, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L41:
 	b .L38
 .L48:
 	b .L38
 
+	.ident "ZWJM"

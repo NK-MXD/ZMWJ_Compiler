@@ -5,9 +5,9 @@
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #92
+	sub sp, sp, #96
 .L31:
 	ldr r4, =2
 	str r4, [fp, #-4]
@@ -106,11 +106,12 @@ main:
 .L59:
 	ldr r4, [fp, #-92]
 	mov r0, r4
-	add sp, sp, #92
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #96
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L62:
 	b .L59
 .L73:
 	b .L59
 
+	.ident "ZWJM"

@@ -5,7 +5,7 @@
 	.global climbStairs
 	.type climbStairs , %function
 climbStairs:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #48
 .L36:
@@ -20,7 +20,7 @@ climbStairs:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #48
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L39:
 	mov r4, #0
@@ -107,7 +107,7 @@ climbStairs:
 	ldr r4, [r5]
 	mov r0, r4
 	add sp, sp, #48
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L50:
 	b .L47
@@ -117,7 +117,7 @@ climbStairs:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L61:
@@ -131,6 +131,7 @@ main:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

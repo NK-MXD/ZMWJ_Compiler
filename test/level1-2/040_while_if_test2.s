@@ -5,7 +5,7 @@
 	.global ifWhile
 	.type ifWhile , %function
 ifWhile:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L24:
@@ -27,7 +27,7 @@ ifWhile:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L32:
 	b .L28
@@ -88,14 +88,13 @@ ifWhile:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L55:
 	bl ifWhile
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #0
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

@@ -12,7 +12,7 @@ ascii_0:
 	.global my_getint
 	.type my_getint , %function
 my_getint:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L66:
@@ -84,7 +84,7 @@ my_getint:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L95:
 	b .L93
@@ -122,7 +122,7 @@ my_getint:
 	.global my_putint
 	.type my_putint , %function
 my_putint:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #72
 .L112:
@@ -200,7 +200,7 @@ my_putint:
 	b .L138
 .L129:
 	add sp, sp, #72
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L132:
 	b .L129
@@ -210,7 +210,7 @@ my_putint:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L139:
@@ -246,7 +246,7 @@ main:
 .L143:
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L146:
 	b .L143
@@ -255,3 +255,4 @@ main:
 
 addr_ascii_00:
 	.word ascii_0
+	.ident "ZWJM"

@@ -5,7 +5,7 @@
 	.global FourWhile
 	.type FourWhile , %function
 FourWhile:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L45:
@@ -40,7 +40,7 @@ FourWhile:
 	add r6, r5, r4
 	mov r0, r6
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L55:
 	b .L52
@@ -133,14 +133,13 @@ FourWhile:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L94:
 	bl FourWhile
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #0
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

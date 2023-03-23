@@ -12,9 +12,9 @@ len:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	ldr r4, =548
+	ldr r4, =552
 	sub sp, sp, r4
 .L129:
 	mov r4, #0
@@ -500,9 +500,9 @@ addr_len1:
 	b .L277
 .L264:
 	mov r0, #0
-	ldr r1, =548
+	ldr r1, =552
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L267:
 	b .L264
@@ -511,3 +511,4 @@ addr_len1:
 
 addr_len2:
 	.word len
+	.ident "ZWJM"

@@ -5,9 +5,9 @@
 	.global func1
 	.type func1 , %function
 func1:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L150:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -23,8 +23,8 @@ func1:
 	ldr r5, [fp, #-8]
 	mul r6, r4, r5
 	mov r0, r6
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L155:
 	ldr r4, [fp, #-4]
@@ -37,8 +37,8 @@ func1:
 	bl func1
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L159:
 	b .L155
@@ -46,7 +46,7 @@ func1:
 	.global func2
 	.type func2 , %function
 func2:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L160:
@@ -70,13 +70,13 @@ func2:
 	mov r4, r0
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L164:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L167:
 	b .L164
@@ -84,7 +84,7 @@ func2:
 	.global func3
 	.type func3 , %function
 func3:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L169:
@@ -101,7 +101,7 @@ func3:
 	add r5, r4, #1
 	mov r0, r5
 	add sp, sp, #8
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L173:
 	ldr r4, [fp, #-4]
@@ -113,7 +113,7 @@ func3:
 	mov r4, r0
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L177:
 	b .L173
@@ -121,9 +121,9 @@ func3:
 	.global func4
 	.type func4 , %function
 func4:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L178:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -137,14 +137,14 @@ func4:
 .L182:
 	ldr r4, [fp, #-8]
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, fp, lr}
 	bx lr
 .L183:
 	ldr r4, [fp, #-12]
 	mov r0, r4
-	add sp, sp, #12
-	pop {r4, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, fp, lr}
 	bx lr
 .L186:
 	b .L183
@@ -152,23 +152,23 @@ func4:
 	.global func5
 	.type func5 , %function
 func5:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L188:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
 	ldr r5, =0
 	sub r6, r5, r4
 	mov r0, r6
-	add sp, sp, #4
-	pop {r4, r5, r6, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global func6
 	.type func6 , %function
 func6:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L190:
@@ -183,12 +183,12 @@ func6:
 .L193:
 	mov r0, #1
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 .L194:
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 .L196:
 	ldr r4, [fp, #-8]
@@ -205,9 +205,9 @@ func6:
 	.global func7
 	.type func7 , %function
 func7:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L203:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -223,13 +223,13 @@ func7:
 	b .L210
 .L205:
 	mov r0, #1
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L206:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L210:
 	b .L206
@@ -237,9 +237,9 @@ func7:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #76
+	sub sp, sp, #80
 .L212:
 	bl getint
 	mov r4, r0
@@ -571,8 +571,8 @@ main:
 	str r4, [fp, #-64]
 	ldr r4, [fp, #-64]
 	mov r0, r4
-	add sp, sp, #76
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	add sp, sp, #80
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F0
 .LTORG
@@ -582,3 +582,4 @@ main:
 .L229:
 	b .L221
 
+	.ident "ZWJM"

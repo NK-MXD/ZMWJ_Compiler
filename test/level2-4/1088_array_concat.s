@@ -5,9 +5,9 @@
 	.global concat
 	.type concat , %function
 concat:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L82:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -86,8 +86,8 @@ concat:
 	b .L115
 .L104:
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L107:
 	b .L104
@@ -97,7 +97,7 @@ concat:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #128
 .L116:
@@ -235,10 +235,11 @@ main:
 	bl putch
 	mov r0, #0
 	add sp, sp, #128
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L144:
 	b .L141
 .L150:
 	b .L141
 
+	.ident "ZWJM"

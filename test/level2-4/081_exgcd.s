@@ -5,7 +5,7 @@
 	.global exgcd
 	.type exgcd , %function
 exgcd:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L52:
@@ -37,7 +37,7 @@ exgcd:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L58:
 	ldr r4, [fp, #-8]
@@ -95,7 +95,7 @@ exgcd:
 	ldr r4, [fp, #-20]
 	mov r0, r4
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L62:
 	b .L58
@@ -103,7 +103,7 @@ exgcd:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L77:
@@ -182,6 +182,7 @@ main:
 	bl putint
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

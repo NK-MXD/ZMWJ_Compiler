@@ -7,7 +7,7 @@
 	.global merge_sort
 	.type merge_sort , %function
 merge_sort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L95:
@@ -23,7 +23,7 @@ merge_sort:
 	b .L102
 .L98:
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L99:
 	ldr r4, [fp, #-4]
@@ -318,7 +318,7 @@ addr_buf0:
 	b .L191
 .L179:
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L182:
 	b .L179
@@ -328,9 +328,9 @@ addr_buf0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L192:
 	mov r4, #0
 	ldr r5, addr_buf1
@@ -365,9 +365,10 @@ main:
 	mov r1, r5
 	bl putarray
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 addr_buf1:
 	.word buf
+	.ident "ZWJM"

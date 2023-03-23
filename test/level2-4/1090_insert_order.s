@@ -11,7 +11,7 @@ N:
 	.global insert
 	.type insert , %function
 insert:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L68:
@@ -111,7 +111,7 @@ insert:
 .L104:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L107:
 	b .L104
@@ -121,9 +121,9 @@ insert:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #52
+	sub sp, sp, #56
 .L118:
 	ldr r4, =10
 	ldr r5, addr_N0
@@ -265,8 +265,8 @@ main:
 	b .L134
 .L124:
 	mov r0, #0
-	add sp, sp, #52
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #56
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L127:
 	b .L124
@@ -275,3 +275,4 @@ main:
 
 addr_N0:
 	.word N
+	.ident "ZWJM"

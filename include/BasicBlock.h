@@ -69,8 +69,6 @@ public:
     void addAlloc(Instruction* alloc);
     std::vector<BasicBlock *>& getSuccBlock() { return succ;};
     std::vector<BasicBlock *>& getPredBlock() { return pred;};
-    void insertPhiInstruction(Operand* dst);
-    void addSucc(BasicBlock* bb, bool first);
 };
 
 #endif

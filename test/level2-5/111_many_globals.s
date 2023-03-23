@@ -206,7 +206,7 @@ a39:
 	.global testParam8
 	.type testParam8 , %function
 testParam8:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #32
 .L366:
@@ -214,13 +214,13 @@ testParam8:
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #20]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #24]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #28]
-	str r3, [fp, #-28]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #32]
+	str r3, [fp, #-28]
+	ldr r3, [fp, #36]
 	str r3, [fp, #-32]
 	ldr r4, [fp, #-4]
 	ldr r5, [fp, #-8]
@@ -239,13 +239,13 @@ testParam8:
 	add r6, r5, r4
 	mov r0, r6
 	add sp, sp, #32
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global testParam16
 	.type testParam16 , %function
 testParam16:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #64
 .L375:
@@ -253,29 +253,29 @@ testParam16:
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #20]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #24]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #28]
-	str r3, [fp, #-28]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #32]
-	str r3, [fp, #-32]
+	str r3, [fp, #-28]
 	ldr r3, [fp, #36]
-	str r3, [fp, #-36]
+	str r3, [fp, #-32]
 	ldr r3, [fp, #40]
-	str r3, [fp, #-40]
+	str r3, [fp, #-36]
 	ldr r3, [fp, #44]
-	str r3, [fp, #-44]
+	str r3, [fp, #-40]
 	ldr r3, [fp, #48]
-	str r3, [fp, #-48]
+	str r3, [fp, #-44]
 	ldr r3, [fp, #52]
-	str r3, [fp, #-52]
+	str r3, [fp, #-48]
 	ldr r3, [fp, #56]
-	str r3, [fp, #-56]
+	str r3, [fp, #-52]
 	ldr r3, [fp, #60]
-	str r3, [fp, #-60]
+	str r3, [fp, #-56]
 	ldr r3, [fp, #64]
+	str r3, [fp, #-60]
+	ldr r3, [fp, #68]
 	str r3, [fp, #-64]
 	ldr r4, [fp, #-4]
 	ldr r5, [fp, #-8]
@@ -310,13 +310,13 @@ testParam16:
 	add r6, r5, r4
 	mov r0, r6
 	add sp, sp, #64
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global testParam32
 	.type testParam32 , %function
 testParam32:
-	push {r4, r5, r6, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #128
 .L392:
@@ -324,61 +324,61 @@ testParam32:
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #20]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #24]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #28]
-	str r3, [fp, #-28]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #32]
-	str r3, [fp, #-32]
+	str r3, [fp, #-28]
 	ldr r3, [fp, #36]
-	str r3, [fp, #-36]
+	str r3, [fp, #-32]
 	ldr r3, [fp, #40]
-	str r3, [fp, #-40]
+	str r3, [fp, #-36]
 	ldr r3, [fp, #44]
-	str r3, [fp, #-44]
+	str r3, [fp, #-40]
 	ldr r3, [fp, #48]
-	str r3, [fp, #-48]
+	str r3, [fp, #-44]
 	ldr r3, [fp, #52]
-	str r3, [fp, #-52]
+	str r3, [fp, #-48]
 	ldr r3, [fp, #56]
-	str r3, [fp, #-56]
+	str r3, [fp, #-52]
 	ldr r3, [fp, #60]
-	str r3, [fp, #-60]
+	str r3, [fp, #-56]
 	ldr r3, [fp, #64]
-	str r3, [fp, #-64]
+	str r3, [fp, #-60]
 	ldr r3, [fp, #68]
-	str r3, [fp, #-68]
+	str r3, [fp, #-64]
 	ldr r3, [fp, #72]
-	str r3, [fp, #-72]
+	str r3, [fp, #-68]
 	ldr r3, [fp, #76]
-	str r3, [fp, #-76]
+	str r3, [fp, #-72]
 	ldr r3, [fp, #80]
-	str r3, [fp, #-80]
+	str r3, [fp, #-76]
 	ldr r3, [fp, #84]
-	str r3, [fp, #-84]
+	str r3, [fp, #-80]
 	ldr r3, [fp, #88]
-	str r3, [fp, #-88]
+	str r3, [fp, #-84]
 	ldr r3, [fp, #92]
-	str r3, [fp, #-92]
+	str r3, [fp, #-88]
 	ldr r3, [fp, #96]
-	str r3, [fp, #-96]
+	str r3, [fp, #-92]
 	ldr r3, [fp, #100]
-	str r3, [fp, #-100]
+	str r3, [fp, #-96]
 	ldr r3, [fp, #104]
-	str r3, [fp, #-104]
+	str r3, [fp, #-100]
 	ldr r3, [fp, #108]
-	str r3, [fp, #-108]
+	str r3, [fp, #-104]
 	ldr r3, [fp, #112]
-	str r3, [fp, #-112]
+	str r3, [fp, #-108]
 	ldr r3, [fp, #116]
-	str r3, [fp, #-116]
+	str r3, [fp, #-112]
 	ldr r3, [fp, #120]
-	str r3, [fp, #-120]
+	str r3, [fp, #-116]
 	ldr r3, [fp, #124]
-	str r3, [fp, #-124]
+	str r3, [fp, #-120]
 	ldr r3, [fp, #128]
+	str r3, [fp, #-124]
+	ldr r3, [fp, #132]
 	str r3, [fp, #-128]
 	ldr r4, [fp, #-4]
 	ldr r5, [fp, #-8]
@@ -445,13 +445,13 @@ testParam32:
 	add r6, r5, r4
 	mov r0, r6
 	add sp, sp, #128
-	pop {r4, r5, r6, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #152
 .L425:
@@ -848,7 +848,7 @@ main:
 	bl putint
 	mov r0, #0
 	add sp, sp, #152
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F0
 .LTORG
@@ -1014,3 +1014,4 @@ addr_a381:
 	.word a38
 addr_a391:
 	.word a39
+	.ident "ZWJM"

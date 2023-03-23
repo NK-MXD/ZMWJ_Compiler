@@ -5,7 +5,7 @@
 	.global func
 	.type func , %function
 func:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #40
 .L76:
@@ -13,15 +13,15 @@ func:
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #28]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #32]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #36]
-	str r3, [fp, #-28]
+	str r3, [fp, #-24]
 	ldr r3, [fp, #40]
-	str r3, [fp, #-32]
+	str r3, [fp, #-28]
 	ldr r3, [fp, #44]
+	str r3, [fp, #-32]
+	ldr r3, [fp, #48]
 	str r3, [fp, #-36]
 	ldr r4, =0
 	str r4, [fp, #-40]
@@ -112,7 +112,7 @@ func:
 	add r6, r4, r5
 	mov r0, r6
 	add sp, sp, #40
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L108:
 	b .L105
@@ -122,7 +122,7 @@ func:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	ldr r4, =28880
 	sub sp, sp, r4
@@ -380,9 +380,9 @@ main:
 .LTORG
 .F0:
 .L146:
-	ldr r5, =-28860
-	ldr r4, [fp, r5]
-	cmp r4, #0
+	ldr r4, =-28860
+	ldr r5, [fp, r4]
+	cmp r5, #0
 	movge r4, #1
 	movlt r4, #0
 	bge .L147
@@ -394,21 +394,21 @@ main:
 	mul r7, r4, r6
 	add r4, fp, r5
 	add r5, r4, r7
-	ldr r6, =-28860
-	ldr r4, [fp, r6]
-	mov r6, #4
-	mul r7, r4, r6
+	ldr r4, =-28860
+	ldr r6, [fp, r4]
+	mov r4, #4
+	mul r7, r6, r4
 	add r4, r5, r7
 	ldr r5, [r4]
 	mov r0, r5
 	bl putint
 	mov r0, #32
 	bl putch
-	ldr r5, =-28860
-	ldr r4, [fp, r5]
-	sub r5, r4, #1
 	ldr r4, =-28860
-	str r5, [fp, r4]
+	ldr r5, [fp, r4]
+	sub r4, r5, #1
+	ldr r5, =-28860
+	str r4, [fp, r5]
 	ldr r4, =-28860
 	ldr r5, [fp, r4]
 	cmp r5, #0
@@ -422,10 +422,11 @@ main:
 	mov r0, #0
 	ldr r1, =28880
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L151:
 	b .L148
 .L158:
 	b .L148
 
+	.ident "ZWJM"

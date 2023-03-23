@@ -11,9 +11,8 @@ a:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L4:
 	ldr r4, =10
 	ldr r5, addr_a0
@@ -27,16 +26,15 @@ main:
 	b .L9
 .L5:
 	mov r0, #1
-	add sp, sp, #0
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L6:
 	mov r0, #0
-	add sp, sp, #0
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L9:
 	b .L6
 
 addr_a0:
 	.word a
+	.ident "ZWJM"

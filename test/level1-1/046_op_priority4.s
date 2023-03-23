@@ -31,9 +31,9 @@ e:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L49:
 	bl getint
 	mov r4, r0
@@ -85,8 +85,8 @@ main:
 .L52:
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L53:
 	ldr r4, addr_a0
@@ -143,3 +143,4 @@ addr_d0:
 	.word d
 addr_e0:
 	.word e
+	.ident "ZWJM"

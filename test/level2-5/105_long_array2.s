@@ -7,9 +7,9 @@
 	.global f1
 	.type f1 , %function
 f1:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L17:
 	str r0, [fp, #-4]
 	mov r4, #5
@@ -70,14 +70,14 @@ f1:
 	mov r5, r4
 	ldr r4, [r5]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	ldr r4, =32768
 	sub sp, sp, r4
@@ -95,15 +95,9 @@ main:
 	add r4, fp, r5
 	add r5, r4, r7
 	mov r4, #0
-	mov r5, #4
-	mul r6, r4, r5
-	mov r4, #1
-	ldr r5, =-16384
-	ldr r7, =4096
-	mul r8, r4, r7
-	add r4, fp, r5
-	add r5, r4, r8
-	add r4, r5, r6
+	mov r6, #4
+	mul r7, r4, r6
+	add r4, r5, r7
 	ldr r5, =1
 	str r5, [r4]
 	ldr r6, =4096
@@ -136,15 +130,9 @@ main:
 	add r4, fp, r5
 	add r5, r4, r7
 	mov r4, #0
-	mov r5, #4
-	mul r6, r4, r5
-	mov r4, #0
-	ldr r5, =-32768
-	mov r7, #16
-	mul r8, r4, r7
-	add r4, fp, r5
-	add r5, r4, r8
-	add r4, r5, r6
+	mov r6, #4
+	mul r7, r4, r6
+	add r4, r5, r7
 	ldr r5, =1
 	str r5, [r4]
 	add r5, r4, #4
@@ -163,15 +151,9 @@ main:
 	add r4, fp, r5
 	add r5, r4, r7
 	mov r4, #0
-	mov r5, #4
-	mul r6, r4, r5
-	mov r4, #0
-	ldr r5, =-32768
-	mov r7, #16
-	mul r8, r4, r7
-	add r4, fp, r5
-	add r5, r4, r8
-	add r4, r5, r6
+	mov r6, #4
+	mul r7, r4, r6
+	add r4, r5, r7
 	mov r0, r4
 	bl f1
 	mov r4, r0
@@ -186,21 +168,16 @@ main:
 	add r4, fp, r5
 	add r5, r4, r7
 	mov r4, #0
-	mov r5, #4
-	mul r6, r4, r5
-	mov r4, #2
-	ldr r5, =-32768
-	mov r7, #16
-	mul r8, r4, r7
-	add r4, fp, r5
-	add r5, r4, r8
-	add r4, r5, r6
+	mov r6, #4
+	mul r7, r4, r6
+	add r4, r5, r7
 	ldr r5, [r4]
 	mov r0, r5
 	ldr r1, =32768
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
 addr_a0:
 	.word a
+	.ident "ZWJM"

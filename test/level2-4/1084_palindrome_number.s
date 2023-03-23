@@ -5,9 +5,9 @@
 	.global palindrome
 	.type palindrome , %function
 palindrome:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #28
+	sub sp, sp, #32
 .L41:
 	str r0, [fp, #-4]
 	ldr r4, =0
@@ -81,8 +81,8 @@ palindrome:
 .L59:
 	ldr r4, [fp, #-28]
 	mov r0, r4
-	add sp, sp, #28
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #32
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L60:
 	mov r4, #1
@@ -112,7 +112,7 @@ palindrome:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L71:
@@ -149,8 +149,9 @@ main:
 	bl putch
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 .L79:
 	b .L75
 
+	.ident "ZWJM"

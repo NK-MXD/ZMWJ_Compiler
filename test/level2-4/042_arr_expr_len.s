@@ -6,21 +6,12 @@
 	.align 4
 	.size arr, 24
 arr:
-<<<<<<< HEAD
 	.word 1
 	.word 2
 	.word 33
 	.word 4
 	.word 5
 	.word 6
-=======
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
->>>>>>> master
 	.section .rodata
 	.global N
 	.align 4
@@ -31,7 +22,7 @@ N:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L21:
@@ -71,7 +62,7 @@ main:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L29:
 	b .L26
@@ -82,3 +73,4 @@ addr_N0:
 	.word N
 addr_arr0:
 	.word arr
+	.ident "ZWJM"

@@ -11,7 +11,7 @@ n:
 	.global select_sort
 	.type select_sort , %function
 select_sort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L79:
@@ -39,7 +39,7 @@ select_sort:
 .L87:
 	mov r0, #0
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L90:
 	b .L87
@@ -146,7 +146,7 @@ select_sort:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #48
 .L131:
@@ -289,7 +289,7 @@ main:
 .L136:
 	mov r0, #0
 	add sp, sp, #48
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L139:
 	b .L136
@@ -298,3 +298,4 @@ main:
 
 addr_n0:
 	.word n
+	.ident "ZWJM"

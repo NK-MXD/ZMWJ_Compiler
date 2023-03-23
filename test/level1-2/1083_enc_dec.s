@@ -5,9 +5,9 @@
 	.global enc
 	.type enc , %function
 enc:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L34:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -29,8 +29,8 @@ enc:
 .L38:
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L41:
 	b .L37
@@ -38,9 +38,9 @@ enc:
 	.global dec
 	.type dec , %function
 dec:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L42:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -62,8 +62,8 @@ dec:
 .L46:
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L49:
 	b .L45
@@ -71,7 +71,7 @@ dec:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L50:
@@ -97,6 +97,7 @@ main:
 	bl putch
 	mov r0, #0
 	add sp, sp, #8
-	pop {r4, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

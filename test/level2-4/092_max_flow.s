@@ -17,7 +17,7 @@ INF:
 	.global my_memset
 	.type my_memset , %function
 my_memset:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L194:
@@ -55,7 +55,7 @@ my_memset:
 	b .L211
 .L201:
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L204:
 	b .L201
@@ -65,9 +65,9 @@ my_memset:
 	.global add_node
 	.type add_node , %function
 add_node:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L212:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -222,14 +222,14 @@ add_node:
 	add r4, r6, r8
 	mov r6, r4
 	str r5, [r6]
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 
 	.global dfs
 	.type dfs , %function
 dfs:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
 	sub sp, sp, #24
 .L232:
@@ -247,7 +247,7 @@ dfs:
 	ldr r4, [fp, #-12]
 	mov r0, r4
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L237:
 	ldr r4, [fp, #-4]
@@ -303,7 +303,7 @@ dfs:
 .L244:
 	mov r0, #0
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L248:
 	b .L244
@@ -494,7 +494,7 @@ dfs:
 	ldr r4, [fp, #-24]
 	mov r0, r4
 	add sp, sp, #24
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 	b .F0
 .LTORG
@@ -536,7 +536,7 @@ addr_used0:
 	.global max_flow
 	.type max_flow , %function
 max_flow:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L307:
@@ -582,7 +582,7 @@ max_flow:
 .L313:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L315:
 	b .L313
@@ -590,7 +590,7 @@ max_flow:
 	ldr r4, [fp, #-12]
 	mov r0, r4
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L319:
 	ldr r4, [fp, #-12]
@@ -611,9 +611,9 @@ max_flow:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L327:
 	bl getint
 	mov r4, r0
@@ -676,8 +676,8 @@ main:
 	mov r0, #10
 	bl putch
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L335:
 	b .L332
@@ -696,3 +696,4 @@ addr_rev1:
 	.word rev
 addr_used1:
 	.word used
+	.ident "ZWJM"

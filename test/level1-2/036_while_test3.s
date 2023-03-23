@@ -26,7 +26,7 @@ e:
 	.global EightWhile
 	.type EightWhile , %function
 EightWhile:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L93:
@@ -72,7 +72,7 @@ EightWhile:
 	sub r4, r6, r5
 	mov r0, r4
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L103:
 	b .L100
@@ -304,9 +304,8 @@ addr_e0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #0
 .L186:
 	ldr r4, =1
 	ldr r5, addr_g1
@@ -323,8 +322,7 @@ main:
 	bl EightWhile
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #0
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 
 addr_g1:
@@ -335,3 +333,4 @@ addr_f1:
 	.word f
 addr_e1:
 	.word e
+	.ident "ZWJM"

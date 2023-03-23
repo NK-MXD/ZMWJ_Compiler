@@ -467,7 +467,7 @@ RET:
 	.global putstr
 	.type putstr , %function
 putstr:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L47:
@@ -514,7 +514,7 @@ putstr:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L56:
 	b .L52
@@ -524,9 +524,9 @@ putstr:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L68:
 	mov r4, #0
 	ldr r5, addr___HELLO0
@@ -567,8 +567,8 @@ main:
 	b .L82
 .L72:
 	mov r0, #0
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L74:
 	b .L72
@@ -658,3 +658,4 @@ addr_saY_HeI10_To0:
 	.word saY_HeI10_To
 addr_RET0:
 	.word RET
+	.ident "ZWJM"

@@ -5,7 +5,7 @@
 	.global removeElement
 	.type removeElement , %function
 removeElement:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L48:
@@ -40,7 +40,7 @@ removeElement:
 	ldr r4, [fp, #-8]
 	mov r0, r4
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L58:
 	b .L55
@@ -83,7 +83,7 @@ removeElement:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #48
 .L76:
@@ -188,6 +188,7 @@ main:
 	ldr r4, [fp, #-4]
 	mov r0, r4
 	add sp, sp, #48
-	pop {r4, r5, r6, r7, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

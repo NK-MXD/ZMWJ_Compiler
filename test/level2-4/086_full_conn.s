@@ -5,9 +5,9 @@
 	.global relu_reg
 	.type relu_reg , %function
 relu_reg:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L933:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -18,8 +18,8 @@ relu_reg:
 	b .L939
 .L935:
 	mov r0, #127
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L936:
 	ldr r4, [fp, #-4]
@@ -32,14 +32,14 @@ relu_reg:
 	b .L936
 .L940:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L941:
 	ldr r4, [fp, #-4]
 	mov r0, r4
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 .L944:
 	b .L941
@@ -47,9 +47,9 @@ relu_reg:
 	.global model
 	.type model , %function
 model:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L945:
 	str r0, [fp, #-4]
 	ldr r4, [fp, #-4]
@@ -3506,13 +3506,13 @@ model:
 .F6:
 .L947:
 	mov r0, #1
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L948:
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L1701:
 	b .L948
@@ -3520,7 +3520,7 @@ model:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #112
 .L1702:
@@ -3542,7 +3542,7 @@ main:
 .L1707:
 	mov r0, #0
 	add sp, sp, #112
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L1710:
 	b .L1707
@@ -3655,3 +3655,4 @@ main:
 .L1746:
 	b .L1707
 
+	.ident "ZWJM"

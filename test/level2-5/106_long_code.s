@@ -11,7 +11,7 @@ n:
 	.global bubblesort
 	.type bubblesort , %function
 bubblesort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L531:
@@ -36,7 +36,7 @@ bubblesort:
 .L537:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L540:
 	b .L537
@@ -141,7 +141,7 @@ bubblesort:
 	.global insertsort
 	.type insertsort , %function
 insertsort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L579:
@@ -173,7 +173,7 @@ insertsort:
 .L584:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L587:
 	b .L584
@@ -256,9 +256,9 @@ insertsort:
 	.global QuickSort
 	.type QuickSort , %function
 QuickSort:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #28
+	sub sp, sp, #32
 .L631:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -285,8 +285,8 @@ QuickSort:
 	b .L645
 .L636:
 	mov r0, #0
-	add sp, sp, #28
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #32
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L639:
 	b .L636
@@ -487,7 +487,7 @@ addr_n0:
 	.global getMid
 	.type getMid , %function
 getMid:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L736:
@@ -527,7 +527,7 @@ getMid:
 	sdiv r5, r6, r4
 	mov r0, r5
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L740:
 	ldr r4, addr_n1
@@ -543,7 +543,7 @@ getMid:
 	ldr r4, [r5]
 	mov r0, r4
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L744:
 	b .L740
@@ -551,9 +551,9 @@ getMid:
 	.global getMost
 	.type getMost , %function
 getMost:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	ldr r4, =4020
+	ldr r4, =4024
 	sub sp, sp, r4
 .L751:
 	str r0, [fp, #-4]
@@ -661,9 +661,9 @@ getMost:
 	ldr r5, =-4016
 	ldr r4, [fp, r5]
 	mov r0, r4
-	ldr r1, =4020
+	ldr r1, =4024
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L773:
 	b .L770
@@ -706,7 +706,7 @@ getMost:
 	.global revert
 	.type revert , %function
 revert:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L791:
@@ -767,7 +767,7 @@ revert:
 .L798:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L801:
 	b .L798
@@ -777,9 +777,9 @@ revert:
 	.global arrCopy
 	.type arrCopy , %function
 arrCopy:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L814:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -821,8 +821,8 @@ arrCopy:
 	b .L832
 .L820:
 	mov r0, #0
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L823:
 	b .L820
@@ -832,7 +832,7 @@ arrCopy:
 	.global calSum
 	.type calSum , %function
 calSum:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
 .L833:
@@ -877,7 +877,7 @@ calSum:
 .L840:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L843:
 	b .L840
@@ -921,9 +921,9 @@ calSum:
 	.global avgPooling
 	.type avgPooling , %function
 avgPooling:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L860:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -1083,8 +1083,8 @@ avgPooling:
 	b .L912
 .L902:
 	mov r0, #0
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L905:
 	b .L902
@@ -1094,7 +1094,7 @@ avgPooling:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	ldr r4, =264
 	sub sp, sp, r4
@@ -1906,7 +1906,7 @@ addr_n3:
 	mov r0, #0
 	ldr r1, =264
 	add sp, sp, r1
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L995:
 	b .L992
@@ -1915,3 +1915,4 @@ addr_n3:
 
 addr_n4:
 	.word n
+	.ident "ZWJM"

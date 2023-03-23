@@ -9,9 +9,9 @@
 	.global topo
 	.type topo , %function
 topo:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #20
+	sub sp, sp, #24
 .L88:
 	str r0, [fp, #-4]
 	ldr r4, =0
@@ -219,8 +219,8 @@ addr_queue0:
 	.word queue
 .F0:
 .L147:
-	add sp, sp, #20
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #24
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L150:
 	b .L147
@@ -230,9 +230,9 @@ addr_queue0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #12
+	sub sp, sp, #16
 .L158:
 	ldr r4, =1
 	str r4, [fp, #-12]
@@ -257,8 +257,8 @@ main:
 	mov r0, r4
 	bl topo
 	mov r0, #0
-	add sp, sp, #12
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L167:
 	b .L164
@@ -330,3 +330,4 @@ addr_indegree1:
 	.word indegree
 addr_queue1:
 	.word queue
+	.ident "ZWJM"

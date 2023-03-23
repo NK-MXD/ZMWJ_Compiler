@@ -11,24 +11,17 @@ b:
 	.align 4
 	.size c, 16
 c:
-<<<<<<< HEAD
 	.word 6
 	.word 7
 	.word 8
 	.word 9
-=======
-	.word 0
-	.word 0
-	.word 0
-	.word 0
->>>>>>> master
 	.text
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #220
+	sub sp, sp, #224
 .L36:
 	ldr r4, =1
 	str r4, [fp, #-4]
@@ -266,8 +259,8 @@ addr_c0:
 	mov r0, #10
 	bl putch
 	mov r0, #0
-	add sp, sp, #220
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #224
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L96:
 	b .L93
@@ -276,3 +269,4 @@ addr_b1:
 	.word b
 addr_c1:
 	.word c
+	.ident "ZWJM"

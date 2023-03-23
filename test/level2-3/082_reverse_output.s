@@ -5,7 +5,7 @@
 	.global reverse
 	.type reverse , %function
 reverse:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L15:
@@ -38,7 +38,7 @@ reverse:
 	b .L20
 .L20:
 	add sp, sp, #8
-	pop {r4, r5, fp, lr}
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L23:
 	b .L19
@@ -46,9 +46,9 @@ reverse:
 	.global main
 	.type main , %function
 main:
-	push {r4, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L24:
 	ldr r4, =200
 	str r4, [fp, #-4]
@@ -56,7 +56,8 @@ main:
 	mov r0, r4
 	bl reverse
 	mov r0, #0
-	add sp, sp, #4
-	pop {r4, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
 	bx lr
 
+	.ident "ZWJM"

@@ -8,9 +8,9 @@
 	.global loop1
 	.type loop1 , %function
 loop1:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #36
+	sub sp, sp, #40
 .L284:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
@@ -30,8 +30,8 @@ loop1:
 	str r4, [fp, #-16]
 	b .L304
 .L296:
-	add sp, sp, #36
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #40
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L300:
 	b .L296
@@ -263,9 +263,9 @@ addr_arr20:
 	.global loop2
 	.type loop2 , %function
 loop2:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #28
+	sub sp, sp, #32
 .L390:
 	ldr r4, =0
 	str r4, [fp, #-4]
@@ -282,8 +282,8 @@ loop2:
 	str r4, [fp, #-8]
 	b .L404
 .L400:
-	add sp, sp, #28
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #32
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L403:
 	b .L400
@@ -494,19 +494,19 @@ addr_arr21:
 	.global loop3
 	.type loop3 , %function
 loop3:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #60
+	sub sp, sp, #64
 .L481:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #28]
-	str r3, [fp, #-20]
 	ldr r3, [fp, #32]
-	str r3, [fp, #-24]
+	str r3, [fp, #-20]
 	ldr r3, [fp, #36]
+	str r3, [fp, #-24]
+	ldr r3, [fp, #40]
 	str r3, [fp, #-28]
 	ldr r4, =0
 	str r4, [fp, #-60]
@@ -527,8 +527,8 @@ loop3:
 .L499:
 	ldr r4, [fp, #-60]
 	mov r0, r4
-	add sp, sp, #60
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #64
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L502:
 	b .L499
@@ -865,9 +865,9 @@ addr_arr22:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #36
+	sub sp, sp, #40
 .L630:
 	bl getint
 	mov r4, r0
@@ -920,11 +920,12 @@ main:
 	add sp, sp, #12
 	mov r4, r0
 	mov r0, r4
-	add sp, sp, #36
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	add sp, sp, #40
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 
 addr_arr13:
 	.word arr1
 addr_arr23:
 	.word arr2
+	.ident "ZWJM"

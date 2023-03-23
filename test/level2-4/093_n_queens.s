@@ -20,9 +20,9 @@ n:
 	.global printans
 	.type printans , %function
 printans:
-	push {r4, r5, r6, r7, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L90:
 	ldr r4, addr_sum0
 	ldr r5, [r4]
@@ -60,16 +60,16 @@ printans:
 	beq .L99
 	b .L104
 .L94:
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L97:
 	b .L94
 .L99:
 	mov r0, #10
 	bl putch
-	add sp, sp, #4
-	pop {r4, r5, r6, r7, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L100:
 	mov r0, #32
@@ -95,7 +95,7 @@ printans:
 	.global f
 	.type f , %function
 f:
-	push {r4, r5, r6, r7, r8, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
 .L111:
@@ -127,7 +127,7 @@ f:
 	b .L127
 .L116:
 	add sp, sp, #8
-	pop {r4, r5, r6, r7, r8, fp, lr}
+	pop {r3, r4, r5, r6, r7, r8, fp, lr}
 	bx lr
 .L119:
 	b .L116
@@ -298,9 +298,9 @@ addr_line20:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, fp, lr}
+	push {r3, r4, r5, r6, fp, lr}
 	mov fp, sp
-	sub sp, sp, #4
+	sub sp, sp, #8
 .L148:
 	bl getint
 	mov r4, r0
@@ -333,8 +333,8 @@ main:
 	ldr r4, addr_sum1
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #4
-	pop {r4, r5, fp, lr}
+	add sp, sp, #8
+	pop {r3, r4, r5, r6, fp, lr}
 	bx lr
 .L155:
 	b .L152
@@ -353,3 +353,4 @@ addr_line11:
 	.word line1
 addr_line21:
 	.word line2
+	.ident "ZWJM"

@@ -7,15 +7,15 @@
 	.global KnapSack
 	.type KnapSack , %function
 KnapSack:
-	push {r4, r5, r6, r7, r8, r9, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #36
+	sub sp, sp, #40
 .L109:
 	str r0, [fp, #-4]
 	str r1, [fp, #-8]
 	str r2, [fp, #-12]
 	str r3, [fp, #-16]
-	ldr r3, [fp, #32]
+	ldr r3, [fp, #40]
 	str r3, [fp, #-20]
 	ldr r4, =1
 	str r4, [fp, #-24]
@@ -252,8 +252,8 @@ addr_V0:
 	add r4, r5, r7
 	ldr r5, [r4]
 	mov r0, r5
-	add sp, sp, #36
-	pop {r4, r5, r6, r7, r8, r9, fp, lr}
+	add sp, sp, #40
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 .L176:
 	b .L173
@@ -302,9 +302,9 @@ addr_V0:
 	.global main
 	.type main , %function
 main:
-	push {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	mov fp, sp
-	sub sp, sp, #84
+	sub sp, sp, #88
 .L198:
 	mov r4, #0
 	mov r5, #-28
@@ -389,9 +389,10 @@ main:
 	mov r0, r4
 	bl putint
 	mov r0, #0
-	add sp, sp, #84
-	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	add sp, sp, #88
+	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
 
 addr_V1:
 	.word V
+	.ident "ZWJM"
