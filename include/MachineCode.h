@@ -78,7 +78,7 @@ class MachineOperand {
     MachineInstruction *getParent() { return this->parent; };
     void PrintReg();
     void output();
-
+    
     void setParam() { param = true; }
     bool isParam() { return param; }
     void setParamNo(int no) { paramNo = no; }

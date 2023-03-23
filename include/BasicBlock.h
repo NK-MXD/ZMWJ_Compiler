@@ -38,7 +38,6 @@ public:
     void output() const;
     bool succEmpty() const { return succ.empty(); };
     bool predEmpty() const { return pred.empty(); };
-    void addSucc(BasicBlock *);
     void removeSucc(BasicBlock *);
     void addPred(BasicBlock *);
     void removePred(BasicBlock *);
@@ -68,6 +67,10 @@ public:
     bool inStore(Operand* ope) { return stores.count(ope); }
     void replaceIns(Instruction* old, Instruction* new_);
     void addAlloc(Instruction* alloc);
+    std::vector<BasicBlock *>& getSuccBlock() { return succ;};
+    std::vector<BasicBlock *>& getPredBlock() { return pred;};
+    void insertPhiInstruction(Operand* dst);
+    void addSucc(BasicBlock* bb, bool first);
 };
 
 #endif

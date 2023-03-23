@@ -27,6 +27,7 @@ class Unit {
     reverse_iterator rbegin() { return func_list.rbegin(); };
     reverse_iterator rend() { return func_list.rend(); };
     void genMachineCode(MachineUnit* munit);
+    std::vector<Function* > &get_functions() {return func_list;};
 };
 
 #endif

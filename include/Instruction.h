@@ -42,6 +42,15 @@ class Instruction {
     MachineOperand* genMachineImm(int val);
     MachineOperand* genMachineLabel(int block_no);
     virtual void genMachineCode(AsmBuilder*) = 0;
+    // Z0323
+    Operand* getDef() { return operands[0]; }
+    void replaceDef(Operand* new_op) {
+        if(!operands.empty()){
+            operands[0]->removeDef(this);
+            operands[0] = new_op;
+            new_op->setDef(this);
+        }
+    }
 
    protected:
     unsigned instType;
@@ -88,6 +97,7 @@ class AllocaInstruction : public Instruction {
     ~AllocaInstruction();
     void output() const;
     void genMachineCode(AsmBuilder*);
+    bool isArray() { return se->getType()->isArray();}
 
    private:
     SymbolEntry* se;
@@ -320,5 +330,36 @@ class BitcastInstruction : public Instruction {
     }
     void setFlag() { flag = true; }
     bool getFlag() { return flag; }
+};
+
+
+class PhiInstruction : public Instruction {
+   private:
+    Operand* originDef;
+    Operand* dst;
+    std::map<BasicBlock*, Operand*> srcs;
+
+   public:
+    PhiInstruction(Operand* dst, BasicBlock* insert_bb = nullptr);
+    ~PhiInstruction();
+    void output() const;
+    Operand* getDef() {return operands[0];};
+    void genMachineCode(AsmBuilder*) {}
+    std::vector<Operand*> getUse() {
+        std::vector<Operand*> ret;
+        for (auto ope : operands)
+            if (ope != operands[0])
+                ret.emplace_back(ope);
+        return ret;
+    }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
+    Operand* getOriginDef() { return originDef; }
+    void addSrc(BasicBlock* block, Operand* src);
+    Operand* getSrc(BasicBlock* block) {
+        if (srcs.find(block) != srcs.end())
+            return srcs[block];
+        return nullptr;
+    };
 };
 #endif
