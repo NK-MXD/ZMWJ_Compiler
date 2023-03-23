@@ -1718,3 +1718,34 @@ void XorInstruction::genMachineCode(AsmBuilder* builder) {
                                    falseOperand, MachineInstruction::NE);
     cur_block->InsertInst(cur_inst);
 }
+
+PhiInstruction::PhiInstruction(Operand* dst, BasicBlock* insert_bb)
+    : Instruction(PHI, insert_bb) {
+    operands.emplace_back(dst);
+    this->dst = dst;
+    this->originDef = dst;
+    dst->setDef(this);
+}
+
+PhiInstruction::~PhiInstruction() {
+    dst->setDef(nullptr);
+    if (dst->usersNum() == 0)
+        delete dst;
+    for (auto it : srcs)
+        it.second->removeUse(this);
+}
+
+void PhiInstruction::output() const {
+    fprintf(yyout, "  %s = phi %s", dst->toStr().c_str(),
+            dst->getType()->toStr().c_str());
+    bool first = true;
+    for (auto it = srcs.begin(); it != srcs.end(); it++) {
+        if (!first)
+            fprintf(yyout, ", ");
+        else
+            first = false;
+        fprintf(yyout, "[ %s , %%B%d ]", it->second->toStr().c_str(),
+                it->first->getNo());
+    }
+    fprintf(yyout, "\n");
+}

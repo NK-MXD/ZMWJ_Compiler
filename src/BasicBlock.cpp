@@ -60,7 +60,7 @@ void BasicBlock::output() const {
         i->output();
 }
 
-void BasicBlock::addSucc(BasicBlock* bb) {
+void BasicBlock::addSucc(BasicBlock* bb, bool first) {
     succ.push_back(bb);
 }
 
@@ -126,4 +126,9 @@ void BasicBlock::addAlloc(Instruction* alloc) {
         insertAfter(alloc, lastAlloc);
         lastAlloc = alloc;
     }
+}
+
+void BasicBlock::insertPhiInstruction(Operand* dst) {
+    Instruction* i = new PhiInstruction(dst);
+    insertFront(i);
 }

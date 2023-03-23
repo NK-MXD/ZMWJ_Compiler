@@ -38,7 +38,6 @@ public:
     void output() const;
     bool succEmpty() const { return succ.empty(); };
     bool predEmpty() const { return pred.empty(); };
-    void addSucc(BasicBlock *);
     void removeSucc(BasicBlock *);
     void addPred(BasicBlock *);
     void removePred(BasicBlock *);

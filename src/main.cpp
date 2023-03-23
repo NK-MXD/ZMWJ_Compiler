@@ -5,6 +5,8 @@
 #include "LinearScan.h"
 #include "MachineCode.h"
 #include "Unit.h"
+#include "dominatorTree.h"
+#include "mem2reg.h"
 using namespace std;
 
 Ast ast;
@@ -20,6 +22,7 @@ bool dump_tokens;
 bool dump_ast;
 bool dump_ir;
 bool dump_asm;
+bool optimize;
 
 int main(int argc, char* argv[]) {
     int opt;
@@ -38,6 +41,8 @@ int main(int argc, char* argv[]) {
                 dump_ir = true;
                 break;
             case 'O':
+                optimize=true;
+                break;
             case 'S':
                 dump_asm = true;
                 break;
@@ -45,7 +50,6 @@ int main(int argc, char* argv[]) {
                 // fprintf(stderr, "Usage: %s [-o outfile] infile\n", argv[0]);
                 // exit(EXIT_FAILURE);
                 dump_asm = true;
-
                 break;
         }
     }
@@ -69,6 +73,16 @@ int main(int argc, char* argv[]) {
     ast.typeCheck();
     ast.genCode(&unit);
     // cout<<"genCode\n";
+
+    if(optimize){
+        // ComSubExprEli em(&unit);
+        // em.execute();
+        dominatorTree dt(&unit);
+        dt.execute();
+        Mem2Reg mr(&unit);
+        mr.execute();
+    }
+
     if (dump_ir)
         unit.output();
     // cout<<"genMachineCode\n";

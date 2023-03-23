@@ -52,6 +52,10 @@ app:$(LEXER) $(PARSER) $(BINARY)
 run:app
 	@$(BINARY) -o example.s -S example.sy
 
+run0:app
+	@$(BINARY) -o example.s -S -O2 example.sy
+
+
 run1:app
 	@$(BINARY) -o example.s -S example.sy
 	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
