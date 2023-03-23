@@ -969,33 +969,37 @@ void StoreInstruction::genMachineCode(AsmBuilder* builder) {
 MachineOperand* Instruction::genMachineOperand(Operand* ope) {
     auto se = ope->getEntry();
     MachineOperand* mope = nullptr;
-    if (se->isConstant())
+    if (se->isConstant()) {
         mope = new MachineOperand(
             MachineOperand::IMM,
             (int)dynamic_cast<ConstantSymbolEntry*>(se)->getValue());
-    else if (se->isTemporary())
+    } else if (se->isTemporary()) {
         mope = new MachineOperand(
             MachineOperand::VREG,
             dynamic_cast<TemporarySymbolEntry*>(se)->getLabel());
-    else if (se->isVariable()) {
+    } else if (se->isVariable()) {
         auto id_se = dynamic_cast<IdentifierSymbolEntry*>(se);
         if (id_se->isGlobal())
             mope = new MachineOperand(id_se->toStr().c_str());
         else if (id_se->isParam()) {
             // TODO: 这样分配的是虚拟寄存器 能对应到r0-r3嘛
             //  r4之后的参数需要一条load 哪里加 怎么判断是r4之后的参数
-            if (id_se->getParamNo() < 4)
+            auto no = id_se->getParamNo();
+            if (no < 4)
                 mope = new MachineOperand(MachineOperand::REG,
                                           id_se->getParamNo());
-            else
+            else {
                 // 用r3代表一下
                 mope = new MachineOperand(MachineOperand::REG, 3);
+                mope->setParam();
+                mope->setParamNo(no);
+            }
+            mope->setAllParamNo(id_se->getStackParamNo());
         } else
             exit(0);
     }
     return mope;
 }
-
 MachineOperand* Instruction::genMachineFloatOperand(Operand* ope) {
     auto se = ope->getEntry();
     if (!se->getType()->isFloat()) {

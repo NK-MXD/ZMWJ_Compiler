@@ -858,8 +858,7 @@ void MachineBlock::output() {
         }
         if ((*it)->isStore()) {
             MachineOperand* operand = (*it)->getUse()[0];
-            if (operand->isReg() && operand->getReg() == 3 &&
-                operand->isParam()) {
+            if (operand->isReg() && operand->getReg() == 3 ) {
                 auto fp = new MachineOperand(MachineOperand::REG, 11);
                 auto r3 = new MachineOperand(MachineOperand::REG, 3);
                 int temp = baseOffset + operand->getOffset();
