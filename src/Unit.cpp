@@ -29,7 +29,7 @@ void Unit::insertDeclare(SymbolEntry* se) {
 void Unit::output() const {
     for (auto se : global_list) {
         if (se->getType()->isInt())
-            fprintf(yyout, "%s = global %s %d, align 4\n", se->toStr().c_str(),
+            fprintf(yyout, "%s = global %s %f, align 4\n", se->toStr().c_str(),
                     se->getType()->toStr().c_str(),
                     ((IdentifierSymbolEntry*)se)->getValue());
         else if (se->getType()->isArray()) {
@@ -53,7 +53,7 @@ void Unit::output() const {
                         for (int j = 0; j < temp->getLength(); j++) {
                             if (j != 0)
                                 fprintf(yyout, ", ");
-                            fprintf(yyout, "i32 %d", val[i++]);
+                            fprintf(yyout, "i32 %f", val[i++]);
                         }
                         fprintf(yyout, "]");
                         stk1.pop();

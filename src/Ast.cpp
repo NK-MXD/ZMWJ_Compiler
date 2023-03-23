@@ -622,6 +622,7 @@ bool DeclStmt::hasMemset = false;
 void DeclStmt::genCode() {
     IdentifierSymbolEntry* se =
         dynamic_cast<IdentifierSymbolEntry*>(id->getSymbolEntry());
+        // std::cout<<"DeclStmt::genCode\n";
     if (se->isGlobal()) {
         Operand* addr;
         SymbolEntry* addr_se;

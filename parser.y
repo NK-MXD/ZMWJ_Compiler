@@ -6,11 +6,11 @@
     #include <stack>
     extern Ast ast;
 
-    Type* declType; // store type for variable declarations.
-    Type* funcRetType; // store type for return value of funtion declarations.
     int yylex();
     int yyerror(char const*);
     ArrayType* arrayType;
+    Type* declType; // store type for variable declarations.
+    Type* funcRetType; // store type for return value of funtion declarations.
     int idx;
     double* arrayValue; // store all number in float
     std::stack<InitValueListExpr*> stk;
@@ -18,9 +18,9 @@
     InitValueListExpr* top;
     int leftCnt = 0;
     int whileCnt = 0;
-    int stackParamNo = 0;
     int paramNo = 0;
     int fpParamNo = 0;
+    int stackParamNo = 0;
     int notZeroNum = 0;
     extern int yylineno;
     extern char* yytext;
@@ -33,8 +33,10 @@
     #include "Type.h"
 }
 
+%define parse.error verbose
+
 %union {
-    double numtype;
+    double numtype; // store all number in float
     char* strtype;
     StmtNode* stmttype;
     ExprNode* exprtype;
@@ -52,8 +54,14 @@
 %token CONST
 %token RETURN CONTINUE BREAK
 
-%type<stmttype> Stmts Stmt AssignStmt ExprStmt BlockStmt IfStmt WhileStmt BreakStmt ContinueStmt ReturnStmt DeclStmt FuncDef ConstDeclStmt VarDeclStmt ConstDefList VarDef ConstDef VarDefList FuncFParam FuncFParams MaybeFuncFParams BlankStmt
-%type<exprtype> Exp AddExp Cond LOrExp PrimaryExp LVal RelExp LAndExp MulExp ConstExp EqExp UnaryExp InitVal ConstInitVal InitValList ConstInitValList FuncArrayIndices FuncRParams ArrayIndices
+%type<stmttype> Stmts Stmt AssignStmt ExprStmt BlockStmt IfStmt WhileStmt BreakStmt ContinueStmt 
+%type<stmttype> ReturnStmt DeclStmt FuncDef ConstDeclStmt VarDeclStmt ConstDefList VarDef ConstDef 
+%type<stmttype> VarDefList FuncFParam FuncFParams MaybeFuncFParams BlankStmt
+
+%type<exprtype> Exp AddExp Cond LOrExp PrimaryExp LVal RelExp LAndExp MulExp ConstExp EqExp UnaryExp 
+%type<exprtype> InitVal ConstInitVal InitValList ConstInitValList FuncArrayIndices FuncRParams 
+%type<exprtype> ArrayIndices
+
 %type<type> Type
 
 %precedence THEN
@@ -71,33 +79,31 @@ Stmts
     }
     ;
 Stmt
-    : AssignStmt {
-        $$=$1;
-    }
-    | ExprStmt {$$ = $1;}
-    | BlockStmt {$$=$1;}
-    | BlankStmt {$$ = $1;}
-    | IfStmt {$$ = $1;}
-    | WhileStmt {$$ = $1;}
+    : AssignStmt { $$ = $1; }
+    | ExprStmt { $$ = $1; }
+    | BlockStmt {$$ = $1;}
+    | BlankStmt { $$ = $1; }
+    | IfStmt { $$ = $1; }
+    | WhileStmt { $$ = $1; }
     | BreakStmt {
-        if(!whileCnt)
+        if (!whileCnt)
             fprintf(stderr, "\'break\' statement not in while statement\n");
-        $$=$1;
+        $$ = $1;
     }
     | ContinueStmt {
-        if(!whileCnt)
+        if (!whileCnt)
             fprintf(stderr, "\'continue\' statement not in while statement\n");
-        $$=$1;
+        $$ = $1;
     }
-    | ReturnStmt {$$ = $1;}
-    | DeclStmt {$$ = $1;}
-    | FuncDef {$$ = $1;}
+    | ReturnStmt { $$ = $1; }
+    | DeclStmt { $$ = $1; }
+    | FuncDef { $$ = $1; }
     ;
 LVal
     : ID {
         SymbolEntry* se;
         se = identifiers->lookup($1);
-        if(se == nullptr)
+        if (se == nullptr)
             fprintf(stderr, "identifier \"%s\" is undefined\n", (char*)$1);
         $$ = new Id(se);
         delete []$1;
@@ -105,7 +111,7 @@ LVal
     | ID ArrayIndices{
         SymbolEntry* se;
         se = identifiers->lookup($1);
-        if(se == nullptr)
+        if (se == nullptr)
             fprintf(stderr, "identifier \"%s\" is undefined\n", (char*)$1);
         $$ = new Id(se, $2);
         delete []$1;
@@ -161,7 +167,7 @@ WhileStmt
     Stmt {
         StmtNode *whileNode = $<stmttype>5; 
         ((WhileStmt*)whileNode)->setStmt($6);
-        $$=whileNode;
+        $$ = whileNode;
         whileStk.pop();
         whileCnt--;
     }
@@ -191,11 +197,11 @@ ReturnStmt
     ;
 Exp
     :
-    AddExp {$$ = $1;}
+    AddExp { $$ = $1; }
     ;
 Cond
     :
-    LOrExp {$$ = $1;}
+    LOrExp { $$ = $1; }
     ;
 PrimaryExp
     : LPAREN Exp RPAREN {
@@ -208,7 +214,7 @@ PrimaryExp
         SymbolEntry* se;
         se = globals->lookup(std::string($1));
         // 这里如果str内容和变量名相同 怎么处理
-        if(se == nullptr){
+        if (se == nullptr) {
             Type* type = new StringType(strlen($1));
             se = new ConstantSymbolEntry(type, std::string($1));
             globals->install(std::string($1), se);
@@ -227,26 +233,26 @@ PrimaryExp
     }
     ;
 UnaryExp 
-    : PrimaryExp {$$ = $1;}
+    : PrimaryExp { $$ = $1; }
     | ID LPAREN FuncRParams RPAREN {
         SymbolEntry* se;
         se = identifiers->lookup($1);
-        if(se == nullptr)
+        if (se == nullptr)
             fprintf(stderr, "function \"%s\" is undefined\n", (char*)$1);
         $$ = new CallExpr(se, $3);
     }
     | ID LPAREN RPAREN {
         SymbolEntry* se;
         se = identifiers->lookup($1);
-        if(se == nullptr)
+        if (se == nullptr)
             fprintf(stderr, "function \"%s\" is undefined\n", (char*)$1);
-            if (strcmp($1, "_sysy_starttime") == 0 || strcmp($1, "_sysy_stoptime") == 0) {
+        if (strcmp($1, "_sysy_starttime") == 0 || strcmp($1, "_sysy_stoptime") == 0) {
             ExprNode* param = new Constant(new ConstantSymbolEntry(TypeSystem::intType, yylineno));
             $$ = new CallExpr(se, param);
         } else
-        $$ = new CallExpr(se);
+            $$ = new CallExpr(se);
     }
-    | ADD UnaryExp {$$ = $2;}
+    | ADD UnaryExp { $$ = $2; }
     | SUB UnaryExp {
         Type* exprType = $2->getType();
         SymbolEntry* se = new TemporarySymbolEntry(exprType, SymbolTable::getLabel());
@@ -259,7 +265,6 @@ UnaryExp
     }
     | NOT UnaryExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new UnaryExpr(se, UnaryExpr::NOT, $2);
         ExprNode* tmpExpr;
         if ($2->getType()->isFloat()) {
 
@@ -278,7 +283,7 @@ UnaryExp
     }
     ;
 MulExp
-    : UnaryExp {$$ = $1;}
+    : UnaryExp { $$ = $1; }
     | MulExp MUL UnaryExp {
         SymbolEntry* se;
         if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
@@ -286,7 +291,8 @@ MulExp
             $$ = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
         } else {
             se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
+            ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
+            $$ = tmpExpr->const_fold();
         }
     }
     | MulExp DIV UnaryExp {
@@ -296,10 +302,12 @@ MulExp
             $$ = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
         } else {
             se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
+            ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
+            $$ = tmpExpr->const_fold();
         }
     }
     | MulExp MOD UnaryExp {
+
         if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
             // error
             // already handled in `ast.cpp`
@@ -307,11 +315,12 @@ MulExp
         }
 
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::MOD, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::MOD, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     ;
 AddExp
-    : MulExp {$$ = $1;}
+    : MulExp { $$ = $1; }
     | AddExp ADD MulExp {
         SymbolEntry* se;
         if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
@@ -319,7 +328,8 @@ AddExp
             $$ = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
         } else {
             se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
+            ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
+            $$ = tmpExpr->const_fold();
         }
     }
     | AddExp SUB MulExp {
@@ -329,7 +339,8 @@ AddExp
             $$ = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
         } else {
             se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
+            ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
+            $$ = tmpExpr->const_fold();
         }
     }
     ;
@@ -339,51 +350,59 @@ RelExp
     }
     | RelExp LESS AddExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::LESS, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::LESS, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     | RelExp LESSEQUAL AddExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::LESSEQUAL, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::LESSEQUAL, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     | RelExp GREATER AddExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::GREATER, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::GREATER, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     | RelExp GREATEREQUAL AddExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::GREATEREQUAL, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::GREATEREQUAL, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     ;
 EqExp
-    : RelExp {$$ = $1;}
+    : RelExp { $$ = $1; }
     | EqExp EQUAL RelExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::EQUAL, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::EQUAL, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     | EqExp NOTEQUAL RelExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::NOTEQUAL, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::NOTEQUAL, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     ;
 LAndExp
-    : EqExp {$$ = $1;}
+    : EqExp { $$ = $1; }
     | LAndExp AND EqExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::AND, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::AND, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     ;
 LOrExp
-    : LAndExp {$$ = $1;}
+    : LAndExp { $$ = $1; }
     | LOrExp OR LAndExp {
         SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::OR, $1, $3);
+        ExprNode* tmpExpr = new BinaryExpr(se, BinaryExpr::OR, $1, $3);
+        $$ = tmpExpr->const_fold();
     }
     ;
 ConstExp
-    : AddExp {$$ = $1;}
+    : AddExp { $$ = $1; }
     ;
 FuncRParams 
-    : Exp {$$ = $1;}
+    : Exp { $$ = $1; }
     | FuncRParams COMMA Exp {
         $$ = $1;
         $$->setNext($3);
@@ -402,11 +421,11 @@ Type
     }
     ;
 DeclStmt
-    : VarDeclStmt {$$ = $1;}
-    | ConstDeclStmt {$$ = $1;}
+    : VarDeclStmt { $$ = $1; }
+    | ConstDeclStmt { $$ = $1; }
     ;
 VarDeclStmt
-    : Type VarDefList SEMICOLON {$$ = $2;}
+    : Type VarDefList SEMICOLON { $$ = $2; }
     ;
 ConstDeclStmt
     : CONST Type ConstDefList SEMICOLON {
@@ -419,20 +438,20 @@ VarDefList
         $$ = $1;
         $1->setNext($3);
     } 
-    | VarDef {$$ = $1;}
+    | VarDef { $$ = $1; }
     ;
 ConstDefList
     : ConstDefList COMMA ConstDef {
         $$ = $1;
         $1->setNext($3);
     }
-    | ConstDef {$$ = $1;}
+    | ConstDef { $$ = $1; }
     ;
 VarDef
     : ID {
         SymbolEntry* se;
         se = new IdentifierSymbolEntry(declType, $1, identifiers->getLevel());
-        if(!identifiers->install($1, se))
+        if (!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         $$ = new DeclStmt(new Id(se));
         delete []$1;
@@ -441,15 +460,15 @@ VarDef
         SymbolEntry* se;
         std::vector<int> vec;
         ExprNode* temp = $2;
-        while(temp){
+        while (temp) {
             vec.push_back(temp->getValue());
             temp = (ExprNode*)(temp->getNext());
         }
-        Type *type = declType;
+        Type* type = declType;
         Type* temp1;
-        while(!vec.empty()){
+        while (!vec.empty()) {
             temp1 = new ArrayType(type, vec.back());
-            if(type->isArray())
+            if (type->isArray())
                 ((ArrayType*)type)->setArrayType(temp1);
             type = temp1;
             vec.pop_back();
@@ -457,9 +476,9 @@ VarDef
         arrayType = (ArrayType*)type;
         se = new IdentifierSymbolEntry(type, $1, identifiers->getLevel());
         ((IdentifierSymbolEntry*)se)->setAllZero();
-        // double *p = new double[type->getSize()];
+        // int *p = new int[type->getSize()];
         // ((IdentifierSymbolEntry*)se)->setArrayValue(p);
-        if(!identifiers->install($1, se))
+        if (!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         $$ = new DeclStmt(new Id(se));
         delete []$1;
@@ -467,7 +486,7 @@ VarDef
     | ID ASSIGN InitVal {
         SymbolEntry* se;
         se = new IdentifierSymbolEntry(declType, $1, identifiers->getLevel());
-        if(!identifiers->install($1, se))
+        if (!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         // 这里要不要存值不确定
         double val = $3->getValue();
@@ -484,7 +503,7 @@ VarDef
         SymbolEntry* se;
         std::vector<int> vec;
         ExprNode* temp = $2;
-        while(temp){
+        while (temp) {
             vec.push_back(temp->getValue());
             temp = (ExprNode*)(temp->getNext());
         }
@@ -492,7 +511,7 @@ VarDef
         Type* temp1;
         for(auto it = vec.rbegin(); it != vec.rend(); it++) {
             temp1 = new ArrayType(type, *it);
-            if(type->isArray())
+            if (type->isArray())
                 ((ArrayType*)type)->setArrayType(temp1);
             type = temp1;
         }
@@ -519,6 +538,7 @@ VarDef
     ;
 ConstDef
     : ID ASSIGN ConstInitVal {
+
         if (declType->isFloat()) {
             declType = TypeSystem::constFloatType;
         } else if (declType->isInt()) {
@@ -526,10 +546,11 @@ ConstDef
         } else {
             // error
         }
+
         SymbolEntry* se;
         se = new IdentifierSymbolEntry(declType, $1, identifiers->getLevel());
         ((IdentifierSymbolEntry*)se)->setConst();
-        if(!identifiers->install($1, se))
+        if (!identifiers->install($1, se))
             fprintf(stderr, "identifier \"%s\" is already defined\n", (char*)$1);
         identifiers->install($1, se);
         double val = $3->getValue();
@@ -542,7 +563,8 @@ ConstDef
         $$ = new DeclStmt(new Id(se), $3);
         delete []$1;
     }
-    | ID ArrayIndices ASSIGN  {
+    | ID ArrayIndices ASSIGN {
+
         if (declType->isFloat()) {
             declType = TypeSystem::constFloatType;
         } else if (declType->isInt()) {
@@ -550,10 +572,11 @@ ConstDef
         } else {
             // error
         }
+
         SymbolEntry* se;
         std::vector<int> vec;
         ExprNode* temp = $2;
-        while(temp){
+        while (temp) {
             vec.push_back(temp->getValue());
             temp = (ExprNode*)(temp->getNext());
         }
@@ -561,7 +584,7 @@ ConstDef
         Type* temp1;
         for(auto it = vec.rbegin(); it != vec.rend(); it++) {
             temp1 = new ArrayType(type, *it, true);
-            if(type->isArray())
+            if (type->isArray())
                 ((ArrayType*)type)->setArrayType(temp1);
             type = temp1;
         }
@@ -657,14 +680,14 @@ InitVal
     | LBRACE RBRACE {
         SymbolEntry* se;
         ExprNode* list;
-        if(stk.empty()){
+        if (stk.empty()) {
             // 如果只用一个{}初始化数组，那么栈一定为空
             // 此时也没必要再加入栈了
             memset(arrayValue, 0, arrayType->getSize());
             idx += arrayType->getSize() / declType->getSize();
             se = new ConstantSymbolEntry(arrayType);
             list = new InitValueListExpr(se);
-        }else{
+        } else {
             // 栈不空说明肯定不是只有{}
             // 此时需要确定{}到底占了几个元素
             Type* type = ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType();
@@ -674,7 +697,7 @@ InitVal
             se = new ConstantSymbolEntry(type);
             list = new InitValueListExpr(se);
             stk.top()->addExpr(list);
-            while(stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt){
+            while (stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt) {
                 stk.pop();
             }
         }
@@ -682,15 +705,16 @@ InitVal
     }
     | LBRACE {
         SymbolEntry* se;
-        if(!stk.empty())
-            arrayType = (ArrayType*)(((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
+        if (!stk.empty())
+            arrayType = (ArrayType*)(
+                ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
         se = new ConstantSymbolEntry(arrayType);
         if (arrayType->getElementType() != TypeSystem::intType &&
             arrayType->getElementType() != TypeSystem::floatType) {
             arrayType = (ArrayType*)(arrayType->getElementType());
         }
         InitValueListExpr* expr = new InitValueListExpr(se);
-        if(!stk.empty())
+        if (!stk.empty())
             stk.top()->addExpr(expr);
         stk.push(expr);
         $<exprtype>$ = expr;
@@ -719,7 +743,8 @@ InitVal
 ConstInitVal
     : ConstExp {
         $$ = $1;
-        if(!stk.empty()){
+        if (!stk.empty()) {
+
             double val = $1->getValue();
             if (val)
                 notZeroNum++;
@@ -778,14 +803,14 @@ ConstInitVal
     | LBRACE RBRACE {
         SymbolEntry* se;
         ExprNode* list;
-        if(stk.empty()){
+        if (stk.empty()) {
             // 如果只用一个{}初始化数组，那么栈一定为空
             // 此时也没必要再加入栈了
             memset(arrayValue, 0, arrayType->getSize());
             idx += arrayType->getSize() / declType->getSize();
             se = new ConstantSymbolEntry(arrayType);
             list = new InitValueListExpr(se);
-        }else{
+        } else {
             // 栈不空说明肯定不是只有{}
             // 此时需要确定{}到底占了几个元素
             Type* type = ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType();
@@ -795,7 +820,7 @@ ConstInitVal
             se = new ConstantSymbolEntry(type);
             list = new InitValueListExpr(se);
             stk.top()->addExpr(list);
-            while(stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt){
+            while (stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt) {
                 stk.pop();
             }
         }
@@ -803,15 +828,16 @@ ConstInitVal
     }
     | LBRACE {
         SymbolEntry* se;
-        if(!stk.empty())
-            arrayType = (ArrayType*)(((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
+        if (!stk.empty())
+            arrayType = (ArrayType*)(
+                ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
         se = new ConstantSymbolEntry(arrayType);
         if (arrayType->getElementType() != TypeSystem::intType &&
             arrayType->getElementType() != TypeSystem::floatType) {
             arrayType = (ArrayType*)(arrayType->getElementType());
         }
         InitValueListExpr* expr = new InitValueListExpr(se);
-        if(!stk.empty())
+        if (!stk.empty())
             stk.top()->addExpr(expr);
         stk.push(expr);
         $<exprtype>$ = expr;
@@ -819,19 +845,21 @@ ConstInitVal
     } 
       ConstInitValList RBRACE {
         leftCnt--;
-        while(stk.top() != $<exprtype>2 && stk.size() > (long unsigned int)(leftCnt + 1))
+        while (stk.top() != $<exprtype>2 && stk.size() > (long unsigned int)(leftCnt + 1))
             stk.pop();
-        if(stk.top() == $<exprtype>2)
+        if (stk.top() == $<exprtype>2)
             stk.pop();
         $$ = $<exprtype>2;
-        if(!stk.empty())
-            while(stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt){
+        if (!stk.empty())
+            while (stk.top()->isFull() && stk.size() != (long unsigned int)leftCnt) {
                 stk.pop();
             }
-        while(idx % (((ArrayType*)($$->getSymbolEntry()->getType()))->getSize()/ sizeof(int)) !=0 )
+        while (
+            idx % (((ArrayType*)($$->getSymbolEntry()->getType()))->getSize() / sizeof(int)) != 0)
             arrayValue[idx++] = 0;
-        if(!stk.empty())
-            arrayType = (ArrayType*)(((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
+        if (!stk.empty())
+            arrayType = (ArrayType*)(
+                ((ArrayType*)(stk.top()->getSymbolEntry()->getType()))->getElementType());
     }
     ;
 InitValList
@@ -860,7 +888,7 @@ FuncDef
         stackParamNo = 0;
         funcRetType = $1;
     }
-    LPAREN MaybeFuncFParams RPAREN {
+      LPAREN MaybeFuncFParams RPAREN {
         Type* funcType;
         std::vector<Type*> vec;
         std::vector<SymbolEntry*> vec1;
@@ -880,7 +908,7 @@ FuncDef
         }
         $<se>$ = se; 
     } 
-    BlockStmt {
+      BlockStmt {
         $$ = new FunctionDef($<se>7, (DeclStmt*)$5, $8);
         SymbolTable* top = identifiers;
         identifiers = identifiers->getPrev();
@@ -889,8 +917,8 @@ FuncDef
     }
     ;
 MaybeFuncFParams
-    : FuncFParams {$$ = $1;}
-    | %empty {$$ = nullptr;}
+    : FuncFParams { $$ = $1; }
+    | %empty { $$ = nullptr; }
 FuncFParams
     : FuncFParams COMMA FuncFParam {
         $$ = $1;
@@ -967,6 +995,7 @@ FuncArrayIndices
 
 int yyerror(char const* message)
 {
-    std::cerr<<message<<std::endl;
+    std::cerr << message << std::endl;
+    std::cerr << yytext << std::endl;
     return -1;
 }

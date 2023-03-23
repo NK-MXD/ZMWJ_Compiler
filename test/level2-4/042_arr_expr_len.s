@@ -6,12 +6,21 @@
 	.align 4
 	.size arr, 24
 arr:
+<<<<<<< HEAD
 	.word 1
 	.word 2
 	.word 33
 	.word 4
 	.word 5
 	.word 6
+=======
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+>>>>>>> master
 	.section .rodata
 	.global N
 	.align 4
