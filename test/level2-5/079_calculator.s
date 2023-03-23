@@ -21,7 +21,7 @@ i:
 	.align 4
 	.size ii, 4
 ii:
-	.word 0
+	.word 1
 	.global c
 	.align 4
 	.size c, 4

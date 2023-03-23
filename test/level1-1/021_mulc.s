@@ -7,7 +7,7 @@
 	.align 4
 	.size a, 4
 a:
-	.word 0
+	.word 5
 	.text
 	.global main
 	.type main , %function

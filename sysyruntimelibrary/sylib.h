@@ -6,8 +6,15 @@
 #include<sys/time.h>
 /* Input & output functions */
 int getint(),getch(),getarray(int a[]);
+float getfloat();
+int getfarray(float a[]);
+
 void putint(int a),putch(int a),putarray(int n,int a[]);
-#define putf(fmt, ...) printf(fmt, __VA_ARGS__) // TODO? 
+void putfloat(float a);
+void putfarray(int n, float a[]);
+
+void putf(char a[], ...);
+
 /* Timing function implementation */
 struct timeval _sysy_start,_sysy_end;
 #define starttime() _sysy_starttime(__LINE__)

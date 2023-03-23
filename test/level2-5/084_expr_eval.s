@@ -6,7 +6,7 @@
 	.align 4
 	.size last_char, 4
 last_char:
-	.word 0
+	.word 32
 	.global num
 	.align 4
 	.size num, 4
@@ -32,7 +32,7 @@ TOKEN_NUM:
 	.align 4
 	.size TOKEN_OTHER, 4
 TOKEN_OTHER:
-	.word 0
+	.word 1
 	.text
 	.global next_char
 	.type next_char , %function
@@ -587,9 +587,9 @@ eval:
 	cmp r5, r6
 	movne r4, #1
 	moveq r4, #0
-	bne .L861
-	b .L865
-.L861:
+	bne .L349
+	b .L353
+.L349:
 	bl panic
 	mov r4, r0
 	mov r0, r4
@@ -597,7 +597,7 @@ eval:
 	add sp, sp, r1
 	pop {r4, r5, r6, r7, r8, fp, lr}
 	bx lr
-.L862:
+.L350:
 	mov r4, #0
 	ldr r5, =-1024
 	mov r6, #4
@@ -611,10 +611,10 @@ eval:
 	bl stack_push
 	bl next_token
 	mov r4, r0
-	b .L866
-.L865:
-	b .L862
-.L866:
+	b .L354
+.L353:
+	b .L350
+.L354:
 	ldr r4, addr_cur_token0
 	ldr r5, [r4]
 	ldr r4, addr_TOKEN_OTHER0
@@ -622,9 +622,9 @@ eval:
 	cmp r5, r6
 	moveq r4, #1
 	movne r4, #0
-	beq .L867
-	b .L871
-.L867:
+	beq .L355
+	b .L359
+.L355:
 	ldr r4, addr_other0
 	ldr r5, [r4]
 	ldr r4, =-2052
@@ -642,23 +642,23 @@ eval:
 	cmp r4, #0
 	movne r4, #1
 	moveq r4, #0
-	bne .L873
-	b .L877
-.L868:
+	bne .L361
+	b .L365
+.L356:
 	bl next_token
 	mov r4, r0
-	b .L921
-.L871:
-	b .L868
-.L873:
-	b .L868
-.L874:
+	b .L409
+.L359:
+	b .L356
+.L361:
+	b .L356
+.L362:
 	bl next_token
 	mov r4, r0
-	b .L880
-.L877:
-	b .L874
-.L880:
+	b .L368
+.L365:
+	b .L362
+.L368:
 	mov r4, #0
 	ldr r5, =-2048
 	mov r6, #4
@@ -671,9 +671,9 @@ eval:
 	cmp r4, #0
 	movne r4, #1
 	moveq r4, #0
-	bne .L903
-	b .L885
-.L881:
+	bne .L391
+	b .L373
+.L369:
 	mov r4, #0
 	ldr r5, =-2048
 	mov r6, #4
@@ -739,9 +739,9 @@ eval:
 	cmp r4, #0
 	movne r4, #1
 	moveq r4, #0
-	bne .L903
-	b .L905
-.L882:
+	bne .L391
+	b .L393
+.L370:
 	mov r4, #0
 	ldr r5, =-2048
 	mov r6, #4
@@ -760,8 +760,8 @@ eval:
 	cmp r5, r6
 	movne r4, #1
 	moveq r4, #0
-	bne .L910
-	b .L914
+	bne .L398
+	b .L402
 	b .F0
 .LTORG
 addr_TOKEN_NUM0:
@@ -777,9 +777,9 @@ addr_other0:
 addr_cur_token0:
 	.word cur_token
 .F0:
-.L885:
-	b .L882
-.L903:
+.L373:
+	b .L370
+.L391:
 	mov r4, #0
 	ldr r5, =-2048
 	mov r6, #4
@@ -800,13 +800,13 @@ addr_cur_token0:
 	cmp r4, r5
 	movge r4, #1
 	movlt r4, #0
-	bge .L881
-	b .L909
-.L905:
-	b .L882
-.L909:
-	b .L882
-.L910:
+	bge .L369
+	b .L397
+.L393:
+	b .L370
+.L397:
+	b .L370
+.L398:
 	bl panic
 	mov r4, r0
 	mov r0, r4
@@ -814,7 +814,7 @@ addr_cur_token0:
 	add sp, sp, r1
 	pop {r4, r5, r6, r7, r8, fp, lr}
 	bx lr
-.L911:
+.L399:
 	mov r4, #0
 	ldr r5, =-1024
 	mov r6, #4
@@ -835,13 +835,13 @@ addr_cur_token0:
 	cmp r5, r6
 	moveq r4, #1
 	movne r4, #0
-	beq .L867
-	b .L920
-.L914:
-	b .L911
-.L920:
-	b .L868
-.L921:
+	beq .L355
+	b .L408
+.L402:
+	b .L399
+.L408:
+	b .L356
+.L409:
 	mov r4, #0
 	ldr r5, =-2048
 	mov r6, #4
@@ -854,9 +854,9 @@ addr_cur_token0:
 	cmp r4, #0
 	movne r4, #1
 	moveq r4, #0
-	bne .L922
-	b .L925
-.L922:
+	bne .L410
+	b .L413
+.L410:
 	mov r4, #0
 	ldr r5, =-2048
 	mov r6, #4
@@ -922,9 +922,9 @@ addr_cur_token0:
 	cmp r4, #0
 	movne r4, #1
 	moveq r4, #0
-	bne .L922
-	b .L934
-.L923:
+	bne .L410
+	b .L422
+.L411:
 	mov r4, #0
 	ldr r5, =-1024
 	mov r6, #4
@@ -939,10 +939,10 @@ addr_cur_token0:
 	add sp, sp, r1
 	pop {r4, r5, r6, r7, r8, fp, lr}
 	bx lr
-.L925:
-	b .L923
-.L934:
-	b .L923
+.L413:
+	b .L411
+.L422:
+	b .L411
 
 	.global main
 	.type main , %function
@@ -950,7 +950,7 @@ main:
 	push {r4, r5, fp, lr}
 	mov fp, sp
 	sub sp, sp, #4
-.L936:
+.L424:
 	bl getint
 	mov r4, r0
 	str r4, [fp, #-4]
@@ -958,15 +958,15 @@ main:
 	mov r4, r0
 	bl next_token
 	mov r4, r0
-	b .L938
-.L938:
+	b .L426
+.L426:
 	ldr r4, [fp, #-4]
 	cmp r4, #0
 	movne r4, #1
 	moveq r4, #0
-	bne .L939
-	b .L942
-.L939:
+	bne .L427
+	b .L430
+.L427:
 	bl eval
 	mov r4, r0
 	mov r0, r4
@@ -980,17 +980,17 @@ main:
 	cmp r4, #0
 	movne r4, #1
 	moveq r4, #0
-	bne .L939
-	b .L947
-.L940:
+	bne .L427
+	b .L435
+.L428:
 	mov r0, #0
 	add sp, sp, #4
 	pop {r4, r5, fp, lr}
 	bx lr
-.L942:
-	b .L940
-.L947:
-	b .L940
+.L430:
+	b .L428
+.L435:
+	b .L428
 
 addr_TOKEN_NUM1:
 	.word TOKEN_NUM

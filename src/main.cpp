@@ -67,8 +67,8 @@ int main(int argc, char* argv[]) {
     if (dump_ast)
         ast.output();
     ast.typeCheck();
-    // cout<<"genCode\n";
     ast.genCode(&unit);
+    // cout<<"genCode\n";
     if (dump_ir)
         unit.output();
     // cout<<"genMachineCode\n";

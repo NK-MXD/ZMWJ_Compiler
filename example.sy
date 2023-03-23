@@ -1,8 +1,10 @@
-//test domain of global var define and local define
-int a = 3;
-int b = 5;
+int add(float a0[],float a1[], float a2[],float b0[],float b1[],float b2[],float c0[],float c1[],float c2[])
+{
+    return 0;
+}
 
-int main(){
-    int a = 5;
-    return a + b;
+int main()
+{
+    
+    return 0;
 }

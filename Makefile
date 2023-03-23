@@ -1,7 +1,7 @@
 SRC_PATH ?= src
 INC_PATH += include
 BUILD_PATH ?= build
-TEST_PATH ?= test/level1-1
+TEST_PATH ?= test/level2-6
 OBJ_PATH ?= $(BUILD_PATH)/obj
 BINARY ?= $(BUILD_PATH)/compiler
 SYSLIB_PATH ?= sysyruntimelibrary
@@ -50,10 +50,10 @@ $(BINARY):$(OBJ)
 app:$(LEXER) $(PARSER) $(BINARY)
 
 run:app
-	@$(BINARY) -o example.s -S example.sy -O2
+	@$(BINARY) -o example.s -S example.sy
 
 run1:app
-	@$(BINARY) -o example.s -S example.sy -O2
+	@$(BINARY) -o example.s -S example.sy
 	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
 	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example
 	echo $$?

@@ -24,7 +24,7 @@ private:
     // 包含这个块内的store
     std::set<Operand*> stores1;
     // used for entry
-    Instruction* lastAlloc;
+    Instruction* lastAlloc = NULL;
 
 public:
     BasicBlock(Function *);

@@ -375,19 +375,19 @@ main:
 	mul r6, r4, r5
 	ldr r4, =-28860
 	str r6, [fp, r4]
-	b .L14574
+	b .L146
 	b .F0
 .LTORG
 .F0:
-.L14574:
+.L146:
 	ldr r5, =-28860
 	ldr r4, [fp, r5]
 	cmp r4, #0
 	movge r4, #1
 	movlt r4, #0
-	bge .L14575
-	b .L14579
-.L14575:
+	bge .L147
+	b .L151
+.L147:
 	mov r4, #6
 	ldr r5, =-28856
 	mov r6, #236
@@ -414,9 +414,9 @@ main:
 	cmp r5, #0
 	movge r4, #1
 	movlt r4, #0
-	bge .L14575
-	b .L14586
-.L14576:
+	bge .L147
+	b .L158
+.L148:
 	mov r0, #10
 	bl putch
 	mov r0, #0
@@ -424,8 +424,8 @@ main:
 	add sp, sp, r1
 	pop {r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx lr
-.L14579:
-	b .L14576
-.L14586:
-	b .L14576
+.L151:
+	b .L148
+.L158:
+	b .L148
 

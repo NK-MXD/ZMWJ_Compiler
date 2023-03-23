@@ -7,12 +7,12 @@
 	.align 4
 	.size maxn, 4
 maxn:
-	.word 0
+	.word 18
 	.global mod
 	.align 4
 	.size mod, 4
 mod:
-	.word 0
+	.word 1000000007
 	.comm dp, 52907904, 4
 	.comm list, 800, 4
 	.comm cns, 80, 4
