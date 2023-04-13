@@ -1018,7 +1018,16 @@ void MachineFunction::output() {
 
 std::vector<MachineOperand*> MachineFunction::getSavedRegs() {
     std::vector<MachineOperand*> regs;
+    // z0214这里是为了避免站内偏移计算覆盖寄存器数值
+    auto r3 = new MachineOperand(MachineOperand::REG, 3);
+        regs.push_back(r3);
+    auto r4 = new MachineOperand(MachineOperand::REG, 4);
+        regs.push_back(r4);
+
+
     for (auto it = saved_regs.begin(); it != saved_regs.end(); it++) {
+        if((*it)==3||(*it)==4)
+            continue;
         auto reg = new MachineOperand(MachineOperand::REG, *it);
         regs.push_back(reg);
     }
@@ -1261,4 +1270,30 @@ VcvtMInstruction::VcvtMInstruction(MachineBlock* p,
     dst->setParent(this);
     src->setParent(this);
     dst->setDef(this);
+}
+
+void MachineInstruction::replaceDef(MachineOperand* old, MachineOperand* new_) {
+    for (auto i = 0; i < (int)def_list.size(); i++)
+        if (def_list[i] == old) {
+            def_list[i] = new_;
+            new_->setParent(this);
+            break;
+        }
+}
+
+void MachineInstruction::replaceUse(MachineOperand* old, MachineOperand* new_) {
+    for (auto i = 0; i < (int)use_list.size(); i++)
+        if (use_list[i] == old) {
+            use_list[i] = new_;
+            new_->setParent(this);
+            break;
+        }
+}
+
+void MachineBlock::printDefout(){
+    if(!def_out.empty())
+    for(auto i=def_out.begin();i!=def_out.end();i++){
+        std::cout<<(*i)->toStr()<<"\n";
+    }
+
 }

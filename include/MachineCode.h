@@ -63,6 +63,10 @@ class MachineOperand {
         this->fval = fval;
         this->fpu = true;
     }
+    bool needColor() {
+        return type == VREG || (type == REG && (reg_no < 11 || reg_no >= 16));
+    }
+    
     int getType() { return type; }
     bool isFloat() { return this->fpu; };
     int getReg() { return this->reg_no; };
@@ -130,6 +134,8 @@ class MachineInstruction {
     void insertBefore(MachineInstruction *);
     void insertAfter(MachineInstruction *);
     int getType() { return type; }
+    void replaceUse(MachineOperand* old, MachineOperand* new_);
+    void replaceDef(MachineOperand* old, MachineOperand* new_);
     int getOp() { return op; }
     MachineBlock *getParent() const { return parent; };
     // 简单起见这样写了
@@ -317,6 +323,9 @@ class MachineBlock {
     void addSucc(MachineBlock *s) { this->succ.push_back(s); };
     std::set<MachineOperand *> &getLiveIn() { return live_in; };
     std::set<MachineOperand *> &getLiveOut() { return live_out; };
+    std::set<MachineOperand*>& getDefIn() { return def_in; };
+    std::set<MachineOperand*>& getDefOut() { return def_out; };
+    void printDefout();
     std::vector<MachineBlock *> &getPreds() { return pred; };
     std::vector<MachineBlock *> &getSuccs() { return succ; };
     void output();
@@ -324,6 +333,11 @@ class MachineBlock {
     void setCmpCond(int cond) { cmpCond = cond; };
     int getSize() const { return inst_list.size(); };
     MachineFunction *getParent() const { return parent; };
+    void remove(MachineInstruction* ins) {
+      auto it = find(inst_list.begin(), inst_list.end(), ins);
+      if (it != inst_list.end())
+        inst_list.erase(it);
+    }
 };
 
 class MachineFunction {
@@ -335,7 +349,7 @@ class MachineFunction {
     std::set<int> saved_fpregs;
     SymbolEntry *sym_ptr;
     int paramsNum;
-
+    MachineBlock* entry;
     bool need_align;
 
   public:
@@ -365,13 +379,16 @@ class MachineFunction {
     int getParamsNum() const { return paramsNum; };
     SymbolEntry* getSymbolEntry() { return sym_ptr; };
     MachineUnit *getParent() const { return parent; };
+    void setEntry(MachineBlock* entry) { this->entry = entry; }
+    MachineBlock* getEntry() { return entry; };
+    bool needAlign() { return need_align; }
+
     int getSize() const {
         int res = 0;
         for (auto block : block_list)
             res += block->getSize();
         return res;
     };
-    bool needAlign() { return need_align; }
 };
 
 class MachineUnit {

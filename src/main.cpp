@@ -6,6 +6,8 @@
 #include "MachineCode.h"
 #include "Unit.h"
 #include "dominatorTree.h"
+#include "ComSubExprEli.h"
+#include "GraphColor.h"
 #include "mem2reg.h"
 using namespace std;
 
@@ -75,20 +77,25 @@ int main(int argc, char* argv[]) {
     // cout<<"genCode\n";
 
     if(optimize){
-        // ComSubExprEli em(&unit);
-        // em.execute();
-        dominatorTree dt(&unit);
-        dt.execute();
-        Mem2Reg mr(&unit);
-        mr.execute();
+        ComSubExprEli em(&unit);
+        em.execute();
+    //     dominatorTree dt(&unit);
+    //     dt.execute();
+    //     Mem2Reg mr(&unit);
+    //     mr.execute();
     }
 
     if (dump_ir)
         unit.output();
     // cout<<"genMachineCode\n";
     unit.genMachineCode(&mUnit);
-    LinearScan linearScan(&mUnit);
-    linearScan.allocateRegisters();
+
+    // LinearScan linearScan(&mUnit);
+    // linearScan.allocateRegisters();
+
+    GraphColor GraphColor(&mUnit);
+    GraphColor.allocateRegisters();
+
     if (dump_asm)
         mUnit.output();
     return 0;

@@ -1,10 +1,11 @@
 SRC_PATH ?= src
 INC_PATH += include
 BUILD_PATH ?= build
-TEST_PATH ?= ctest/performance
+TEST_PATH ?= test/
 OBJ_PATH ?= $(BUILD_PATH)/obj
 BINARY ?= $(BUILD_PATH)/compiler
 SYSLIB_PATH ?= sysyruntimelibrary
+
 
 INC = $(addprefix -I, $(INC_PATH))
 SRC = $(shell find $(SRC_PATH)  -name "*.cpp")
@@ -52,12 +53,25 @@ app:$(LEXER) $(PARSER) $(BINARY)
 run:app
 	@$(BINARY) -o example.s -S example.sy
 
+ll:app
+	@$(BINARY) -o example.ll -i	 example.sy
+
+ll0:app
+	@$(BINARY) -o example_O2.ll -i -O2 example.sy
+
+
 run0:app
-	@$(BINARY) -o example.s -S -O2 example.sy
+	@$(BINARY) -o example_O2.s -S -O2 example.sy
 
 
 run1:app
 	@$(BINARY) -o example.s -S example.sy
+	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
+	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example
+	echo $$?
+
+run10:app
+	@$(BINARY) -o example.s -S -O example.sy
 	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
 	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example
 	echo $$?
@@ -113,7 +127,7 @@ test:app
 		OUT=$${file%.*}.out
 		FILE=$${file##*/}
 		FILE=$${FILE%.*}
-		timeout 5s $(BINARY) $${file} -o $${ASM} -S 2>$${LOG}
+		timeout 5s $(BINARY) $${file} -o $${ASM} -O2 -S 2>$${LOG}
 		RETURN_VALUE=$$?
 		if [ $$RETURN_VALUE = 124 ]; then
 			echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mCompile Timeout\033[0m"

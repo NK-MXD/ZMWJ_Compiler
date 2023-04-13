@@ -17,11 +17,15 @@ private:
     Instruction *def;                // The instruction where this operand is defined.
     std::vector<Instruction *> uses; // Intructions that use this operand.
     SymbolEntry *se;                 // The symbol entry of this operand.
+    std::vector<SymbolEntry*>idx_se;
     SymbolEntry* opdSe=nullptr;
     bool isLoad=0;
 public:
     void setLoad(bool b){isLoad=b;}
     bool getLoad(){return isLoad;}
+    void setIdxSe(std::vector<SymbolEntry*> v){
+        idx_se.assign(v.begin(),v.end());
+    }
     SymbolEntry* getOpdSe(){return this->opdSe;}
     void setOpdSe(SymbolEntry* se){this->opdSe=se;}
     Operand(SymbolEntry*se) :se(se){def = nullptr;};
@@ -31,6 +35,8 @@ public:
     void removeDef(Instruction* inst);
     int usersNum() const {return uses.size();};
 
+    SymbolEntry*& getSymbolEntry() {return se;};
+    std::vector<SymbolEntry*>& getIdxSe(){return idx_se;}
     use_iterator use_begin() {return uses.begin();};
     use_iterator use_end() {return uses.end();};
     Type* getType() {return se->getType();};
