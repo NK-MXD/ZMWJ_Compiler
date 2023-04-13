@@ -2,6 +2,7 @@
 #define __OPERAND_H__
 
 #include "SymbolTable.h"
+#include "Instruction.h"
 #include <vector>
 
 class Instruction;
@@ -74,7 +75,8 @@ public:
             return ((IdentifierSymbolEntry*)se)->isGlobal();
         return false;
     }
-    
+    // 将对自身所有的使用替换成对op的使用
+    void replaceAllUseWith(Operand *op);
         
 };
 

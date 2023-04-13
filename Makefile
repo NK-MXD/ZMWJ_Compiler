@@ -51,23 +51,43 @@ $(BINARY):$(OBJ)
 app:$(LEXER) $(PARSER) $(BINARY)
 
 run:app
-	@$(BINARY) -o example.s -S example.sy
-
-ll:app
-	@$(BINARY) -o example.ll -i	 example.sy
+	@$(BINARY) -o example.s -S example.sy -O2
 
 ll0:app
 	@$(BINARY) -o example_O2.ll -i -O2 example.sy
 
 
 run0:app
-	@$(BINARY) -o example_O2.s -S -O2 example.sy
+	@$(BINARY) -o exampleO2.s -S -O2 example.sy
+	arm-linux-gnueabihf-gcc exampleO2.s $(SYSLIB_PATH)/libsysy.a -o example
+	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
+	echo $$?
 
 
-run1:app
-	@$(BINARY) -o example.s -S example.sy
-	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
-	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example
+runO0:app
+	@$(BINARY) -o exampleO0.s -S example.sy
+	@$(BINARY) -o exampleO0.ll -i example.sy
+	arm-linux-gnueabihf-gcc exampleO0.s $(SYSLIB_PATH)/libsysy.a -o example
+	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
+	echo $$?
+
+runO2:app
+	@$(BINARY) -o exampleO2.s -S example.sy -O2
+	@$(BINARY) -o exampleO2.ll -i example.sy -O2
+	arm-linux-gnueabihf-gcc exampleO2.s $(SYSLIB_PATH)/libsysy.a -o example
+	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
+	echo $$?
+
+ll:app
+	@$(BINARY) -o example.ll -i example.sy
+
+ll1:app
+	@$(BINARY) -o exampleO.ll -i example.sy -O2
+
+llrun:app
+	@$(BINARY) -o exampleO2.ll -i example.sy -O2
+	clang -o example exampleO2.ll sysyruntimelibrary/sylib.c 
+	./example <example.in
 	echo $$?
 
 run10:app
@@ -119,6 +139,7 @@ test:app
 	@success=0
 	@for file in $(sort $(TESTCASE))
 	do
+		IR=$${file%.*}.ll
 		ASM=$${file%.*}.s
 		LOG=$${file%.*}.log
 		BIN=$${file%.*}.bin
@@ -128,6 +149,64 @@ test:app
 		FILE=$${file##*/}
 		FILE=$${FILE%.*}
 		timeout 5s $(BINARY) $${file} -o $${ASM} -O2 -S 2>$${LOG}
+		timeout 5s $(BINARY) $${file} -o $${IR} -O2 -i 2>$${LOG}
+		RETURN_VALUE=$$?
+		if [ $$RETURN_VALUE = 124 ]; then
+			echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mCompile Timeout\033[0m"
+			continue
+		else if [ $$RETURN_VALUE != 0 ]; then
+			echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mCompile Error\033[0m"
+			continue
+			fi
+		fi
+		arm-linux-gnueabihf-gcc -mcpu=cortex-a72 -o $${BIN} $${ASM} $(SYSLIB_PATH)/libsysy.a >>$${LOG} 2>&1
+		if [ $$? != 0 ]; then
+			echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mAssemble Error\033[0m"
+		else
+			if [ -f "$${IN}" ]; then
+				timeout 2s qemu-arm -L /usr/arm-linux-gnueabihf $${BIN} <$${IN} >$${RES} 2>>$${LOG}
+			else
+				timeout 2s qemu-arm -L /usr/arm-linux-gnueabihf $${BIN} >$${RES} 2>>$${LOG}
+			fi
+			RETURN_VALUE=$$?
+			FINAL=`tail -c 1 $${RES}`
+			[ $${FINAL} ] && echo "\n$${RETURN_VALUE}" >> $${RES} || echo "$${RETURN_VALUE}" >> $${RES}
+			if [ "$${RETURN_VALUE}" = "124" ]; then
+				echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mExecute Timeout\033[0m"
+			else if [ "$${RETURN_VALUE}" = "127" ]; then
+				echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mExecute Error\033[0m"
+				else
+					diff -Z $${RES} $${OUT} >/dev/null 2>&1
+					if [ $$? != 0 ]; then
+						echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mWrong Answer\033[0m"
+					else
+						success=$$((success + 1))
+						echo "\033[1;32mPASS:\033[0m $${FILE}"
+					fi
+				fi
+			fi
+		fi
+	done
+	echo "\033[1;33mTotal: $(TESTCASE_NUM)\t\033[1;32mAccept: $${success}\t\033[1;31mFail: $$(($(TESTCASE_NUM) - $${success}))\033[0m"
+	[ $(TESTCASE_NUM) = $${success} ] && echo "\033[5;32mAll Accepted. Congratulations!\033[0m"
+	:
+
+.ONESHELL:
+test_ll:app
+	@success=0
+	@for file in $(sort $(TESTCASE))
+	do
+		IR=$${file%.*}.ll
+		ASM=$${file%.*}.s
+		LOG=$${file%.*}.log
+		BIN=$${file%.*}.bin
+		RES=$${file%.*}.res
+		IN=$${file%.*}.in
+		OUT=$${file%.*}.out
+		FILE=$${file##*/}
+		FILE=$${FILE%.*}
+		timeout 5s $(BINARY) $${file} -o $${ASM} -O2 -S 2>$${LOG}
+		timeout 5s $(BINARY) $${file} -o $${IR} -O2 -i 2>$${LOG}
 		RETURN_VALUE=$$?
 		if [ $$RETURN_VALUE = 124 ]; then
 			echo "\033[1;31mFAIL:\033[0m $${FILE}\t\033[1;31mCompile Timeout\033[0m"

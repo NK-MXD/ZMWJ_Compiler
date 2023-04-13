@@ -319,6 +319,18 @@ class MachineBlock {
     void InsertInst(MachineInstruction *inst) {
         this->inst_list.push_back(inst);
     };
+    void InsertInstBeforeEnd(MachineInstruction *dst){this->inst_list.insert(inst_list.end()-1, dst);};
+    void InsertInstBeforeBr(MachineInstruction *dst){
+      for(auto inst = inst_list.rbegin(); inst != inst_list.rend(); inst++){
+        if((*inst)->isBranch()){
+          continue;
+        }
+        // std::cout<<"hhh";
+        auto pos = find(inst_list.begin(), inst_list.end(), *inst);
+        this->inst_list.insert(pos, dst);
+        return;
+      }
+    };
     void addPred(MachineBlock *p) { this->pred.push_back(p); };
     void addSucc(MachineBlock *s) { this->succ.push_back(s); };
     std::set<MachineOperand *> &getLiveIn() { return live_in; };
@@ -338,6 +350,7 @@ class MachineBlock {
       if (it != inst_list.end())
         inst_list.erase(it);
     }
+    int getNo() const { return no;};
 };
 
 class MachineFunction {

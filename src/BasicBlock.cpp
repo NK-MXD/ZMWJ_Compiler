@@ -92,6 +92,7 @@ void BasicBlock::genMachineCode(AsmBuilder* builder)
 BasicBlock::BasicBlock(Function *f)
 {
     this->no = SymbolTable::getLabel();
+    this->visit = false;
     f->insertBlock(this);
     parent = f;
     head = new DummyInstruction();

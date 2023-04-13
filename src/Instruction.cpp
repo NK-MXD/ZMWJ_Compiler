@@ -59,6 +59,18 @@ BinaryInstruction::BinaryInstruction(unsigned opcode,
     src2->addUse(this);
 }
 
+void BinaryInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
+}
+
 BinaryInstruction::~BinaryInstruction() {
     operands[0]->setDef(nullptr);
     if (operands[0]->usersNum() == 0)
@@ -309,6 +321,18 @@ CmpInstruction::CmpInstruction(unsigned opcode,
     src2->addUse(this);
 }
 
+void CmpInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
+}
+
 CmpInstruction::~CmpInstruction() {
     operands[0]->setDef(nullptr);
     if (operands[0]->usersNum() == 0)
@@ -519,6 +543,14 @@ CondBrInstruction::CondBrInstruction(BasicBlock* true_branch,
     operands.push_back(cond);
 }
 
+void CondBrInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
+    }
+}
+
 CondBrInstruction::~CondBrInstruction() {
     operands[0]->removeUse(this);
 }
@@ -569,6 +601,14 @@ RetInstruction::RetInstruction(Operand* src, BasicBlock* insert_bb)
     if (src != nullptr) {
         operands.push_back(src);
         src->addUse(this);
+    }
+}
+
+void RetInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands.size() && operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
     }
 }
 
@@ -711,6 +751,14 @@ LoadInstruction::LoadInstruction(Operand* dst,
     src_addr->addUse(this);
 }
 
+void LoadInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
 LoadInstruction::~LoadInstruction() {
     operands[0]->setDef(nullptr);
     if (operands[0]->usersNum() == 0)
@@ -841,6 +889,18 @@ StoreInstruction::StoreInstruction(Operand* dst_addr,
     src->addUse(this);
     this->push_back_opse(dst_addr->getSymbolEntry());
 
+}
+
+void StoreInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
+    } else if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
 }
 
 StoreInstruction::~StoreInstruction() {
@@ -1076,6 +1136,15 @@ CallInstruction::CallInstruction(Operand* dst,
     }
 }
 
+void CallInstruction::replaceUse(Operand* old, Operand* new_) {
+    for (int i = 1; i < (int)operands.size(); i++)
+        if (operands[i] == old) {
+            operands[i]->removeUse(this);
+            operands[i] = new_;
+            new_->addUse(this);
+        }
+}
+
 void CallInstruction::output() const {
     fprintf(yyout, "  ");
     if (operands[0])
@@ -1100,6 +1169,13 @@ BitcastInstruction::BitcastInstruction(Operand* dst,
     dst->setDef(this);
     src->addUse(this);
     flag = false;
+}
+void BitcastInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
 }
 
 void BitcastInstruction::output() const {
@@ -1370,6 +1446,14 @@ void FptosiInstruction::output() const {
             dst->getType()->toStr().c_str());
 }
 
+void FptosiInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+        src = new_;
+    }
+}
 
 FptosiInstruction::~FptosiInstruction() {
     operands[0]->setDef(nullptr);
@@ -1438,6 +1522,16 @@ SitofpInstruction::~SitofpInstruction() {
         delete operands[0];
     operands[1]->removeUse(this);
 }
+
+void SitofpInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+        src = new_;
+    }
+}
+
 
 void SitofpInstruction::genMachineCode(AsmBuilder* builder) {
     MachineInstruction* cur_inst;
@@ -1569,6 +1663,18 @@ GepInstruction::~GepInstruction() {
         delete operands[0];
     operands[1]->removeUse(this);
     operands[2]->removeUse(this);
+}
+
+void GepInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
 }
 
 void GepInstruction::genMachineCode(AsmBuilder* builder) {
@@ -1720,6 +1826,14 @@ void ZextInstruction::genMachineCode(AsmBuilder* builder) {
     cur_block->InsertInst(cur_inst);
 }
 
+void ZextInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
 void XorInstruction::genMachineCode(AsmBuilder* builder) {
     auto cur_block = builder->getBlock();
     auto dst = genMachineOperand(operands[0]);
@@ -1731,6 +1845,14 @@ void XorInstruction::genMachineCode(AsmBuilder* builder) {
     cur_inst = new MovMInstruction(cur_block, MovMInstruction::MOV, dst,
                                    falseOperand, MachineInstruction::NE);
     cur_block->InsertInst(cur_inst);
+}
+
+void XorInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
 }
 
 PhiInstruction::PhiInstruction(Operand* dst, BasicBlock* insert_bb)
@@ -1766,48 +1888,17 @@ void PhiInstruction::output() const {
 
 
 
-void BinaryInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    } else if (operands[2] == old) {
-        operands[2]->removeUse(this);
-        operands[2] = new_;
-        new_->addUse(this);
-    }
-}
-
 void BinaryInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
     operands[0] = new_;
     new_->setDef(this);
 }
 
-void CmpInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    } else if (operands[2] == old) {
-        operands[2]->removeUse(this);
-        operands[2] = new_;
-        new_->addUse(this);
-    }
-}
 
 void CmpInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
     operands[0] = new_;
     new_->setDef(this);
-}
-
-void CondBrInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[0] == old) {
-        operands[0]->removeUse(this);
-        operands[0] = new_;
-        new_->addUse(this);
-    }
 }
 
 void RetInstruction::replaceDef(Operand* new_) {
@@ -1818,13 +1909,6 @@ void RetInstruction::replaceDef(Operand* new_) {
     }
 }
 
-void RetInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands.size() && operands[0] == old) {
-        operands[0]->removeUse(this);
-        operands[0] = new_;
-        new_->addUse(this);
-    }
-}
 
 void AllocaInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1838,25 +1922,6 @@ void LoadInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void LoadInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
-
-void StoreInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[0] == old) {
-        operands[0]->removeUse(this);
-        operands[0] = new_;
-        new_->addUse(this);
-    } else if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
 
 void CallInstruction::replaceDef(Operand* new_) {
     if (dst) {
@@ -1867,14 +1932,6 @@ void CallInstruction::replaceDef(Operand* new_) {
     }
 }
 
-void CallInstruction::replaceUse(Operand* old, Operand* new_) {
-    for (int i = 1; i < (int)operands.size(); i++)
-        if (operands[i] == old) {
-            operands[i]->removeUse(this);
-            operands[i] = new_;
-            new_->addUse(this);
-        }
-}
 
 void ZextInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1882,13 +1939,6 @@ void ZextInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void ZextInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
 
 void XorInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1896,13 +1946,6 @@ void XorInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void XorInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
 
 void GepInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1910,17 +1953,6 @@ void GepInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void GepInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    } else if (operands[2] == old) {
-        operands[2]->removeUse(this);
-        operands[2] = new_;
-        new_->addUse(this);
-    }
-}
 
 void PhiInstruction::replaceUse(Operand* old, Operand* new_) {
     for (auto& it : srcs) {
@@ -1947,23 +1979,7 @@ void PhiInstruction::addSrc(BasicBlock* block, Operand* src) {
     src->addUse(this);
 }
 
-void SitofpInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-        src = new_;
-    }
-}
 
-void FptosiInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-        src = new_;
-    }
-}
 
 void FptosiInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1977,10 +1993,28 @@ void SitofpInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void BitcastInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
+
+
+void PhiInstruction::genMachineCodeAfter(AsmBuilder* builder){
+    // 0408m
+    // fix: 由于每次生成机器代码是一个block一个block生成的, 因此在当前phi指令的block当中可能还没有定义来源路径block
+    // 可能的一种解决方案是在整体机器代码生成结束进行Phi resolution
+    auto f = builder->getFunction();
+    auto mdst = genMachineOperand(operands[0]);
+    // auto tempop = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    MachineBlock* block = builder->getBlock();
+    // MachineOperand* temp = new MachineOperand(MachineOperand::REG, SymbolTable::getLabel());
+    // std::cout<<this->getDef()->toStr()<<"\t";
+    for (auto src : srcs){
+        MachineBlock* b = src.first->getParent()->getMachineBlock(src.first);
+        // std::cout<<src.first->getNo()<<"\t"<<b<<"\t";
+        auto mop = genMachineOperand(src.second);
+        auto inst = new MovMInstruction(b, MovMInstruction::MOV, mdst, mop);
+        auto endInst = b->end();
+        
+        b->InsertInstBeforeBr(inst);
+        
     }
+    // std::cout<<"\n";
+    // new MovMInstruction(block, MovMInstruction::MOV, mdst, temp);
 }

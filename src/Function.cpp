@@ -69,22 +69,36 @@ void Function::genMachineCode(AsmBuilder* builder)
     auto cur_unit = builder->getUnit();
     auto cur_func = new MachineFunction(cur_unit, this->sym_ptr);
     builder->setFunction(cur_func);
-    std::map<BasicBlock*, MachineBlock*> map;
     for(auto block : block_list)
     {
         block->genMachineCode(builder);
-        map[block] = builder->getBlock();
+        this->map2[block] = builder->getBlock();
+        //std::cout<<block->getNo()<<"\t"<<block<<"\t"<<this->map2[block]<<"\n";
     }
     // Add pred and succ for every block
     for(auto block : block_list)
     {
-        auto mblock = map[block];
+        auto mblock = this->map2[block];
         for (auto pred = block->pred_begin(); pred != block->pred_end(); pred++)
-            mblock->addPred(map[*pred]);
+            mblock->addPred(this->map2[*pred]);
         for (auto succ = block->succ_begin(); succ != block->succ_end(); succ++)
-            mblock->addSucc(map[*succ]);
+            mblock->addSucc(this->map2[*succ]);
     }
-    cur_func->setEntry(map[entry]);
+    cur_func->setEntry(map2[entry]);
     cur_unit->InsertFunc(cur_func);
-
+    // 0413m
+    // 在所有机器代码都生成完毕的情况下进行phi指令的机器代码生成
+    // fix: 有问题
+    // for(auto block : block_list)
+    // {
+    //     for(auto i = block->begin(); i != block->end(); i = i->getNext()){
+    //         if(!i->isPhi()){
+    //             break;
+    //         }
+    //         // std::cout<<block->getNo()<<"生成phi指令: \n";
+    //         auto phi = dynamic_cast<PhiInstruction*>(i);
+    //         phi->genMachineCodeAfter(builder);
+    //         // std::cout<<"生成结束 \n";
+    //     }
+    // }
 }

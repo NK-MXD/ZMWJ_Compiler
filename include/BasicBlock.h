@@ -25,6 +25,8 @@ private:
     std::set<Operand*> stores1;
     // used for entry
     Instruction* lastAlloc = NULL;
+    // 各种算法中用到，标记是否访问过，算法开头应把所有vis置false(调用IrFunc::clear_all_vis)
+    bool visit; 
 
 public:
     BasicBlock(Function *);
@@ -71,6 +73,8 @@ public:
     void addAlloc(Instruction* alloc);
     std::vector<BasicBlock *>& getSuccBlock() { return succ;};
     std::vector<BasicBlock *>& getPredBlock() { return pred;};
+    void setvisit(bool v) { this->visit = v; };
+    bool isVisited() const{ return visit;};
     void insertPhiInstruction(Operand* dst);
 };
 
