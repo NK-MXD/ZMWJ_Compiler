@@ -7,19 +7,48 @@
 #include "AsmBuilder.h"
 #include "Operand.h"
 
+
+static std::string instName[]={
+        "BINARY",
+        "COND",
+        "UNCOND",
+        "RET",
+        "LOAD",
+        "STORE",
+        "CMP",
+        "ALLOCA",
+        "CALL",
+        "ZEXT",
+        "XOR",
+        "GEP",
+        "PHI",
+        "FPTOSI",  // floating point to signed int
+        "SITOFP",  // signed int to floating point
+        "BITCAST",
+        "SHL",
+        "ASHR"
+    };
+
 class BasicBlock;
 
 class Instruction {
    public:
+    std::string getInstName(){return instName[instType];}
+    void push_back_opse(SymbolEntry* se){op_se.emplace_back(se);}
+    virtual void replaceUse(Operand* old, Operand* new_) {}
+    virtual void replaceDef(Operand* new_) {}
     Instruction(unsigned instType, BasicBlock* insert_bb = nullptr);
     virtual ~Instruction();
     BasicBlock* getParent();
+    unsigned getOpcode() const {return opcode; };
+    unsigned getInstType() const {return instType; };
     bool isUncond() const { return instType == UNCOND; };
     bool isCond() const { return instType == COND; };
     bool isAlloc() const { return instType == ALLOCA; };
     bool isRet() const { return instType == RET; };
     bool isCall() const { return instType == CALL; }
     bool isStore() const { return instType == STORE; }
+    bool isZext() const { return instType == ZEXT; }
     bool isPhi() const { return instType == PHI; };
     bool isBin() const { return instType == BINARY; };
     bool isLoad() const { return instType == LOAD; };
@@ -28,11 +57,16 @@ class Instruction {
     bool isXor() const { return instType == XOR; };
     bool isBitcast() const { return instType == BITCAST; };
     bool isShl() const { return instType == SHL; };
+    bool isVoid() { return (instType == RET) || (instType == COND) || 
+                    (instType == UNCOND) || (instType == STORE) || 
+                    (instType == CALL); };
     void setParent(BasicBlock*);
     void setNext(Instruction*);
     void setPrev(Instruction*);
     Instruction* getNext();
     Instruction* getPrev();
+    std::vector<Operand *> &getOp(){return operands;};
+    std::vector<SymbolEntry *> &getOpse(){return op_se;};
     virtual void output() const = 0;
     MachineOperand* genMachineOperand(Operand*);
     MachineOperand* genMachineFloatOperand(Operand*);
@@ -44,13 +78,13 @@ class Instruction {
     virtual void genMachineCode(AsmBuilder*) = 0;
     // Z0323
     Operand* getDef() { return operands[0]; }
-    void replaceDef(Operand* new_op) {
-        if(!operands.empty()){
-            operands[0]->removeDef(this);
-            operands[0] = new_op;
-            new_op->setDef(this);
-        }
-    }
+    // void replaceDef(Operand* new_op) {
+    //     if(!operands.empty()){
+    //         operands[0]->removeDef(this);
+    //         operands[0] = new_op;
+    //         new_op->setDef(this);
+    //     }
+    // }
 
    protected:
     unsigned instType;
@@ -59,6 +93,7 @@ class Instruction {
     Instruction* next;
     BasicBlock* parent;
     std::vector<Operand*> operands;
+    std::vector<SymbolEntry *> op_se;
     enum {
         BINARY,
         COND,
@@ -97,20 +132,29 @@ class AllocaInstruction : public Instruction {
     ~AllocaInstruction();
     void output() const;
     void genMachineCode(AsmBuilder*);
-    bool isArray() { return se->getType()->isArray();}
+    void replaceDef(Operand* new_);
+    Operand* getDef() { return operands[0]; }
+    // bool isArray() { return se->getType()->isArray();}
 
    private:
     SymbolEntry* se;
 };
 
 class LoadInstruction : public Instruction {
+private:
+    bool loadchange=0;
    public:
     LoadInstruction(Operand* dst,
                     Operand* src_addr,
                     BasicBlock* insert_bb = nullptr);
     ~LoadInstruction();
+    bool loadChange(){return loadchange;}
+    void setLoadChange(){loadchange=1;}
     void output() const;
     void genMachineCode(AsmBuilder*);
+    Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 };
 
 class StoreInstruction : public Instruction {
@@ -121,6 +165,10 @@ class StoreInstruction : public Instruction {
     ~StoreInstruction();
     void output() const;
     void genMachineCode(AsmBuilder*);
+    void replaceUse(Operand* old, Operand* new_);
+    std::vector<Operand*> getUse() {
+        return std::vector<Operand*>({operands[0], operands[1]});
+    }
 };
 
 class BinaryInstruction : public Instruction {
@@ -134,6 +182,12 @@ class BinaryInstruction : public Instruction {
     void output() const;
     void genMachineCode(AsmBuilder*);
     enum { SUB, ADD, AND, OR, MUL, DIV, MOD };
+    std::vector<Operand*> getUse() {
+        return std::vector<Operand*>({operands[1], operands[2]});
+    }
+    Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 };
 
 class CmpInstruction : public Instruction {
@@ -147,6 +201,12 @@ class CmpInstruction : public Instruction {
     void output() const;
     void genMachineCode(AsmBuilder*);
     enum { E, NE, L, LE, G, GE };
+    std::vector<Operand*> getUse() {
+        return std::vector<Operand*>({operands[1], operands[2]});
+    }
+    Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 };
 
 // unconditional branch
@@ -157,6 +217,7 @@ class UncondBrInstruction : public Instruction {
     void setBranch(BasicBlock*);
     BasicBlock* getBranch();
     void genMachineCode(AsmBuilder*);
+    
 
    protected:
     BasicBlock* branch;
@@ -176,6 +237,10 @@ class CondBrInstruction : public Instruction {
     void setFalseBranch(BasicBlock*);
     BasicBlock* getFalseBranch();
     void genMachineCode(AsmBuilder*);
+    std::vector<Operand*> getUse() {
+        return std::vector<Operand*>({operands[0]});
+    }
+    void replaceUse(Operand* old, Operand* new_);
 
    protected:
     BasicBlock* true_branch;
@@ -188,6 +253,13 @@ class RetInstruction : public Instruction {
     ~RetInstruction();
     void output() const;
     void genMachineCode(AsmBuilder*);
+    std::vector<Operand*> getUse() {
+        if (operands.size())
+            return std::vector<Operand*>({operands[0]});
+        return std::vector<Operand*>();
+    }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 };
 
 class CallInstruction : public Instruction {
@@ -203,6 +275,9 @@ class CallInstruction : public Instruction {
     ~CallInstruction();
     void output() const;
     void genMachineCode(AsmBuilder*);
+    Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 };
 
 class FptosiInstruction : public Instruction {
@@ -227,6 +302,8 @@ class FptosiInstruction : public Instruction {
         return std::vector<Operand*>({operands[1]});
     }
     Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 
 };
 
@@ -252,6 +329,8 @@ class SitofpInstruction : public Instruction {
         return std::vector<Operand*>({operands[1]});
     }
     Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 
 };
 
@@ -263,6 +342,9 @@ class ZextInstruction : public Instruction {
     ~ZextInstruction();
     void output() const;
     void genMachineCode(AsmBuilder*);
+    Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 };
 
 class XorInstruction : public Instruction {
@@ -271,6 +353,9 @@ class XorInstruction : public Instruction {
     ~XorInstruction();
     void output() const;
     void genMachineCode(AsmBuilder*);
+    Operand* getDef() { return operands[0]; }
+    void replaceUse(Operand* old, Operand* new_);
+    void replaceDef(Operand* new_);
 };
 
 class GepInstruction : public Instruction {
@@ -301,6 +386,9 @@ class GepInstruction : public Instruction {
     Operand* getInit() const { return init; };
     void setInit(Operand* init) { this->init = init; };
     bool hasNoAsm() { return noAsm; }
+    Operand* getDef() { return operands[0]; }
+    void replaceDef(Operand* new_);
+    void replaceUse(Operand* old, Operand* new_);
 
 
 };
@@ -330,6 +418,7 @@ class BitcastInstruction : public Instruction {
     }
     void setFlag() { flag = true; }
     bool getFlag() { return flag; }
+    void replaceUse(Operand* old, Operand* new_);
 };
 
 

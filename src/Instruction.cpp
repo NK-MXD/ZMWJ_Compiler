@@ -839,6 +839,8 @@ StoreInstruction::StoreInstruction(Operand* dst_addr,
     operands.push_back(src);
     dst_addr->addUse(this);
     src->addUse(this);
+    this->push_back_opse(dst_addr->getSymbolEntry());
+
 }
 
 StoreInstruction::~StoreInstruction() {
@@ -1494,6 +1496,7 @@ XorInstruction::XorInstruction(Operand* dst,
     operands.push_back(src);
     dst->setDef(this);
     src->addUse(this);
+    this->push_back_opse(src->getSymbolEntry());
 }
 
 void XorInstruction::output() const {
@@ -1527,6 +1530,17 @@ GepInstruction::GepInstruction(Operand* dst,
     init = nullptr;
     last = false;
     noAsm = false;
+
+    if (!paramFirst)
+    {
+        this->push_back_opse(arr->getSymbolEntry());
+    }
+    else
+    {
+        this->push_back_opse(dst->getSymbolEntry());
+    }
+    if (idx != nullptr)
+        this->push_back_opse(idx->getSymbolEntry());
 }
 
 void GepInstruction::output() const {
@@ -1748,4 +1762,225 @@ void PhiInstruction::output() const {
                 it->first->getNo());
     }
     fprintf(yyout, "\n");
+}
+
+
+
+void BinaryInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
+}
+
+void BinaryInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void CmpInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
+}
+
+void CmpInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void CondBrInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
+    }
+}
+
+void RetInstruction::replaceDef(Operand* new_) {
+    if (operands.size()) {
+        operands[0]->removeDef(this);
+        operands[0] = new_;
+        new_->setDef(this);
+    }
+}
+
+void RetInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands.size() && operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
+    }
+}
+
+void AllocaInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void LoadInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void LoadInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
+void StoreInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
+    } else if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
+void CallInstruction::replaceDef(Operand* new_) {
+    if (dst) {
+        operands[0]->removeDef(this);
+        operands[0] = new_;
+        new_->setDef(this);
+        dst = new_;
+    }
+}
+
+void CallInstruction::replaceUse(Operand* old, Operand* new_) {
+    for (int i = 1; i < (int)operands.size(); i++)
+        if (operands[i] == old) {
+            operands[i]->removeUse(this);
+            operands[i] = new_;
+            new_->addUse(this);
+        }
+}
+
+void ZextInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void ZextInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
+void XorInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void XorInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
+void GepInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void GepInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
+}
+
+void PhiInstruction::replaceUse(Operand* old, Operand* new_) {
+    for (auto& it : srcs) {
+        if (it.second == old) {
+            it.second->removeUse(this);
+            it.second = new_;
+            new_->addUse(this);
+        }
+    }
+    for (auto it = operands.begin() + 1; it != operands.end(); it++)
+        if (*it == old)
+            *it = new_;
+}
+
+void PhiInstruction::replaceDef(Operand* new_) {
+    dst->removeDef(this);
+    dst = new_;
+    new_->setDef(this);
+}
+
+void PhiInstruction::addSrc(BasicBlock* block, Operand* src) {
+    operands.emplace_back(src);
+    srcs.insert(std::make_pair(block, src));
+    src->addUse(this);
+}
+
+void SitofpInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+        src = new_;
+    }
+}
+
+void FptosiInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+        src = new_;
+    }
+}
+
+void FptosiInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void SitofpInstruction::replaceDef(Operand* new_) {
+    operands[0]->removeDef(this);
+    operands[0] = new_;
+    new_->setDef(this);
+}
+
+void BitcastInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
 }

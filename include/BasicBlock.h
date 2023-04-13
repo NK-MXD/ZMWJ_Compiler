@@ -29,6 +29,7 @@ private:
 public:
     BasicBlock(Function *);
     ~BasicBlock();
+    std::vector<BasicBlock *>&getPrevbb(){return pred;}
     void insertFront(Instruction *);
     void insertBack(Instruction *);
     void insertAfter(Instruction*, Instruction*);
@@ -38,6 +39,7 @@ public:
     void output() const;
     bool succEmpty() const { return succ.empty(); };
     bool predEmpty() const { return pred.empty(); };
+    void addSucc(BasicBlock* bb, bool first=0);
     void removeSucc(BasicBlock *);
     void addPred(BasicBlock *);
     void removePred(BasicBlock *);
@@ -69,6 +71,7 @@ public:
     void addAlloc(Instruction* alloc);
     std::vector<BasicBlock *>& getSuccBlock() { return succ;};
     std::vector<BasicBlock *>& getPredBlock() { return pred;};
+    void insertPhiInstruction(Operand* dst);
 };
 
 #endif
