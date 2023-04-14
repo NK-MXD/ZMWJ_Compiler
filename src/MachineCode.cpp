@@ -293,8 +293,23 @@ BinaryMInstruction::BinaryMInstruction(MachineBlock* p,
     src2->setParent(this);
 }
 
+int BinaryMInstruction::pattern_code()
+{
+    switch(op)
+    {
+        case ADD:
+            return 0x02;
+        case SUB:
+            return 0x04;
+        case VSUB:
+            return 0x05;
+        case MUL:
+            return 0x06;
+        default:
+            return 0x00;
+    }
+}
 void BinaryMInstruction::output() {
-    // 这里面PrintCond应该是用不到的啊
     switch (this->op) {
         case BinaryMInstruction::ADD:
             fprintf(yyout, "\tadd ");
@@ -396,6 +411,26 @@ void BinaryMInstruction::output() {
             this->use_list[1]->output();
             fprintf(yyout, "\n");
             break;
+        case BinaryMInstruction::LSL:
+            fprintf(yyout, "\tlsl ");
+            this->PrintCond();
+            this->def_list[0]->output();
+            fprintf(yyout, ", ");
+            this->use_list[0]->output();
+            fprintf(yyout, ", ");
+            this->use_list[1]->output();
+            fprintf(yyout, "\n");
+            break;
+        case BinaryMInstruction::ASR:
+            fprintf(yyout, "\tasr ");
+            this->PrintCond();
+            this->def_list[0]->output();
+            fprintf(yyout, ", ");
+            this->use_list[0]->output();
+            fprintf(yyout, ", ");
+            this->use_list[1]->output();
+            fprintf(yyout, "\n");
+            break;
         default:
             break;
     }
@@ -423,6 +458,16 @@ LoadMInstruction::LoadMInstruction(MachineBlock* p,
     dst->setDef(this);
 }
 
+int LoadMInstruction::pattern_code()
+{
+    switch(op)
+    {
+        case LDR:
+            return 0x08;
+        default:
+            return 0x00;
+    }
+}
 void LoadMInstruction::output() {
     if (op == LoadMInstruction::LDR) {
         fprintf(yyout, "\tldr ");
@@ -507,6 +552,16 @@ StoreMInstruction::StoreMInstruction(MachineBlock* p,
         src3->setParent(this);
 }
 
+int StoreMInstruction::pattern_code()
+{
+    switch(op)
+    {
+        case STR:
+            return 0x09;
+        default:
+            return 0x00;
+    }
+}
 void StoreMInstruction::output() {
     if (op == StoreMInstruction::STR) {
         fprintf(yyout, "\tstr ");
@@ -564,6 +619,18 @@ MovMInstruction::MovMInstruction(MachineBlock* p,
     }
 }
 
+int MovMInstruction::pattern_code()
+{
+    switch(op)
+    {
+        case MOV:
+            return 0x0a;
+        case VMOV:
+            return 0x0b;
+        default:
+            return 0x00;
+    }
+}
 void MovMInstruction::output() {
     switch (this->op) {
         case MovMInstruction::MOV:
@@ -956,6 +1023,17 @@ void MachineBlock::output() {
     // }
 }
 
+void MachineBlock::insertFront(MachineInstruction* in) {
+    inst_list.insert(inst_list.begin(), in);
+}
+
+MachineInstruction* MachineBlock::getNext(MachineInstruction* in) {
+    auto it = find(inst_list.begin(), inst_list.end(), in);
+    if (it != inst_list.end() && (it + 1) != inst_list.end()) {
+        return *(it + 1);
+    }
+    return nullptr;
+}
 
 void MachineFunction::output() {
     auto name = this->sym_ptr->toStr().substr(1);
@@ -1296,4 +1374,130 @@ void MachineBlock::printDefout(){
         std::cout<<(*i)->toStr()<<"\n";
     }
 
+}
+
+SmullMInstruction::SmullMInstruction(MachineBlock* p,
+                                       MachineOperand* dst,
+                                       MachineOperand* dst1,
+                                       MachineOperand* src1,
+                                       MachineOperand* src2,
+                                       int cond) {
+    this->parent = p;
+    this->type = MachineInstruction::SMULL;
+    this->cond = cond;
+    this->def_list.push_back(dst);
+    this->def_list.push_back(dst1);
+    this->use_list.push_back(src1);
+    this->use_list.push_back(src2);
+    dst->setParent(this);
+    dst1->setParent(this);
+    src1->setParent(this);
+    src2->setParent(this);
+    dst->setDef(this);
+    dst1->setDef(this);
+}
+
+void SmullMInstruction::output() {
+    fprintf(yyout, "\tumull ");
+    this->def_list[0]->output();
+    fprintf(yyout, ", ");
+    this->def_list[1]->output();
+    fprintf(yyout, ", ");
+    this->use_list[0]->output();
+    fprintf(yyout, ", ");
+    this->use_list[1]->output();
+    fprintf(yyout, "\n");
+}
+FuseMInstruction::FuseMInstruction(MachineBlock* p,
+                                   int op,
+                                   MachineOperand* dst,
+                                   MachineOperand* src1,
+                                   MachineOperand* src2,
+                                   MachineOperand* src3) {
+    this->parent = p;
+    this->type = MachineInstruction::FUSE;
+    this->op = op;
+    this->def_list.push_back(dst);
+    this->use_list.push_back(src1);
+    this->use_list.push_back(src2);
+    this->use_list.push_back(src3);
+    dst->setParent(this);
+    src1->setParent(this);
+    src2->setParent(this);
+    src3->setParent(this);
+}
+void FuseMInstruction::output() {
+    switch (this->op) {
+        case FuseMInstruction::MLA:
+            fprintf(yyout, "\tmla ");
+            break;
+        case FuseMInstruction::MLS:
+            fprintf(yyout, "\tmls ");
+            break;
+        case FuseMInstruction::VMLA:
+            fprintf(yyout, "\tvmla.f32 ");
+            break;
+        case FuseMInstruction::VMLS:
+            fprintf(yyout, "\tvmls.f32 ");
+            break;
+        default:
+            break;
+    }
+
+    this->PrintCond();
+    this->def_list[0]->output();
+    fprintf(yyout, ", ");
+    this->use_list[0]->output();
+    fprintf(yyout, ", ");
+    this->use_list[1]->output();
+    if (this->op != FuseMInstruction::VMLA &&
+        this->op != FuseMInstruction::VMLS) {
+        fprintf(yyout, ", ");
+        this->use_list[2]->output();
+    }
+    fprintf(yyout, "\n");
+}
+
+VNegMInstruction::VNegMInstruction(MachineBlock* p,
+                                   int op,
+                                   MachineOperand* dst,
+                                   MachineOperand* src) {
+    this->parent = p;
+    this->type = MachineInstruction::VNEG;
+    this->op = op;
+    this->def_list.push_back(dst);
+    this->use_list.push_back(src);
+    dst->setParent(this);
+    src->setParent(this);
+}
+
+void VNegMInstruction::output() {
+    fprintf(yyout, "\tvneg.");
+    switch (this->op) {
+        case VNegMInstruction::F32:
+            fprintf(yyout, "f32 ");
+            break;
+        case VNegMInstruction::S32:
+            fprintf(yyout, "s32 ");  // need neon registers
+            break;
+
+        default:
+            break;
+    }
+
+    this->PrintCond();
+    this->def_list[0]->output();
+    fprintf(yyout, ", ");
+    this->use_list[0]->output();
+    fprintf(yyout, "\n");
+}
+
+int VNegMInstruction::latency() {
+    return 3;
+}
+
+void MachineBlock::insertBefore(MachineInstruction* a, MachineInstruction* b) {
+    auto it = find(inst_list.begin(), inst_list.end(), b);
+    if (it != inst_list.end())
+        inst_list.insert(it, a);
 }

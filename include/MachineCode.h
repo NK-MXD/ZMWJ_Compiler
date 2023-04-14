@@ -49,6 +49,7 @@ class MachineOperand {
     MachineOperand(std::string label);
     MachineOperand(int tp, float fval);
     MachineOperand() = default;
+    uint32_t getBinVal();
     int getOp() { return op; }
     bool operator==(const MachineOperand &) const;
     bool operator<(const MachineOperand &) const;
@@ -138,7 +139,6 @@ class MachineInstruction {
     void replaceDef(MachineOperand* old, MachineOperand* new_);
     int getOp() { return op; }
     MachineBlock *getParent() const { return parent; };
-    // 简单起见这样写了
     bool isBX() const { return type == BRANCH && op == 2; };
     bool isBL() const { return type == BRANCH && op == 1; };
     bool isB() const { return type == BRANCH && op == 0; };
@@ -164,6 +164,7 @@ class MachineInstruction {
     bool isCondMov() const { return type == MOV && op == 0 && cond != NONE; };
     bool isPush() const { return type == STACK && op == 0; };
     bool isStack() const { return type == STACK; }
+    virtual int pattern_code()=0;
 
 
 };
@@ -177,6 +178,7 @@ class VNegMInstruction : public MachineInstruction {
                      MachineOperand* src);
     void output();
     int latency();
+    int pattern_code(){return 0x00;}
 };
 
 class FuseMInstruction : public MachineInstruction {
@@ -190,15 +192,17 @@ class FuseMInstruction : public MachineInstruction {
                      MachineOperand* src3);
     void output();
     int latency();
+    int pattern_code(){return 0x00;}
 };
 
 class BinaryMInstruction : public MachineInstruction {
   public:
-    enum opType { ADD, SUB, MUL, DIV, AND, OR, VADD, VSUB, VMUL, VDIV };
+    enum opType { ADD, SUB, MUL, DIV, AND, OR, VADD, VSUB, VMUL, VDIV, LSL, ASR};
     BinaryMInstruction(MachineBlock *p, int op, MachineOperand *dst,
                        MachineOperand *src1, MachineOperand *src2,
                        int cond = MachineInstruction::NONE);
     void output();
+    int pattern_code();
 };
 
 class LoadMInstruction : public MachineInstruction {
@@ -215,6 +219,7 @@ class LoadMInstruction : public MachineInstruction {
     void output();
     void setNeedModify() { needModify = true; }
     bool isNeedModify() { return needModify; }
+    int pattern_code();
 };
 
 class StoreMInstruction : public MachineInstruction {
@@ -227,6 +232,7 @@ class StoreMInstruction : public MachineInstruction {
                       MachineOperand* src3 = nullptr,
                       int cond = MachineInstruction::NONE);
     void output();
+    int pattern_code();
 };
 
 class MovMInstruction : public MachineInstruction {
@@ -239,6 +245,7 @@ class MovMInstruction : public MachineInstruction {
                     int cond = MachineInstruction::NONE,
                     MachineOperand* num = nullptr);
     void output();
+    int pattern_code();
 };
 
 class BranchMInstruction : public MachineInstruction {
@@ -247,6 +254,7 @@ class BranchMInstruction : public MachineInstruction {
     BranchMInstruction(MachineBlock *p, int op, MachineOperand *dst,
                        int cond = MachineInstruction::NONE);
     void output();
+    int pattern_code(){return 0x00;}
 };
 
 class CmpMInstruction : public MachineInstruction {
@@ -258,6 +266,7 @@ class CmpMInstruction : public MachineInstruction {
                     MachineOperand* src2,
                     int cond = MachineInstruction::NONE);
     void output();
+    int pattern_code(){return 0x00;}
 };
 
 class StackMInstrcuton : public MachineInstruction {
@@ -268,6 +277,7 @@ class StackMInstrcuton : public MachineInstruction {
                      MachineOperand *src1 = nullptr,
                      int cond = MachineInstruction::NONE);
     void output();
+    int pattern_code(){return 0x00;}
 };
 
 
@@ -280,12 +290,14 @@ class VcvtMInstruction : public MachineInstruction {
                      MachineOperand* src,
                      int cond = MachineInstruction::NONE);
     void output();
+    int pattern_code(){return 0x00;}
 };
 
 class VmrsMInstruction : public MachineInstruction {
    public:
     VmrsMInstruction(MachineBlock* p);
     void output();
+    int pattern_code(){return 0x00;}
 };
 
 class MachineBlock {
@@ -319,6 +331,19 @@ class MachineBlock {
     void InsertInst(MachineInstruction *inst) {
         this->inst_list.push_back(inst);
     };
+    void insertBefore(MachineInstruction *src,MachineInstruction *dst);
+    void InsertInstBeforeEnd(MachineInstruction *dst){this->inst_list.insert(inst_list.end()-1, dst);};
+    void InsertInstBeforeBr(MachineInstruction *dst){
+      for(auto inst = inst_list.rbegin(); inst != inst_list.rend(); inst++){
+        if((*inst)->isBranch()){
+          continue;
+        }
+        // std::cout<<"hhh";
+        auto pos = find(inst_list.begin(), inst_list.end(), *inst);
+        this->inst_list.insert(pos, dst);
+        return;
+      }
+    };
     void addPred(MachineBlock *p) { this->pred.push_back(p); };
     void addSucc(MachineBlock *s) { this->succ.push_back(s); };
     std::set<MachineOperand *> &getLiveIn() { return live_in; };
@@ -338,6 +363,9 @@ class MachineBlock {
       if (it != inst_list.end())
         inst_list.erase(it);
     }
+    int getNo() const { return no;};
+    void insertFront(MachineInstruction* in);
+    MachineInstruction* getNext(MachineInstruction* in);
 };
 
 class MachineFunction {
@@ -421,5 +449,18 @@ class StackMInstruction : public MachineInstruction {
                       MachineOperand* src1 = nullptr,
                       int cond = MachineInstruction::NONE);
     void output();
+    int pattern_code(){return 0x00;}
+};
+
+class SmullMInstruction : public MachineInstruction {
+   public:
+    SmullMInstruction(MachineBlock* p,
+                       MachineOperand* dst,
+                       MachineOperand* dst1,
+                       MachineOperand* src1,
+                       MachineOperand* src2,
+                       int cond = MachineInstruction::NONE);
+    void output();
+    int pattern_code(){}
 };
 #endif

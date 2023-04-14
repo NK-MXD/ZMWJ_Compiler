@@ -1,5 +1,6 @@
 #include "Instruction.h"
 #include <iostream>
+#include <cmath>
 #include <sstream>
 #include "BasicBlock.h"
 #include "Function.h"
@@ -59,6 +60,18 @@ BinaryInstruction::BinaryInstruction(unsigned opcode,
     src2->addUse(this);
 }
 
+void BinaryInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
+}
+
 BinaryInstruction::~BinaryInstruction() {
     operands[0]->setDef(nullptr);
     if (operands[0]->usersNum() == 0)
@@ -112,134 +125,265 @@ void BinaryInstruction::output() const {
             type.c_str(), s2.c_str(), s3.c_str());
 }
 
+
+
+
+bool isPowerOf2(int num) {
+    return (num & (num - 1)) ? false : true;
+}
+
+int log2ForIntpowOf2(int num) {
+    int res = -1;
+    while (num) {
+        num >>= 1;
+        res++;
+    }
+    return res;
+}
+
+int getMinLargerPowOf2(int num) {
+    int res = 1;
+    while(res < num) {
+        res = res << 1;
+    }
+    return 256;
+}
+
+int clz(int x) { return __builtin_clz(x); }
+int ctz(int x) { return __builtin_ctz(x); }
+
 void BinaryInstruction::genMachineCode(AsmBuilder* builder) {
-    // complete other instructions
     auto cur_block = builder->getBlock();
-    /* HINT:
-     * The source operands of ADD instruction in ir code both can be immediate
-     * num. However, it's not allowed in assembly code. So you need to insert
-     * LOAD/MOV instrucrion to load immediate num into register. As to other
-     * instructions, such as MUL, CMP, you need to deal with this situation,
-     * too.*/
-
-    if (operands[0]->getType()->isFloat()) {
-        auto flag = false;
-        auto dst = genMachineFloatOperand(operands[0]);
-        auto src1 = genMachineFloatOperand(operands[1]);
-        auto src2 = genMachineFloatOperand(operands[2]);
-        MachineInstruction* cur_inst = nullptr;
-        if (src1->isImm()) {
-            auto tmp_reg = genMachineVReg(true);
-            auto internal_reg = genMachineVReg();
-            cur_inst = new LoadMInstruction(cur_block, LoadMInstruction::LDR,
-                                            internal_reg, src1);
-            cur_block->InsertInst(cur_inst);
-            internal_reg = new MachineOperand(*internal_reg);
-            cur_inst = new MovMInstruction(cur_block, MovMInstruction::VMOV,
-                                           tmp_reg, internal_reg);
-            cur_block->InsertInst(cur_inst);
-            src1 = new MachineOperand(*tmp_reg);
-        }
-        if (src2->isImm()) {
-            if (src2->getFVal() == 0 && opcode == ADD)
-                flag = true;
-            else {
-                auto tmp_reg = genMachineVReg(true);
-                auto internal_reg = genMachineVReg();
-                cur_inst = new LoadMInstruction(
-                    cur_block, LoadMInstruction::LDR, internal_reg, src2);
-                cur_block->InsertInst(cur_inst);
-                internal_reg = new MachineOperand(*internal_reg);
-                cur_inst = new MovMInstruction(cur_block, MovMInstruction::VMOV,
-                                               tmp_reg, internal_reg);
-                cur_block->InsertInst(cur_inst);
-                src2 = new MachineOperand(*tmp_reg);
-            }
-        }
-
-        switch (opcode) {
-            case ADD:
-                if (flag)
-                    cur_inst = new MovMInstruction(
-                        cur_block, MovMInstruction::VMOVF32, dst, src1);
-                else
-                    cur_inst = new BinaryMInstruction(
-                        cur_block, BinaryMInstruction::VADD, dst, src1, src2);
-                break;
-            case SUB:
-                cur_inst = new BinaryMInstruction(
-                    cur_block, BinaryMInstruction::VSUB, dst, src1, src2);
-                break;
-            case AND:
-                // TODO
-                break;
-            case OR:
-                // TODO
-                break;
-            case MUL:
-                cur_inst = new BinaryMInstruction(
-                    cur_block, BinaryMInstruction::VMUL, dst, src1, src2);
-                break;
-            case DIV:
-                cur_inst = new BinaryMInstruction(
-                    cur_block, BinaryMInstruction::VDIV, dst, src1, src2);
-                break;
-            case MOD:
-                // error
-                break;
-            default:
-                break;
-        }
-        cur_block->InsertInst(cur_inst);
-
-    } else {
+    
+    if(operands[0]->getType()->isInt()) { //int;
         auto dst = genMachineOperand(operands[0]);
         auto src1 = genMachineOperand(operands[1]);
         auto src2 = genMachineOperand(operands[2]);
+        //StrengthReduction:
+        if(src1->isImm() && opcode == MUL) {  
+            if(src2->isImm()) {
+                MachineOperand* temp = new MachineOperand(MachineOperand::IMM, src1->getVal()*src2->getVal());
+                MachineInstruction* cur_inst = new MovMInstruction(
+                        cur_block, MovMInstruction::MOV, dst, temp);
+                cur_block->InsertInst(cur_inst);
+                return;
+            }
+            if(src1->getVal() == 0) {
+                MachineOperand* temp = new MachineOperand(MachineOperand::IMM, 0);
+                MachineInstruction* cur_inst = new MovMInstruction(
+                            cur_block, MovMInstruction::MOV, dst, temp);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(src1->getVal() == 1) {
+                MachineInstruction* cur_inst = new MovMInstruction(
+                            cur_block, MovMInstruction::MOV, dst, src2);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(src1->getVal() == 2) {
+                MachineOperand* temp = new MachineOperand(*src2);
+                MachineInstruction* cur_inst = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::ADD, dst, src2, temp);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(isPowerOf2(src1->getVal())) {
+                MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(src1->getVal()));
+                MachineInstruction* cur_inst = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::LSL, dst, src2, pow);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(src1->getVal() >= 4  && isPowerOf2(src1->getVal() + 1)) {
+                MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(src1->getVal() + 1));
+                auto temp = genMachineVReg();
+                //MachineOperand* temp = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel());
+                MachineInstruction* cur_inst1 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::LSL, temp, src2, pow);
+                MachineInstruction* cur_inst2 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::SUB, dst, temp, src2);
+                cur_block->InsertInst(cur_inst1);
+                cur_block->InsertInst(cur_inst2);
+                return;
+            } else if(src1->getVal() >= 4  && isPowerOf2(src1->getVal() - 1)) {
+                MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(src1->getVal() - 1));
+                auto temp = genMachineVReg();
+                //MachineOperand* temp = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel());
+                MachineInstruction* cur_inst1 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::LSL, temp, src2, pow);
+                MachineInstruction* cur_inst2 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::ADD, dst, temp, src2);
+                cur_block->InsertInst(cur_inst1);
+                cur_block->InsertInst(cur_inst2);
+                return;
+            }
+        }
+        //StengthReduction end.
+
+        if(src1->isImm()) {
+            auto temp_reg = genMachineVReg();
+            MachineInstruction* temp_inst = new LoadMInstruction(
+                    cur_block, LoadMInstruction::LDR, temp_reg, src1);
+            cur_block->InsertInst(temp_inst);
+            src1 = new MachineOperand(*temp_reg);
+        }
+
+        //StrengthReduction:
+        if(src2->isImm() && opcode == MUL) {  
+            if(src2->getVal() == 0) {
+                MachineOperand* temp = new MachineOperand(MachineOperand::IMM, 0);
+                MachineInstruction* cur_inst = new MovMInstruction(
+                            cur_block, MovMInstruction::MOV, dst, temp);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(src2->getVal() == 1) {
+                MachineInstruction* cur_inst = new MovMInstruction(
+                            cur_block, MovMInstruction::MOV, dst, src1);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(src2->getVal() == 2) {
+                MachineOperand* temp = new MachineOperand(*src1);
+                MachineInstruction* cur_inst = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::ADD, dst, src1, temp);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(isPowerOf2(src2->getVal())) {
+                MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(src2->getVal()));
+                MachineInstruction* cur_inst = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::LSL, dst, src1, pow);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(src2->getVal() >= 4  && isPowerOf2(src2->getVal() + 1)) {
+                MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(src2->getVal() + 1));
+                auto temp = genMachineVReg();
+                //MachineOperand* temp = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel());
+                MachineInstruction* cur_inst1 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::LSL, temp, src1, pow);
+                MachineInstruction* cur_inst2 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::SUB, dst, temp, src1);
+                cur_block->InsertInst(cur_inst1);
+                cur_block->InsertInst(cur_inst2);
+                return;
+            } else if(src2->getVal() >= 4  && isPowerOf2(src2->getVal() - 1)) {
+                MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(src2->getVal() - 1));
+                auto temp = genMachineVReg();
+                //MachineOperand* temp = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel());
+                MachineInstruction* cur_inst1 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::LSL, temp, src1, pow);
+                MachineInstruction* cur_inst2 = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::ADD, dst, temp, src1);
+                cur_block->InsertInst(cur_inst1);
+                cur_block->InsertInst(cur_inst2);
+                return;
+            }
+        }
+        if(src2->isImm() && opcode == DIV) {
+            if(src2->getVal() == 1) {
+                MachineInstruction* cur_inst = new MovMInstruction(
+                            cur_block, MovMInstruction::MOV, dst, src1);
+                cur_block->InsertInst(cur_inst);
+                return;
+            }
+            if(isPowerOf2(src2->getVal()) && src2->getVal() != 2) { //TODO: it can't works when src==2  £¡£¿Ó¦¸ÃÊÇÒ»¸öºÜÑÏÖØµÄÂß¼­È±ÏÝ;
+                MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(src2->getVal()));
+                //Both are OK:
+                // MachineInstruction* cur_inst = new MovMInstruction(
+                //             cur_block, MovMInstruction::MOVASR, dst, src1, MachineInstruction::NONE, pow);
+                MachineInstruction* cur_inst = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::ASR, dst, src1, pow);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } else if(!isPowerOf2(src2->getVal())) {
+                //TODO : SMULL
+                int constVal = src2->getVal();
+                int s = ctz(constVal);
+                auto off = new MachineOperand(MachineOperand::IMM, 31);    
+                auto temp = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel()); 
+                int _s = 0; 
+                if(constVal % (int(1) << s) == 0) {
+                    constVal = constVal / (int(1) << s);
+                    _s = s;
+                }
+                int low = floor(log2(constVal));
+                long long high = ceil((((double)((long long)(1) << (low + 32))) / constVal));
+                auto m = new MachineOperand(MachineOperand::IMM, high);
+                auto l = new MachineOperand(MachineOperand::IMM, low + _s);
+                auto rh = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel());
+                auto rl = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel());
+                MachineInstruction* inst1 = new LoadMInstruction(nullptr, LoadMInstruction::LDR, temp, m);
+                MachineInstruction* inst2 = new SmullMInstruction(nullptr, rl, rh, src1, temp);
+                MachineInstruction* inst3 = new MovMInstruction(nullptr, MovMInstruction::MOVASR,
+                                    dst, rh, MachineInstruction::NONE, l);
+                MachineInstruction* inst4 = new MovMInstruction(nullptr, MovMInstruction::MOVLSR,
+                                    temp, rh, MachineInstruction::NONE, off);
+                MachineInstruction* inst5 = new BinaryMInstruction(nullptr, BinaryMInstruction::ADD,
+                                    dst, dst, temp);
+            
+                cur_block->InsertInst(inst1);
+                cur_block->InsertInst(inst2);
+                cur_block->InsertInst(inst3);
+                cur_block->InsertInst(inst4);
+                cur_block->InsertInst(inst5);
+                // MachineOperand* temp = new MachineOperand(MachineOperand::IMM, 
+                //             getMinLargerPowOf2(src2->getVal())/(src2->getVal()));
+                // MachineOperand* pow = new MachineOperand(MachineOperand::IMM, log2ForIntpowOf2(getMinLargerPowOf2(src2->getVal()))); 
+                // MachineOperand* dst1 = new MachineOperand(MachineOperand::VREG, SymbolTable::getLabel());
+                // auto temp_reg = genMachineVReg();
+
+                // MachineInstruction* cur_inst1 = new BinaryMInstruction(
+                //             cur_block, BinaryMInstruction::ASR, dst1, src1, pow);
+                // MachineInstruction* cur_inst2 = new LoadMInstruction(
+                //                cur_block, LoadMInstruction::LDR, temp_reg, temp);
+                // MachineInstruction* cur_inst3 = new BinaryMInstruction(
+                //             cur_block, BinaryMInstruction::MUL, dst, dst1, temp_reg);
+                // cur_block->InsertInst(cur_inst1);
+                // cur_block->InsertInst(cur_inst2);
+                // cur_block->InsertInst(cur_inst3);
+                // return;
+            }
+        }
+        if(src2->isImm() && opcode == MOD) {
+            if(isPowerOf2(src2->getVal())) {
+                MachineOperand* temp = new MachineOperand(MachineOperand::IMM, src2->getVal() - 1);
+                MachineInstruction* cur_inst = new BinaryMInstruction(
+                            cur_block, BinaryMInstruction::AND, dst, src1, temp);
+                cur_block->InsertInst(cur_inst);
+                return;
+            } 
+        }
+        //StengthReduction end.
+
+
+        if(src2->isImm() && (src2->getVal() >= 256 || src2->getVal() <= -255)) {
+            auto temp_reg = genMachineVReg();
+            MachineInstruction* temp_inst = new LoadMInstruction(
+                    cur_block, LoadMInstruction::LDR, temp_reg, src2);
+            cur_block->InsertInst(temp_inst);
+            src2 = new MachineOperand(*temp_reg);
+        }
+        if(src2->isImm() && opcode >= MUL) {
+            auto temp_reg = genMachineVReg();
+            MachineInstruction* temp_inst = new LoadMInstruction(
+                    cur_block, LoadMInstruction::LDR, temp_reg, src2);
+            cur_block->InsertInst(temp_inst);
+            src2 = new MachineOperand(*temp_reg);
+        }
         MachineInstruction* cur_inst = nullptr;
-        if (src1->isImm() && src2->isImm() && src2->getVal() == 0 &&
-            opcode == ADD) {
-            if (!(src1->getVal() < 256 && src1->getVal() > -255)) {
-                auto internal_reg = genMachineVReg();
-                cur_inst = new LoadMInstruction(
-                    cur_block, LoadMInstruction::LDR, internal_reg, src1);
-                cur_block->InsertInst(cur_inst);
-                src1 = new MachineOperand(*internal_reg);
-            }
-            cur_inst =
-                new MovMInstruction(cur_block, MovMInstruction::MOV, dst, src1);
-            cur_block->InsertInst(cur_inst);
-            return;
-        }
-        if (src1->isImm()) {
-            auto internal_reg = genMachineVReg();
-            cur_inst = new LoadMInstruction(cur_block, LoadMInstruction::LDR,
-                                            internal_reg, src1);
-            cur_block->InsertInst(cur_inst);
-            src1 = new MachineOperand(*internal_reg);
-        }
-        // 合法立即数的判定太复杂 简单判定255以上均load
-        // 这里应该也不需要考虑负数
-        if (src2->isImm()) {
-            if ((opcode <= BinaryInstruction::OR &&
-                 ((ConstantSymbolEntry*)(operands[2]->getEntry()))->getValue() >
-                     255) ||
-                opcode >= BinaryInstruction::MUL) {
-                auto internal_reg = genMachineVReg();
-                cur_inst = new LoadMInstruction(
-                    cur_block, LoadMInstruction::LDR, internal_reg, src2);
-                cur_block->InsertInst(cur_inst);
-                src2 = new MachineOperand(*internal_reg);
-            }
-        }
         switch (opcode) {
             case ADD:
-                cur_inst = new BinaryMInstruction(
-                    cur_block, BinaryMInstruction::ADD, dst, src1, src2);
+                if(src2->isImm() && src2->getVal() == 0) {
+                    cur_inst = new MovMInstruction(
+                        cur_block, MovMInstruction::MOV, dst, src1);
+                } else {
+                    cur_inst = new BinaryMInstruction(
+                        cur_block, BinaryMInstruction::ADD, dst, src1, src2);
+                }
                 break;
             case SUB:
-                cur_inst = new BinaryMInstruction(
-                    cur_block, BinaryMInstruction::SUB, dst, src1, src2);
+                if(src2->isImm() && src2->getVal() == 0) {
+                    cur_inst = new MovMInstruction(
+                        cur_block, MovMInstruction::MOV, dst, src1);
+                } else {
+                    cur_inst = new BinaryMInstruction(
+                        cur_block, BinaryMInstruction::SUB, dst, src1, src2);
+                }
                 break;
             case AND:
                 cur_inst = new BinaryMInstruction(
@@ -255,20 +399,9 @@ void BinaryInstruction::genMachineCode(AsmBuilder* builder) {
                 break;
             case DIV:
                 cur_inst = new BinaryMInstruction(
-                    cur_block, BinaryMInstruction::DIV, dst, src1, src2);
+                        cur_block, BinaryMInstruction::DIV, dst, src1, src2);
                 break;
             case MOD: {
-                // c = a % b
-                // c = a / b
-                // if(optimize && operands[2]->isConst()){
-                //     int b = operands[2]->getConstVal();
-                //     if(b > 0 && b < 256 && (b & (b-1)) == 0){
-                //         cur_inst = new BinaryMInstruction(
-                //             cur_block, BinaryMInstruction::MOD, dst, src1, src2);
-                //         break;
-                //     }
-                // }
-                // c1 = a / b
                 auto dst1 = genMachineVReg();
                 cur_inst = new BinaryMInstruction(
                     cur_block, BinaryMInstruction::DIV, dst1, src1, src2);
@@ -276,15 +409,88 @@ void BinaryInstruction::genMachineCode(AsmBuilder* builder) {
                 src2 = new MachineOperand(*src2);
                 auto temp = new MachineOperand(*dst1);
                 cur_block->InsertInst(cur_inst);
-                // c2 = c1 * b
+                
                 auto dst2 = genMachineVReg();
                 cur_inst = new BinaryMInstruction(
                     cur_block, BinaryMInstruction::MUL, dst2, temp, src2);
                 cur_block->InsertInst(cur_inst);
                 dst2 = new MachineOperand(*dst2);
-                // c = a - c2
+                
                 cur_inst = new BinaryMInstruction(
                     cur_block, BinaryMInstruction::SUB, dst, src1, dst2);
+                break;
+            }
+            default:
+                break;
+        }
+        cur_block->InsertInst(cur_inst);
+    } else if(operands[0]->getType()->isFloat()) { //float;
+        auto dst = genMachineFloatOperand(operands[0]);
+        auto src1 = genMachineFloatOperand(operands[1]);
+        auto src2 = genMachineFloatOperand(operands[2]);
+        /*float imm => freg:
+           1. imm => reg
+           2. reg => freg
+        */
+
+        if(src1->isImm()) {
+            auto temp_freg = genMachineVReg(true);
+            auto temp_reg = genMachineVReg();
+            MachineInstruction* temp_inst = new LoadMInstruction(
+                    cur_block, LoadMInstruction::LDR, temp_reg, src1);
+            cur_block->InsertInst(temp_inst);
+            MachineInstruction* temp_inst2 = new MovMInstruction(
+                cur_block, MovMInstruction::VMOV, temp_freg, temp_reg);
+            cur_block->InsertInst(temp_inst2);
+            src1 = new MachineOperand(*temp_freg);
+        }
+        if(src2->isImm()) {
+            auto temp_freg = genMachineVReg(true);
+            auto temp_reg = genMachineVReg();
+            MachineInstruction* temp_inst = new LoadMInstruction(
+                    cur_block, LoadMInstruction::LDR, temp_reg, src2);
+            cur_block->InsertInst(temp_inst);
+            MachineInstruction* temp_inst2 = new MovMInstruction(
+                cur_block, MovMInstruction::VMOV, temp_freg, temp_reg);
+            cur_block->InsertInst(temp_inst2);
+            src2 = new MachineOperand(*temp_freg);
+        }
+        MachineInstruction* cur_inst = nullptr;
+        switch (opcode) {
+            case ADD:
+                if(src2->isImm() && src2->getFVal() == 0) {
+                    cur_inst = new MovMInstruction(
+                        cur_block, MovMInstruction::VMOVF32, dst, src1);
+                } else {
+                    cur_inst = new BinaryMInstruction(
+                        cur_block, BinaryMInstruction::VADD, dst, src1, src2);
+                }
+                break;
+            case SUB:
+                if(src2->isImm() && src2->getFVal() == 0) {
+                    cur_inst = new MovMInstruction(
+                        cur_block, MovMInstruction::VMOVF32, dst, src1);
+                } else {
+                    cur_inst = new BinaryMInstruction(
+                        cur_block, BinaryMInstruction::VSUB, dst, src1, src2);
+                }
+                break;
+            case AND:
+                //TODO;
+                break;
+            case OR:
+                //TODO;
+                break;
+            case MUL:
+                cur_inst = new BinaryMInstruction(
+                    cur_block, BinaryMInstruction::VMUL, dst, src1, src2);
+                break;
+            case DIV:
+                cur_inst = new BinaryMInstruction(
+                        cur_block, BinaryMInstruction::VDIV, dst, src1, src2);
+                break;
+            case MOD: {
+                //TODO;
                 break;
             }
             default:
@@ -307,6 +513,18 @@ CmpInstruction::CmpInstruction(unsigned opcode,
     dst->setDef(this);
     src1->addUse(this);
     src2->addUse(this);
+}
+
+void CmpInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
 }
 
 CmpInstruction::~CmpInstruction() {
@@ -519,6 +737,14 @@ CondBrInstruction::CondBrInstruction(BasicBlock* true_branch,
     operands.push_back(cond);
 }
 
+void CondBrInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
+    }
+}
+
 CondBrInstruction::~CondBrInstruction() {
     operands[0]->removeUse(this);
 }
@@ -569,6 +795,14 @@ RetInstruction::RetInstruction(Operand* src, BasicBlock* insert_bb)
     if (src != nullptr) {
         operands.push_back(src);
         src->addUse(this);
+    }
+}
+
+void RetInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands.size() && operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
     }
 }
 
@@ -711,6 +945,14 @@ LoadInstruction::LoadInstruction(Operand* dst,
     src_addr->addUse(this);
 }
 
+void LoadInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
 LoadInstruction::~LoadInstruction() {
     operands[0]->setDef(nullptr);
     if (operands[0]->usersNum() == 0)
@@ -841,6 +1083,18 @@ StoreInstruction::StoreInstruction(Operand* dst_addr,
     src->addUse(this);
     this->push_back_opse(dst_addr->getSymbolEntry());
 
+}
+
+void StoreInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[0] == old) {
+        operands[0]->removeUse(this);
+        operands[0] = new_;
+        new_->addUse(this);
+    } else if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
 }
 
 StoreInstruction::~StoreInstruction() {
@@ -1076,6 +1330,15 @@ CallInstruction::CallInstruction(Operand* dst,
     }
 }
 
+void CallInstruction::replaceUse(Operand* old, Operand* new_) {
+    for (int i = 1; i < (int)operands.size(); i++)
+        if (operands[i] == old) {
+            operands[i]->removeUse(this);
+            operands[i] = new_;
+            new_->addUse(this);
+        }
+}
+
 void CallInstruction::output() const {
     fprintf(yyout, "  ");
     if (operands[0])
@@ -1100,6 +1363,13 @@ BitcastInstruction::BitcastInstruction(Operand* dst,
     dst->setDef(this);
     src->addUse(this);
     flag = false;
+}
+void BitcastInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
 }
 
 void BitcastInstruction::output() const {
@@ -1370,6 +1640,14 @@ void FptosiInstruction::output() const {
             dst->getType()->toStr().c_str());
 }
 
+void FptosiInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+        src = new_;
+    }
+}
 
 FptosiInstruction::~FptosiInstruction() {
     operands[0]->setDef(nullptr);
@@ -1438,6 +1716,16 @@ SitofpInstruction::~SitofpInstruction() {
         delete operands[0];
     operands[1]->removeUse(this);
 }
+
+void SitofpInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+        src = new_;
+    }
+}
+
 
 void SitofpInstruction::genMachineCode(AsmBuilder* builder) {
     MachineInstruction* cur_inst;
@@ -1569,6 +1857,18 @@ GepInstruction::~GepInstruction() {
         delete operands[0];
     operands[1]->removeUse(this);
     operands[2]->removeUse(this);
+}
+
+void GepInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    } else if (operands[2] == old) {
+        operands[2]->removeUse(this);
+        operands[2] = new_;
+        new_->addUse(this);
+    }
 }
 
 void GepInstruction::genMachineCode(AsmBuilder* builder) {
@@ -1720,6 +2020,14 @@ void ZextInstruction::genMachineCode(AsmBuilder* builder) {
     cur_block->InsertInst(cur_inst);
 }
 
+void ZextInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
+}
+
 void XorInstruction::genMachineCode(AsmBuilder* builder) {
     auto cur_block = builder->getBlock();
     auto dst = genMachineOperand(operands[0]);
@@ -1731,6 +2039,14 @@ void XorInstruction::genMachineCode(AsmBuilder* builder) {
     cur_inst = new MovMInstruction(cur_block, MovMInstruction::MOV, dst,
                                    falseOperand, MachineInstruction::NE);
     cur_block->InsertInst(cur_inst);
+}
+
+void XorInstruction::replaceUse(Operand* old, Operand* new_) {
+    if (operands[1] == old) {
+        operands[1]->removeUse(this);
+        operands[1] = new_;
+        new_->addUse(this);
+    }
 }
 
 PhiInstruction::PhiInstruction(Operand* dst, BasicBlock* insert_bb)
@@ -1766,48 +2082,17 @@ void PhiInstruction::output() const {
 
 
 
-void BinaryInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    } else if (operands[2] == old) {
-        operands[2]->removeUse(this);
-        operands[2] = new_;
-        new_->addUse(this);
-    }
-}
-
 void BinaryInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
     operands[0] = new_;
     new_->setDef(this);
 }
 
-void CmpInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    } else if (operands[2] == old) {
-        operands[2]->removeUse(this);
-        operands[2] = new_;
-        new_->addUse(this);
-    }
-}
 
 void CmpInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
     operands[0] = new_;
     new_->setDef(this);
-}
-
-void CondBrInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[0] == old) {
-        operands[0]->removeUse(this);
-        operands[0] = new_;
-        new_->addUse(this);
-    }
 }
 
 void RetInstruction::replaceDef(Operand* new_) {
@@ -1818,13 +2103,6 @@ void RetInstruction::replaceDef(Operand* new_) {
     }
 }
 
-void RetInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands.size() && operands[0] == old) {
-        operands[0]->removeUse(this);
-        operands[0] = new_;
-        new_->addUse(this);
-    }
-}
 
 void AllocaInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1838,25 +2116,6 @@ void LoadInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void LoadInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
-
-void StoreInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[0] == old) {
-        operands[0]->removeUse(this);
-        operands[0] = new_;
-        new_->addUse(this);
-    } else if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
 
 void CallInstruction::replaceDef(Operand* new_) {
     if (dst) {
@@ -1867,14 +2126,6 @@ void CallInstruction::replaceDef(Operand* new_) {
     }
 }
 
-void CallInstruction::replaceUse(Operand* old, Operand* new_) {
-    for (int i = 1; i < (int)operands.size(); i++)
-        if (operands[i] == old) {
-            operands[i]->removeUse(this);
-            operands[i] = new_;
-            new_->addUse(this);
-        }
-}
 
 void ZextInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1882,13 +2133,6 @@ void ZextInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void ZextInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
 
 void XorInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1896,13 +2140,6 @@ void XorInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void XorInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    }
-}
 
 void GepInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1910,17 +2147,6 @@ void GepInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void GepInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-    } else if (operands[2] == old) {
-        operands[2]->removeUse(this);
-        operands[2] = new_;
-        new_->addUse(this);
-    }
-}
 
 void PhiInstruction::replaceUse(Operand* old, Operand* new_) {
     for (auto& it : srcs) {
@@ -1947,23 +2173,7 @@ void PhiInstruction::addSrc(BasicBlock* block, Operand* src) {
     src->addUse(this);
 }
 
-void SitofpInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-        src = new_;
-    }
-}
 
-void FptosiInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
-        src = new_;
-    }
-}
 
 void FptosiInstruction::replaceDef(Operand* new_) {
     operands[0]->removeDef(this);
@@ -1977,10 +2187,28 @@ void SitofpInstruction::replaceDef(Operand* new_) {
     new_->setDef(this);
 }
 
-void BitcastInstruction::replaceUse(Operand* old, Operand* new_) {
-    if (operands[1] == old) {
-        operands[1]->removeUse(this);
-        operands[1] = new_;
-        new_->addUse(this);
+
+
+void PhiInstruction::genMachineCodeAfter(AsmBuilder* builder){
+    // 0408m
+    // fix: 由于每次生成机器代码是一个block一个block生成的, 因此在当前phi指令的block当中可能还没有定义来源路径block
+    // 可能的一种解决方案是在整体机器代码生成结束进行Phi resolution
+    auto f = builder->getFunction();
+    auto mdst = genMachineOperand(operands[0]);
+    // auto tempop = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+    MachineBlock* block = builder->getBlock();
+    // MachineOperand* temp = new MachineOperand(MachineOperand::REG, SymbolTable::getLabel());
+    // std::cout<<this->getDef()->toStr()<<"\t";
+    for (auto src : srcs){
+        MachineBlock* b = src.first->getParent()->getMachineBlock(src.first);
+        // std::cout<<src.first->getNo()<<"\t"<<b<<"\t";
+        auto mop = genMachineOperand(src.second);
+        auto inst = new MovMInstruction(b, MovMInstruction::MOV, mdst, mop);
+        auto endInst = b->end();
+        
+        b->InsertInstBeforeBr(inst);
+        
     }
+    // std::cout<<"\n";
+    // new MovMInstruction(block, MovMInstruction::MOV, mdst, temp);
 }

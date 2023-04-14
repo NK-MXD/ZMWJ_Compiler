@@ -20,6 +20,7 @@ class Function
 
 private:
     std::vector<BasicBlock *> block_list;
+    std::map<BasicBlock*, MachineBlock*> map2;
     SymbolEntry *sym_ptr;
     BasicBlock *entry;
     Unit *parent;
@@ -38,6 +39,11 @@ public:
     reverse_iterator rend() { return block_list.rend(); };
     SymbolEntry *getSymPtr() { return sym_ptr; };
     void genMachineCode(AsmBuilder*);
+    //将所有的block块置为false
+    void clear_all_vis() {
+        for (auto it = block_list.begin(); it != block_list.end(); it++) (*it)->setvisit(false);
+    };
+    MachineBlock* getMachineBlock(BasicBlock* b){ return map2[b];};
 };
 
 #endif

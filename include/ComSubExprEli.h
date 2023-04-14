@@ -13,16 +13,16 @@
 #define printCse_(str) //
 #endif
 
-enum
-{
-    SUB,
-    ADD,
-    AND,
-    OR,
-    MUL,
-    DIV,
-    MOD
-};
+// enum
+// {
+//     SUB,
+//     ADD,
+//     AND,
+//     OR,
+//     MUL,
+//     DIV,
+//     MOD
+// };
 // 公共子表达式优化
 
 struct cmp_inst

@@ -9,6 +9,9 @@
 #include "ComSubExprEli.h"
 #include "GraphColor.h"
 #include "mem2reg.h"
+#include"PeepholeMInstrOpt.h"
+#include "SSADestruction.h"
+
 using namespace std;
 
 Ast ast;
@@ -75,14 +78,15 @@ int main(int argc, char* argv[]) {
     ast.typeCheck();
     ast.genCode(&unit);
     // cout<<"genCode\n";
-
     if(optimize){
-        ComSubExprEli em(&unit);
-        em.execute();
-    //     dominatorTree dt(&unit);
-    //     dt.execute();
-    //     Mem2Reg mr(&unit);
-    //     mr.execute();
+        // ComSubExprEli em(&unit);
+        // em.execute();
+
+        // Mem2Reg mr(&unit);
+        // mr.execute();
+        // //! 换方法!!!
+        // SSADestruction ssa(&unit);
+        // ssa.pass();
     }
 
     if (dump_ir)
@@ -96,6 +100,12 @@ int main(int argc, char* argv[]) {
     GraphColor GraphColor(&mUnit);
     GraphColor.allocateRegisters();
 
+    if(optimize){
+        PeepholeMInstrOpt pmo(&mUnit);
+        pmo.pass();
+        
+    }
+    
     if (dump_asm)
         mUnit.output();
     return 0;
