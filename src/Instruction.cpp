@@ -152,6 +152,191 @@ int getMinLargerPowOf2(int num) {
 int clz(int x) { return __builtin_clz(x); }
 int ctz(int x) { return __builtin_ctz(x); }
 
+// tag: old: 方便调试
+// void BinaryInstruction::genMachineCode(AsmBuilder* builder) {
+//     // complete other instructions
+//     auto cur_block = builder->getBlock();
+//     /* HINT:
+//      * The source operands of ADD instruction in ir code both can be immediate
+//      * num. However, it's not allowed in assembly code. So you need to insert
+//      * LOAD/MOV instrucrion to load immediate num into register. As to other
+//      * instructions, such as MUL, CMP, you need to deal with this situation,
+//      * too.*/
+
+//     if (operands[0]->getType()->isFloat()) {
+//         auto flag = false;
+//         auto dst = genMachineFloatOperand(operands[0]);
+//         auto src1 = genMachineFloatOperand(operands[1]);
+//         auto src2 = genMachineFloatOperand(operands[2]);
+//         MachineInstruction* cur_inst = nullptr;
+//         if (src1->isImm()) {
+//             auto tmp_reg = genMachineVReg(true);
+//             auto internal_reg = genMachineVReg();
+//             cur_inst = new LoadMInstruction(cur_block, LoadMInstruction::LDR,
+//                                             internal_reg, src1);
+//             cur_block->InsertInst(cur_inst);
+//             internal_reg = new MachineOperand(*internal_reg);
+//             cur_inst = new MovMInstruction(cur_block, MovMInstruction::VMOV,
+//                                            tmp_reg, internal_reg);
+//             cur_block->InsertInst(cur_inst);
+//             src1 = new MachineOperand(*tmp_reg);
+//         }
+//         if (src2->isImm()) {
+//             if (src2->getFVal() == 0 && opcode == ADD)
+//                 flag = true;
+//             else {
+//                 auto tmp_reg = genMachineVReg(true);
+//                 auto internal_reg = genMachineVReg();
+//                 cur_inst = new LoadMInstruction(
+//                     cur_block, LoadMInstruction::LDR, internal_reg, src2);
+//                 cur_block->InsertInst(cur_inst);
+//                 internal_reg = new MachineOperand(*internal_reg);
+//                 cur_inst = new MovMInstruction(cur_block, MovMInstruction::VMOV,
+//                                                tmp_reg, internal_reg);
+//                 cur_block->InsertInst(cur_inst);
+//                 src2 = new MachineOperand(*tmp_reg);
+//             }
+//         }
+
+//         switch (opcode) {
+//             case ADD:
+//                 if (flag)
+//                     cur_inst = new MovMInstruction(
+//                         cur_block, MovMInstruction::VMOVF32, dst, src1);
+//                 else
+//                     cur_inst = new BinaryMInstruction(
+//                         cur_block, BinaryMInstruction::VADD, dst, src1, src2);
+//                 break;
+//             case SUB:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::VSUB, dst, src1, src2);
+//                 break;
+//             case AND:
+//                 // TODO
+//                 break;
+//             case OR:
+//                 // TODO
+//                 break;
+//             case MUL:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::VMUL, dst, src1, src2);
+//                 break;
+//             case DIV:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::VDIV, dst, src1, src2);
+//                 break;
+//             case MOD:
+//                 // error
+//                 break;
+//             default:
+//                 break;
+//         }
+//         cur_block->InsertInst(cur_inst);
+
+//     } else {
+//         auto dst = genMachineOperand(operands[0]);
+//         auto src1 = genMachineOperand(operands[1]);
+//         auto src2 = genMachineOperand(operands[2]);
+//         MachineInstruction* cur_inst = nullptr;
+//         if (src1->isImm() && src2->isImm() && src2->getVal() == 0 &&
+//             opcode == ADD) {
+//             if (!(src1->getVal() < 256 && src1->getVal() > -255)) {
+//                 auto internal_reg = genMachineVReg();
+//                 cur_inst = new LoadMInstruction(
+//                     cur_block, LoadMInstruction::LDR, internal_reg, src1);
+//                 cur_block->InsertInst(cur_inst);
+//                 src1 = new MachineOperand(*internal_reg);
+//             }
+//             cur_inst =
+//                 new MovMInstruction(cur_block, MovMInstruction::MOV, dst, src1);
+//             cur_block->InsertInst(cur_inst);
+//             return;
+//         }
+//         if (src1->isImm()) {
+//             auto internal_reg = genMachineVReg();
+//             cur_inst = new LoadMInstruction(cur_block, LoadMInstruction::LDR,
+//                                             internal_reg, src1);
+//             cur_block->InsertInst(cur_inst);
+//             src1 = new MachineOperand(*internal_reg);
+//         }
+//         // 合法立即数的判定太复杂 简单判定255以上均load
+//         // 这里应该也不需要考虑负数
+//         if (src2->isImm()) {
+//             if ((opcode <= BinaryInstruction::OR &&
+//                  ((ConstantSymbolEntry*)(operands[2]->getEntry()))->getValue() >
+//                      255) ||
+//                 opcode >= BinaryInstruction::MUL) {
+//                 auto internal_reg = genMachineVReg();
+//                 cur_inst = new LoadMInstruction(
+//                     cur_block, LoadMInstruction::LDR, internal_reg, src2);
+//                 cur_block->InsertInst(cur_inst);
+//                 src2 = new MachineOperand(*internal_reg);
+//             }
+//         }
+//         switch (opcode) {
+//             case ADD:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::ADD, dst, src1, src2);
+//                 break;
+//             case SUB:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::SUB, dst, src1, src2);
+//                 break;
+//             case AND:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::AND, dst, src1, src2);
+//                 break;
+//             case OR:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::OR, dst, src1, src2);
+//                 break;
+//             case MUL:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::MUL, dst, src1, src2);
+//                 break;
+//             case DIV:
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::DIV, dst, src1, src2);
+//                 break;
+//             case MOD: {
+//                 // c = a % b
+//                 // c = a / b
+//                 // if(optimize && operands[2]->isConst()){
+//                 //     int b = operands[2]->getConstVal();
+//                 //     if(b > 0 && b < 256 && (b & (b-1)) == 0){
+//                 //         cur_inst = new BinaryMInstruction(
+//                 //             cur_block, BinaryMInstruction::MOD, dst, src1, src2);
+//                 //         break;
+//                 //     }
+//                 // }
+//                 // c1 = a / b
+//                 auto dst1 = genMachineVReg();
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::DIV, dst1, src1, src2);
+//                 src1 = new MachineOperand(*src1);
+//                 src2 = new MachineOperand(*src2);
+//                 auto temp = new MachineOperand(*dst1);
+//                 cur_block->InsertInst(cur_inst);
+//                 // c2 = c1 * b
+//                 auto dst2 = genMachineVReg();
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::MUL, dst2, temp, src2);
+//                 cur_block->InsertInst(cur_inst);
+//                 dst2 = new MachineOperand(*dst2);
+//                 // c = a - c2
+//                 cur_inst = new BinaryMInstruction(
+//                     cur_block, BinaryMInstruction::SUB, dst, src1, dst2);
+//                 break;
+//             }
+//             default:
+//                 break;
+//         }
+//         cur_block->InsertInst(cur_inst);
+//     }
+// }
+
+
+// tag: new
 void BinaryInstruction::genMachineCode(AsmBuilder* builder) {
     auto cur_block = builder->getBlock();
     
