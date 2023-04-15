@@ -9,7 +9,7 @@
 #include "ComSubExprEli.h"
 #include "GraphColor.h"
 #include "mem2reg.h"
-#include"PeepholeMInstrOpt.h"
+#include "PeepholeMInstrOpt.h"
 #include "SSADestruction.h"
 
 using namespace std;

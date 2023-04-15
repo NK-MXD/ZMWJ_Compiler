@@ -911,6 +911,7 @@ void WhileStmt::genCode() {
     // fix: 测试使用
     // new UncondBrInstruction(cond_bb, while_bb);
 
+    // fix: 原来分支
     Function* func;
     BasicBlock *cond_bb, *while_bb, *end_bb, *bb;
     bb = builder->getInsertBB();
@@ -928,8 +929,7 @@ void WhileStmt::genCode() {
     cond->genCode();
     backPatch(cond->trueList(), while_bb);
     backPatch(cond->falseList(), end_bb);
-    // Operand* condoperand= cond->getOperand();
-    // new CondBrInstruction(while_bb,end_bb,condoperand,cond_bb);
+
 
     builder->setInsertBB(while_bb);
     stmt->genCode();
@@ -938,6 +938,7 @@ void WhileStmt::genCode() {
     new UncondBrInstruction(cond_bb, while_bb);
 
     builder->setInsertBB(end_bb);
+    // 到这里
 
     // Operand* condoperand = cond->getOperand();
     // auto end = ((CondBrInstruction*)(cond_bb->rbegin()))->getFalseBranch();
