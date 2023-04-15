@@ -11,1162 +11,1872 @@ n:
 	.global bubblesort
 	.type bubblesort , %function
 bubblesort:
-	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #16
-.L388:
+.L531:
 	str r0, [fp, #-4]
-	mov r4, #0
-	mov r5, #0
-	mov r5, #0
-	str r5, [fp, #-12]
-	b .L392
-.L392:
-	ldr r5, addr_n0
-	ldr r6, [r5]
-	sub r5, r6, #1
-	ldr r6, [fp, #-12]
-	cmp r6, r5
-	movlt r5, #1
-	movge r5, #0
-	blt .L393
-	b .L397
-.L393:
-	add r5, r4, #0
-	mov r6, #0
-	str r6, [fp, #-8]
-	b .L398
-.L394:
+	ldr r0, =0
+	str r0, [fp, #-8]
+	b .L535
+.L535:
+	ldr r1, [fp, #-8]
+	ldr r0, addr_n0
+	ldr r0, [r0]
+	sub r0, r0, #1
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L536
+	b .L540
+.L536:
+	ldr r0, =0
+	str r0, [fp, #-12]
+	b .L541
+.L537:
 	mov r0, #0
 	add sp, sp, #16
-	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	pop {r3, r4, fp, lr}
 	bx lr
-.L397:
-	b .L394
-.L398:
-	ldr r6, addr_n0
-	ldr r7, [r6]
-	ldr r6, [fp, #-12]
-	sub r8, r7, r6
-	sub r6, r8, #1
-	ldr r7, [fp, #-8]
-	cmp r7, r6
-	movlt r6, #1
-	movge r6, #0
-	blt .L399
-	b .L403
-.L399:
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	ldr r8, [fp, #-8]
-	mul r9, r8, r7
-	add r7, r6, r9
-	ldr r6, [r7]
-	ldr r7, [fp, #-4]
-	ldr r8, [fp, #-8]
-	add r9, r8, #1
-	mov r8, #4
-	mul r10, r9, r8
-	add r8, r7, r10
-	ldr r7, [r8]
-	cmp r6, r7
-	movgt r6, #1
-	movle r6, #0
-	bgt .L404
-	b .L412
-.L400:
-	ldr r6, [fp, #-12]
-	add r7, r6, #1
-	add r4, r5, #0
-	ldr r6, [fp, #-8]
-	add r8, r6, #0
-	add r6, r7, #0
-	str r6, [fp, #-12]
-	b .L392
-.L403:
-	b .L400
-.L404:
-	ldr r4, [fp, #-4]
-	ldr r6, [fp, #-8]
-	add r7, r6, #1
-	mov r6, #4
-	mul r8, r7, r6
-	add r6, r4, r8
-	ldr r4, [r6]
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	ldr r8, [fp, #-8]
-	mul r9, r8, r7
-	add r7, r6, r9
-	ldr r6, [r7]
-	ldr r7, [fp, #-4]
-	ldr r8, [fp, #-8]
-	add r9, r8, #1
-	mov r8, #4
-	mul r10, r9, r8
-	add r8, r7, r10
-	str r6, [r8]
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	ldr r8, [fp, #-8]
-	mul r9, r8, r7
-	add r7, r6, r9
-	str r4, [r7]
-	add r6, r4, #0
-	b .L405
-.L405:
-	ldr r4, [fp, #-8]
-	add r7, r4, #1
-	add r5, r6, #0
-	add r4, r7, #0
-	str r4, [fp, #-8]
-	b .L398
-.L412:
-	add r6, r5, #0
-	b .L405
+.L540:
+	b .L537
+.L541:
+	ldr r2, [fp, #-12]
+	ldr r0, addr_n0
+	ldr r1, [r0]
+	ldr r0, [fp, #-8]
+	sub r0, r1, r0
+	sub r0, r0, #1
+	cmp r2, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L542
+	b .L546
+.L542:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-12]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-4]
+	ldr r0, [fp, #-12]
+	add r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	cmp r3, r0
+	movgt r0, #1
+	movle r0, #0
+	bgt .L547
+	b .L555
+.L543:
+	ldr r0, [fp, #-8]
+	add r0, r0, #1
+	str r0, [fp, #-8]
+	ldr r1, [fp, #-8]
+	ldr r0, addr_n0
+	ldr r0, [r0]
+	sub r0, r0, #1
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L536
+	b .L578
+.L546:
+	b .L543
+.L547:
+	ldr r2, [fp, #-4]
+	ldr r0, [fp, #-12]
+	add r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	str r0, [fp, #-16]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-12]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-4]
+	ldr r0, [fp, #-12]
+	add r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r3, [fp, #-16]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-12]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	b .L548
+.L548:
+	ldr r0, [fp, #-12]
+	add r0, r0, #1
+	str r0, [fp, #-12]
+	ldr r2, [fp, #-12]
+	ldr r0, addr_n0
+	ldr r1, [r0]
+	ldr r0, [fp, #-8]
+	sub r0, r1, r0
+	sub r0, r0, #1
+	cmp r2, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L542
+	b .L571
+.L555:
+	b .L548
+.L571:
+	b .L543
+.L578:
+	b .L537
 
 	.global insertsort
 	.type insertsort , %function
 insertsort:
-	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #8
-.L420:
+	sub sp, sp, #16
+.L579:
 	str r0, [fp, #-4]
-	mov r4, #0
-	mov r4, #0
-	mov r4, #1
-	b .L423
-.L423:
-	ldr r5, addr_n0
-	ldr r6, [r5]
-	cmp r4, r6
-	movlt r5, #1
-	movge r5, #0
-	blt .L424
-	b .L428
-.L424:
-	ldr r5, [fp, #-4]
-	mov r6, #4
-	mul r7, r4, r6
-	add r6, r5, r7
-	ldr r5, [r6]
-	sub r6, r4, #1
-	add r7, r6, #0
-	str r7, [fp, #-8]
-	b .L433
-.L425:
+	ldr r0, =1
+	str r0, [fp, #-8]
+	b .L582
+.L582:
+	ldr r1, [fp, #-8]
+	ldr r0, addr_n0
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L583
+	b .L587
+.L583:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-8]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	str r0, [fp, #-12]
+	ldr r0, [fp, #-8]
+	sub r0, r0, #1
+	str r0, [fp, #-16]
+	b .L592
+.L584:
 	mov r0, #0
-	add sp, sp, #8
-	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	add sp, sp, #16
+	pop {r3, r4, fp, lr}
 	bx lr
-.L428:
-	b .L425
-.L433:
-	ldr r6, =0
-	sub r7, r6, #1
-	ldr r6, [fp, #-8]
-	cmp r6, r7
-	movgt r6, #1
-	movle r6, #0
-	bgt .L436
-	b .L439
-.L434:
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	ldr r8, [fp, #-8]
-	mul r9, r8, r7
-	add r7, r6, r9
-	ldr r6, [r7]
-	ldr r7, [fp, #-4]
-	ldr r8, [fp, #-8]
-	add r9, r8, #1
-	mov r8, #4
-	mul r10, r9, r8
-	add r8, r7, r10
-	str r6, [r8]
-	ldr r6, [fp, #-8]
-	sub r7, r6, #1
-	add r6, r7, #0
-	str r6, [fp, #-8]
-	b .L433
-.L435:
-	ldr r6, [fp, #-4]
-	ldr r7, [fp, #-8]
-	add r8, r7, #1
-	mov r7, #4
-	mul r9, r8, r7
-	add r7, r6, r9
-	str r5, [r7]
-	add r6, r4, #1
-	ldr r7, [fp, #-8]
-	add r8, r7, #0
-	add r7, r5, #0
-	add r4, r6, #0
-	b .L423
-.L436:
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	ldr r8, [fp, #-8]
-	mul r9, r8, r7
-	add r7, r6, r9
-	ldr r6, [r7]
-	cmp r5, r6
-	movlt r6, #1
-	movge r6, #0
-	blt .L434
-	b .L444
-.L439:
-	b .L435
-.L444:
-	b .L435
+.L587:
+	b .L584
+.L592:
+	ldr r1, [fp, #-16]
+	ldr r0, =0
+	sub r0, r0, #1
+	cmp r1, r0
+	movgt r0, #1
+	movle r0, #0
+	bgt .L615
+	b .L598
+.L593:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-4]
+	ldr r0, [fp, #-16]
+	add r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, [fp, #-16]
+	sub r0, r0, #1
+	str r0, [fp, #-16]
+	ldr r1, [fp, #-16]
+	ldr r0, =0
+	sub r0, r0, #1
+	cmp r1, r0
+	movgt r0, #1
+	movle r0, #0
+	bgt .L615
+	b .L618
+.L594:
+	ldr r3, [fp, #-12]
+	ldr r2, [fp, #-4]
+	ldr r0, [fp, #-16]
+	add r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, [fp, #-8]
+	add r0, r0, #1
+	str r0, [fp, #-8]
+	ldr r1, [fp, #-8]
+	ldr r0, addr_n0
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L583
+	b .L630
+.L598:
+	b .L594
+.L615:
+	ldr r3, [fp, #-12]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	cmp r3, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L593
+	b .L623
+.L618:
+	b .L594
+.L623:
+	b .L594
+.L630:
+	b .L584
 
 	.global QuickSort
 	.type QuickSort , %function
 QuickSort:
-	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	push {r3, r4, fp, lr}
 	mov fp, sp
-	sub sp, sp, #16
-.L449:
-	str r0, [fp, #-4]
-	cmp r1, r2
-	movlt r4, #1
-	movge r4, #0
-	blt .L453
-	b .L457
-.L453:
-	ldr r4, [fp, #-4]
-	mov r5, #4
-	mul r6, r1, r5
-	add r5, r4, r6
-	ldr r4, [r5]
-	str r4, [fp, #-8]
-	add r4, r2, #0
-	add r5, r1, #0
-	b .L463
-.L454:
-	mov r0, #0
-	add sp, sp, #16
-	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	bx lr
-.L457:
-	mov r6, #0
-	mov r6, #0
-	mov r6, #0
-	mov r6, #0
-	b .L454
-.L463:
-	cmp r5, r4
-	movlt r6, #1
-	movge r6, #0
-	blt .L464
-	b .L468
-.L464:
-	add r6, r4, #0
-	b .L469
-.L465:
-	ldr r7, [fp, #-4]
-	mov r8, #4
-	mul r9, r5, r8
-	add r8, r7, r9
-	ldr r7, [fp, #-8]
-	str r7, [r8]
-	sub r7, r5, #1
-	ldr r8, [fp, #-4]
-	mov r0, r8
-	mov r1, r1
-	mov r2, r7
-	bl QuickSort
-	mov r7, r0
-	add r7, r5, #1
-	ldr r8, [fp, #-4]
-	mov r0, r8
-	mov r1, r7
-	mov r2, r2
-	bl QuickSort
-	mov r7, r0
-	add r8, r7, #0
-	ldr r7, [fp, #-8]
-	add r8, r7, #0
-	add r7, r4, #0
-	add r7, r5, #0
-	b .L454
-.L468:
-	b .L465
-.L469:
-	cmp r5, r6
-	movlt r7, #1
-	movge r7, #0
-	blt .L472
-	b .L475
-.L470:
-	sub r7, r6, #1
-	add r6, r7, #0
-	b .L469
-.L471:
-	cmp r5, r6
-	movlt r7, #1
-	movge r7, #0
-	blt .L481
-	b .L485
-.L472:
-	ldr r7, [fp, #-4]
-	mov r8, #4
-	mul r9, r6, r8
-	add r8, r7, r9
-	ldr r7, [r8]
-	ldr r8, [fp, #-8]
-	sub r9, r8, #1
-	cmp r7, r9
-	movgt r7, #1
-	movle r7, #0
-	bgt .L470
-	b .L480
-.L475:
-	b .L471
-.L480:
-	b .L471
-.L481:
-	ldr r7, [fp, #-4]
-	mov r8, #4
-	mul r9, r6, r8
-	add r8, r7, r9
-	ldr r7, [r8]
-	ldr r8, [fp, #-4]
-	mov r9, #4
-	mul r10, r5, r9
-	add r9, r8, r10
-	str r7, [r9]
-	add r7, r5, #1
-	add r8, r7, #0
-	b .L482
-.L482:
-	add r7, r8, #0
-	str r7, [fp, #-12]
-	b .L489
-.L485:
-	add r8, r5, #0
-	b .L482
-.L489:
-	ldr r7, [fp, #-12]
-	cmp r7, r6
-	movlt r7, #1
-	movge r7, #0
-	blt .L492
-	b .L495
-.L490:
-	ldr r7, [fp, #-12]
-	add r8, r7, #1
-	add r7, r8, #0
-	str r7, [fp, #-12]
-	b .L489
-.L491:
-	ldr r7, [fp, #-12]
-	cmp r7, r6
-	movlt r7, #1
-	movge r7, #0
-	blt .L501
-	b .L505
-.L492:
-	ldr r7, [fp, #-4]
-	mov r8, #4
-	ldr r9, [fp, #-12]
-	mul r10, r9, r8
-	add r8, r7, r10
-	ldr r7, [r8]
-	ldr r8, [fp, #-8]
-	cmp r7, r8
-	movlt r7, #1
-	movge r7, #0
-	blt .L490
-	b .L500
-.L495:
-	b .L491
-.L500:
-	b .L491
-.L501:
-	ldr r7, [fp, #-4]
-	mov r8, #4
-	ldr r9, [fp, #-12]
-	mul r10, r9, r8
-	add r8, r7, r10
-	ldr r7, [r8]
-	ldr r8, [fp, #-4]
-	mov r9, #4
-	mul r10, r6, r9
-	add r9, r8, r10
-	str r7, [r9]
-	sub r7, r6, #1
-	add r8, r7, #0
-	b .L502
-.L502:
-	add r4, r8, #0
-	ldr r7, [fp, #-12]
-	add r5, r7, #0
-	b .L463
-.L505:
-	add r8, r6, #0
-	b .L502
-
-	.global getMid
-	.type getMid , %function
-getMid:
-	push {r3, r4, r5, r6, r7, r8, fp, lr}
-	mov fp, sp
-	sub sp, sp, #8
-.L513:
-	str r0, [fp, #-4]
-	ldr r4, addr_n0
-	ldr r5, [r4]
-	ldr r4, =2
-	sdiv r6, r5, r4
-	mul r7, r6, r4
-	sub r4, r5, r7
-	cmp r4, #0
-	moveq r4, #1
-	movne r4, #0
-	beq .L516
-	b .L521
-.L516:
-	ldr r4, addr_n0
-	ldr r5, [r4]
-	ldr r4, =2
-	sdiv r6, r5, r4
-	ldr r4, [fp, #-4]
-	mov r5, #4
-	mul r7, r6, r5
-	add r5, r4, r7
-	ldr r4, [r5]
-	ldr r5, [fp, #-4]
-	sub r7, r6, #1
-	mov r6, #4
-	mul r8, r7, r6
-	add r6, r5, r8
-	ldr r5, [r6]
-	add r6, r4, r5
-	ldr r4, =2
-	sdiv r5, r6, r4
-	mov r0, r5
-	add sp, sp, #8
-	pop {r3, r4, r5, r6, r7, r8, fp, lr}
-	bx lr
-.L517:
-	ldr r4, addr_n0
-	ldr r5, [r4]
-	ldr r4, =2
-	sdiv r6, r5, r4
-	ldr r4, [fp, #-4]
-	mov r5, #4
-	mul r7, r6, r5
-	add r5, r4, r7
-	ldr r4, [r5]
-	mov r0, r4
-	add sp, sp, #8
-	pop {r3, r4, r5, r6, r7, r8, fp, lr}
-	bx lr
-.L521:
-	b .L517
-
-	.global getMost
-	.type getMost , %function
-getMost:
-	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	mov fp, sp
-	ldr r4, =4016
-	sub sp, sp, r4
-.L528:
-	str r0, [fp, #-4]
-	mov r4, #0
-	b .L532
-.L532:
-	ldr r5, =1000
-	cmp r4, r5
-	movlt r5, #1
-	movge r5, #0
-	blt .L533
-	b .L537
-.L533:
-	ldr r5, =-4004
-	mov r6, #4
-	mul r7, r4, r6
-	add r6, fp, r5
-	add r5, r6, r7
-	ldr r6, =0
-	str r6, [r5]
-	add r5, r4, #1
-	add r4, r5, #0
-	b .L532
-.L534:
-	mov r4, #0
-	mov r4, #0
-	mov r5, #0
-	mov r6, #0
-	ldr r7, =-4012
-	str r6, [fp, r7]
-	b .L540
-.L537:
-	b .L534
-.L540:
-	ldr r6, addr_n0
-	ldr r7, [r6]
-	ldr r6, =-4012
-	ldr r8, [fp, r6]
-	cmp r8, r7
-	movlt r6, #1
-	movge r6, #0
-	blt .L541
-	b .L545
-.L541:
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	ldr r8, =-4012
-	ldr r9, [fp, r8]
-	mul r8, r9, r7
-	add r7, r6, r8
-	ldr r6, [r7]
-	ldr r7, =-4008
-	str r6, [fp, r7]
-	ldr r6, =-4004
-	mov r7, #4
-	ldr r8, =-4008
-	ldr r9, [fp, r8]
-	mul r8, r9, r7
-	add r7, fp, r6
-	add r6, r7, r8
-	ldr r7, [r6]
-	add r6, r7, #1
-	ldr r7, =-4004
-	mov r8, #4
-	ldr r9, =-4008
-	ldr r10, [fp, r9]
-	mul r9, r10, r8
-	add r8, fp, r7
-	add r7, r8, r9
-	str r6, [r7]
-	ldr r6, =-4004
-	mov r7, #4
-	ldr r8, =-4008
-	ldr r9, [fp, r8]
-	mul r8, r9, r7
-	add r7, fp, r6
-	add r6, r7, r8
-	ldr r7, [r6]
-	cmp r7, r5
-	movgt r6, #1
-	movle r6, #0
-	bgt .L550
-	b .L555
-.L542:
-	mov r0, r4
-	ldr r1, =4016
-	add sp, sp, r1
-	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	bx lr
-.L545:
-	b .L542
-.L550:
-	ldr r6, =-4004
-	mov r7, #4
-	ldr r8, =-4008
-	ldr r9, [fp, r8]
-	mul r8, r9, r7
-	add r7, fp, r6
-	add r6, r7, r8
-	ldr r7, [r6]
-	ldr r6, =-4008
-	ldr r8, [fp, r6]
-	add r6, r8, #0
-	add r8, r7, #0
-	b .L551
-.L551:
-	ldr r7, =-4012
-	ldr r9, [fp, r7]
-	add r7, r9, #1
-	ldr r9, =-4008
-	ldr r10, [fp, r9]
-	add r9, r10, #0
-	add r4, r6, #0
-	add r5, r8, #0
-	add r9, r7, #0
-	ldr r7, =-4012
-	str r9, [fp, r7]
-	b .L540
-.L555:
-	add r6, r4, #0
-	add r8, r5, #0
-	b .L551
-
-	.global revert
-	.type revert , %function
-revert:
-	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	mov fp, sp
-	sub sp, sp, #8
-.L557:
-	str r0, [fp, #-4]
-	mov r4, #0
-	mov r5, #0
-	mov r6, #0
-	b .L562
-.L562:
-	cmp r5, r4
-	movlt r6, #1
-	movge r6, #0
-	blt .L563
-	b .L567
-.L563:
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	mul r8, r5, r7
-	add r7, r6, r8
-	ldr r6, [r7]
-	ldr r7, [fp, #-4]
-	mov r8, #4
-	mul r9, r4, r8
-	add r8, r7, r9
-	ldr r7, [r8]
-	ldr r8, [fp, #-4]
-	mov r9, #4
-	mul r10, r5, r9
-	add r9, r8, r10
-	str r7, [r9]
-	ldr r7, [fp, #-4]
-	mov r8, #4
-	mul r9, r4, r8
-	add r8, r7, r9
-	str r6, [r8]
-	add r7, r5, #1
-	sub r8, r4, #1
-	add r4, r8, #0
-	add r5, r7, #0
-	add r7, r6, #0
-	b .L562
-.L564:
-	mov r0, #0
-	add sp, sp, #8
-	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	bx lr
-.L567:
-	b .L564
-
-	.global calSum
-	.type calSum , %function
-calSum:
-	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	mov fp, sp
-	sub sp, sp, #8
-.L574:
-	str r0, [fp, #-4]
-	mov r4, #0
-	mov r5, #0
-	b .L579
-.L579:
-	ldr r6, addr_n0
-	ldr r7, [r6]
-	cmp r4, r7
-	movlt r6, #1
-	movge r6, #0
-	blt .L580
-	b .L584
-.L580:
-	ldr r6, [fp, #-4]
-	mov r7, #4
-	mul r8, r4, r7
-	add r7, r6, r8
-	ldr r6, [r7]
-	add r7, r5, r6
-	sdiv r6, r4, r1
-	mul r8, r6, r1
-	sub r6, r4, r8
-	sub r8, r1, #1
-	cmp r6, r8
-	movne r6, #1
-	moveq r6, #0
-	bne .L587
-	b .L592
-.L581:
-	mov r0, #0
-	add sp, sp, #8
-	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	bx lr
-.L584:
-	b .L581
-.L587:
-	ldr r6, [fp, #-4]
-	mov r8, #4
-	mul r9, r4, r8
-	add r8, r6, r9
-	ldr r6, =0
-	str r6, [r8]
-	add r6, r7, #0
-	b .L589
-.L588:
-	ldr r8, [fp, #-4]
-	mov r9, #4
-	mul r10, r4, r9
-	add r9, r8, r10
-	str r7, [r9]
-	mov r6, #0
-	b .L589
-.L589:
-	add r8, r4, #1
-	add r4, r8, #0
-	add r5, r6, #0
-	b .L579
-.L592:
-	b .L588
-
-	.global avgPooling
-	.type avgPooling , %function
-avgPooling:
-	push {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	mov fp, sp
-	sub sp, sp, #40
-.L595:
-	str r0, [fp, #-4]
-	mov r4, #0
-	str r4, [fp, #-20]
-	mov r4, #0
-	str r4, [fp, #-16]
-	mov r4, #0
-	str r4, [fp, #-12]
-	b .L601
-.L601:
-	ldr r4, addr_n0
-	ldr r5, [r4]
-	ldr r4, [fp, #-16]
-	cmp r4, r5
-	movlt r4, #1
-	movge r4, #0
-	blt .L602
-	b .L606
-.L602:
-	sub r4, r1, #1
-	ldr r5, [fp, #-16]
-	cmp r5, r4
-	movlt r4, #1
-	movge r4, #0
-	blt .L607
-	b .L612
-.L603:
-	ldr r4, addr_n0
-	ldr r5, [r4]
-	sub r4, r5, r1
-	add r5, r4, #1
-	add r4, r5, #0
-	str r4, [fp, #-8]
-	b .L629
-.L606:
-	b .L603
-.L607:
-	ldr r4, [fp, #-4]
-	mov r5, #4
-	ldr r6, [fp, #-16]
-	mul r7, r6, r5
-	add r5, r4, r7
-	ldr r4, [r5]
-	ldr r5, [fp, #-12]
-	add r6, r5, r4
-	ldr r4, [fp, #-20]
-	add r5, r4, #0
-	str r5, [fp, #-28]
-	add r4, r6, #0
-	str r4, [fp, #-24]
-	b .L609
-.L608:
-	sub r4, r1, #1
-	ldr r5, [fp, #-16]
-	cmp r5, r4
-	moveq r4, #1
-	movne r4, #0
-	beq .L615
-	b .L620
-.L609:
-	ldr r4, [fp, #-16]
-	add r5, r4, #1
-	ldr r4, [fp, #-28]
-	add r6, r4, #0
-	str r6, [fp, #-20]
-	add r4, r5, #0
-	str r4, [fp, #-16]
-	ldr r4, [fp, #-24]
-	add r5, r4, #0
-	str r5, [fp, #-12]
-	b .L601
-.L612:
-	b .L608
-.L615:
-	ldr r4, [fp, #-4]
-	mov r5, #0
-	mov r6, #4
-	mul r7, r5, r6
-	add r5, r4, r7
-	ldr r4, [r5]
-	ldr r5, [fp, #-12]
-	sdiv r6, r5, r1
-	ldr r5, [fp, #-4]
-	mov r7, #0
-	mov r8, #4
-	mul r9, r7, r8
-	add r7, r5, r9
-	str r6, [r7]
-	add r5, r4, #0
-	str r5, [fp, #-36]
-	ldr r4, [fp, #-12]
-	add r5, r4, #0
-	str r5, [fp, #-32]
-	b .L617
-.L616:
-	ldr r4, [fp, #-4]
-	mov r5, #4
-	ldr r6, [fp, #-16]
-	mul r7, r6, r5
-	add r5, r4, r7
-	ldr r4, [r5]
-	ldr r5, [fp, #-12]
-	add r6, r5, r4
-	ldr r4, [fp, #-20]
-	sub r5, r6, r4
-	ldr r4, [fp, #-4]
-	ldr r6, [fp, #-16]
-	sub r7, r6, r1
-	add r6, r7, #1
-	mov r7, #4
-	mul r8, r6, r7
-	add r6, r4, r8
-	ldr r4, [r6]
-	sdiv r6, r5, r1
-	ldr r7, [fp, #-4]
-	ldr r8, [fp, #-16]
-	sub r9, r8, r1
-	add r8, r9, #1
-	mov r9, #4
-	mul r10, r8, r9
-	add r8, r7, r10
-	str r6, [r8]
-	add r6, r4, #0
-	str r6, [fp, #-36]
-	add r4, r5, #0
-	str r4, [fp, #-32]
-	b .L617
-.L617:
-	ldr r4, [fp, #-36]
-	add r5, r4, #0
-	str r5, [fp, #-28]
-	ldr r4, [fp, #-32]
-	add r5, r4, #0
-	str r5, [fp, #-24]
-	b .L609
-.L620:
-	b .L616
-.L629:
-	ldr r4, addr_n0
-	ldr r5, [r4]
-	ldr r4, [fp, #-8]
-	cmp r4, r5
-	movlt r4, #1
-	movge r4, #0
-	blt .L630
-	b .L634
-.L630:
-	ldr r4, [fp, #-4]
-	mov r5, #4
-	ldr r6, [fp, #-8]
-	mul r7, r6, r5
-	add r5, r4, r7
-	ldr r4, =0
-	str r4, [r5]
-	ldr r4, [fp, #-8]
-	add r5, r4, #1
-	add r4, r5, #0
-	str r4, [fp, #-8]
-	b .L629
+	sub sp, sp, #32
 .L631:
-	mov r0, #0
-	add sp, sp, #40
-	pop {r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
-	bx lr
-.L634:
-	b .L631
-
-	.global main
-	.type main , %function
-main:
-	push {r3, r4, r5, r6, r7, r8, fp, lr}
-	mov fp, sp
-	ldr r4, =256
-	sub sp, sp, r4
+	str r0, [fp, #-4]
+	str r1, [fp, #-8]
+	str r2, [fp, #-12]
+	ldr r1, [fp, #-8]
+	ldr r0, [fp, #-12]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L635
+	b .L639
+.L635:
+	ldr r0, [fp, #-8]
+	str r0, [fp, #-16]
+	ldr r0, [fp, #-12]
+	str r0, [fp, #-20]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-8]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	str r0, [fp, #-24]
+	b .L645
 .L636:
-	ldr r4, =32
-	ldr r5, addr_n0
-	str r4, [r5]
-	mov r4, #0
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =7
-	str r4, [r5]
-	mov r4, #1
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =23
-	str r4, [r5]
-	mov r4, #2
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =89
-	str r4, [r5]
-	mov r4, #3
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =26
-	str r4, [r5]
-	mov r4, #4
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =282
-	str r4, [r5]
-	mov r4, #5
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =254
-	str r4, [r5]
-	mov r4, #6
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =27
-	str r4, [r5]
-	mov r4, #7
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =5
-	str r4, [r5]
-	mov r4, #8
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =83
-	str r4, [r5]
-	mov r4, #9
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =273
-	str r4, [r5]
-	mov r4, #10
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =574
-	str r4, [r5]
-	mov r4, #11
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =905
-	str r4, [r5]
-	mov r4, #12
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =354
-	str r4, [r5]
-	mov r4, #13
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =657
-	str r4, [r5]
-	mov r4, #14
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =935
-	str r4, [r5]
-	mov r4, #15
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =264
-	str r4, [r5]
-	mov r4, #16
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =639
-	str r4, [r5]
-	mov r4, #17
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =459
-	str r4, [r5]
-	mov r4, #18
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =29
-	str r4, [r5]
-	mov r4, #19
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =68
-	str r4, [r5]
-	mov r4, #20
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =929
-	str r4, [r5]
-	mov r4, #21
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =756
-	str r4, [r5]
-	mov r4, #22
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =452
-	str r4, [r5]
-	mov r4, #23
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =279
-	str r4, [r5]
-	mov r4, #24
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =58
-	str r4, [r5]
-	mov r4, #25
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =87
-	str r4, [r5]
-	mov r4, #26
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =96
-	str r4, [r5]
-	mov r4, #27
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =36
-	str r4, [r5]
-	mov r4, #28
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =39
-	str r4, [r5]
-	mov r4, #29
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =28
-	str r4, [r5]
-	mov r4, #30
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =1
-	str r4, [r5]
-	mov r4, #31
-	mov r5, #-128
-	mov r6, #4
-	mul r7, r4, r6
-	add r4, fp, r5
-	add r5, r4, r7
-	ldr r4, =290
-	str r4, [r5]
 	mov r0, #0
-	ldr r1, =256
-	add sp, sp, r1
-	pop {r3, r4, r5, r6, r7, r8, fp, lr}
+	add sp, sp, #32
+	pop {r3, r4, fp, lr}
 	bx lr
+.L639:
+	b .L636
+.L645:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L646
+	b .L650
+.L646:
+	b .L651
+.L647:
+	ldr r3, [fp, #-24]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, [fp, #-16]
+	sub r0, r0, #1
+	str r0, [fp, #-28]
+	ldr r0, [fp, #-4]
+	ldr r1, [fp, #-8]
+	ldr r2, [fp, #-28]
+	bl QuickSort
+	str r0, [fp, #-28]
+	ldr r0, [fp, #-16]
+	add r0, r0, #1
+	str r0, [fp, #-28]
+	ldr r0, [fp, #-4]
+	ldr r1, [fp, #-28]
+	ldr r2, [fp, #-12]
+	bl QuickSort
+	str r0, [fp, #-28]
+	b .L636
+.L650:
+	b .L647
+.L651:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L672
+	b .L657
+.L652:
+	ldr r0, [fp, #-20]
+	sub r0, r0, #1
+	str r0, [fp, #-20]
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L672
+	b .L675
+.L653:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L681
+	b .L685
+.L657:
+	b .L653
+.L672:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-20]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r1, [r0]
+	ldr r0, [fp, #-24]
+	sub r0, r0, #1
+	cmp r1, r0
+	movgt r0, #1
+	movle r0, #0
+	bgt .L652
+	b .L680
+.L675:
+	b .L653
+.L680:
+	b .L653
+.L681:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-20]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, [fp, #-16]
+	add r0, r0, #1
+	str r0, [fp, #-16]
+	b .L682
+.L682:
+	b .L689
+.L685:
+	b .L682
+.L689:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L709
+	b .L695
+.L690:
+	ldr r0, [fp, #-16]
+	add r0, r0, #1
+	str r0, [fp, #-16]
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L709
+	b .L712
+.L691:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L718
+	b .L722
+.L695:
+	b .L691
+.L709:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r1, [r0]
+	ldr r0, [fp, #-24]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L690
+	b .L717
+.L712:
+	b .L691
+.L717:
+	b .L691
+.L718:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-20]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, [fp, #-20]
+	sub r0, r0, #1
+	str r0, [fp, #-20]
+	b .L719
 	b .F0
 .LTORG
 addr_n0:
 	.word n
 .F0:
+.L719:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-20]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L646
+	b .L731
+.L722:
+	b .L719
+.L731:
+	b .L647
 
+	.global getMid
+	.type getMid , %function
+getMid:
+	push {r3, r4, fp, lr}
+	mov fp, sp
+	sub sp, sp, #8
+.L736:
+	str r0, [fp, #-4]
+	ldr r0, addr_n1
+	ldr r2, [r0]
+	ldr r1, =2
+	sdiv r0, r2, r1
+	mul r0, r0, r1
+	sub r0, r2, r0
+	cmp r0, #0
+	moveq r0, #1
+	movne r0, #0
+	beq .L739
+	b .L744
+.L739:
+	ldr r0, addr_n1
+	ldr r1, [r0]
+	ldr r0, =2
+	sdiv r0, r1, r0
+	str r0, [fp, #-8]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-8]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-4]
+	ldr r0, [fp, #-8]
+	sub r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	add r1, r3, r0
+	ldr r0, =2
+	sdiv r0, r1, r0
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
+	bx lr
+.L740:
+	ldr r0, addr_n1
+	ldr r1, [r0]
+	ldr r0, =2
+	sdiv r0, r1, r0
+	str r0, [fp, #-8]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-8]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	add sp, sp, #8
+	pop {r3, r4, fp, lr}
+	bx lr
+.L744:
+	b .L740
+
+	.global getMost
+	.type getMost , %function
+getMost:
+	push {r3, r4, fp, lr}
+	mov fp, sp
+	ldr r4, =4024
+	sub sp, sp, r4
+.L751:
+	str r0, [fp, #-4]
+	ldr r1, =0
+	ldr r0, =-4008
+	str r1, [fp, r0]
+	b .L755
+.L755:
+	ldr r0, =-4008
+	ldr r1, [fp, r0]
+	ldr r0, =1000
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L756
+	b .L760
+.L756:
+	ldr r0, =-4008
+	ldr r1, [fp, r0]
+	ldr r2, =-4004
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =0
+	str r0, [r1]
+	ldr r0, =-4008
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-4008
+	str r1, [fp, r0]
+	ldr r0, =-4008
+	ldr r1, [fp, r0]
+	ldr r0, =1000
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L756
+	b .L765
+.L757:
+	ldr r1, =0
+	ldr r0, =-4008
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-4012
+	str r1, [fp, r0]
+	b .L768
+.L760:
+	b .L757
+.L765:
+	b .L757
+.L768:
+	ldr r0, =-4008
+	ldr r1, [fp, r0]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L769
+	b .L773
+.L769:
+	ldr r2, [fp, #-4]
+	ldr r0, =-4008
+	ldr r1, [fp, r0]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r1, [r0]
+	ldr r0, =-4020
+	str r1, [fp, r0]
+	ldr r0, =-4020
+	ldr r1, [fp, r0]
+	ldr r2, =-4004
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r0, [r0]
+	add r3, r0, #1
+	ldr r0, =-4020
+	ldr r1, [fp, r0]
+	ldr r2, =-4004
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	str r3, [r0]
+	ldr r0, =-4020
+	ldr r1, [fp, r0]
+	ldr r2, =-4004
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-4012
+	ldr r0, [fp, r0]
+	cmp r1, r0
+	movgt r0, #1
+	movle r0, #0
+	bgt .L778
+	b .L783
+.L770:
+	ldr r0, =-4016
+	ldr r0, [fp, r0]
+	ldr r1, =4024
+	add sp, sp, r1
+	pop {r3, r4, fp, lr}
+	bx lr
+.L773:
+	b .L770
+.L778:
+	ldr r0, =-4020
+	ldr r1, [fp, r0]
+	ldr r2, =-4004
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-4012
+	str r1, [fp, r0]
+	ldr r0, =-4020
+	ldr r1, [fp, r0]
+	ldr r0, =-4016
+	str r1, [fp, r0]
+	b .L779
+.L779:
+	ldr r0, =-4008
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-4008
+	str r1, [fp, r0]
+	ldr r0, =-4008
+	ldr r1, [fp, r0]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L769
+	b .L790
+.L783:
+	b .L779
+.L790:
+	b .L770
+
+	.global revert
+	.type revert , %function
+revert:
+	push {r3, r4, fp, lr}
+	mov fp, sp
+	sub sp, sp, #16
+.L791:
+	str r0, [fp, #-4]
+	ldr r0, =0
+	str r0, [fp, #-12]
+	ldr r0, =0
+	str r0, [fp, #-16]
+	b .L796
+.L796:
+	ldr r1, [fp, #-12]
+	ldr r0, [fp, #-16]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L797
+	b .L801
+.L797:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-12]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	str r0, [fp, #-8]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-12]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r3, [fp, #-8]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, [fp, #-12]
+	add r0, r0, #1
+	str r0, [fp, #-12]
+	ldr r0, [fp, #-16]
+	sub r0, r0, #1
+	str r0, [fp, #-16]
+	ldr r1, [fp, #-12]
+	ldr r0, [fp, #-16]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L797
+	b .L813
+.L798:
+	mov r0, #0
+	add sp, sp, #16
+	pop {r3, r4, fp, lr}
+	bx lr
+.L801:
+	b .L798
+.L813:
+	b .L798
+
+	.global arrCopy
+	.type arrCopy , %function
+arrCopy:
+	push {r3, r4, fp, lr}
+	mov fp, sp
+	sub sp, sp, #16
+.L814:
+	str r0, [fp, #-4]
+	str r1, [fp, #-8]
+	ldr r0, =0
+	str r0, [fp, #-12]
+	b .L818
+.L818:
+	ldr r1, [fp, #-12]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L819
+	b .L823
+.L819:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-12]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r3, [r0]
+	ldr r2, [fp, #-8]
+	ldr r1, [fp, #-12]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, [fp, #-12]
+	add r0, r0, #1
+	str r0, [fp, #-12]
+	ldr r1, [fp, #-12]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L819
+	b .L832
+.L820:
+	mov r0, #0
+	add sp, sp, #16
+	pop {r3, r4, fp, lr}
+	bx lr
+.L823:
+	b .L820
+.L832:
+	b .L820
+
+	.global calSum
+	.type calSum , %function
+calSum:
+	push {r3, r4, fp, lr}
+	mov fp, sp
+	sub sp, sp, #16
+.L833:
+	str r0, [fp, #-4]
+	str r1, [fp, #-8]
+	ldr r0, =0
+	str r0, [fp, #-12]
+	ldr r0, =0
+	str r0, [fp, #-16]
+	b .L838
+.L838:
+	ldr r1, [fp, #-16]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L839
+	b .L843
+.L839:
+	ldr r3, [fp, #-12]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	add r0, r3, r0
+	str r0, [fp, #-12]
+	ldr r2, [fp, #-16]
+	ldr r1, [fp, #-8]
+	sdiv r0, r2, r1
+	mul r0, r0, r1
+	sub r1, r2, r0
+	ldr r0, [fp, #-8]
+	sub r0, r0, #1
+	cmp r1, r0
+	movne r0, #1
+	moveq r0, #0
+	bne .L846
+	b .L851
+.L840:
+	mov r0, #0
+	add sp, sp, #16
+	pop {r3, r4, fp, lr}
+	bx lr
+.L843:
+	b .L840
+.L846:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r1, r2, r0
+	ldr r0, =0
+	str r0, [r1]
+	b .L848
+.L847:
+	ldr r3, [fp, #-12]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	ldr r0, =0
+	str r0, [fp, #-12]
+	b .L848
+.L848:
+	ldr r0, [fp, #-16]
+	add r0, r0, #1
+	str r0, [fp, #-16]
+	ldr r1, [fp, #-16]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L839
+	b .L859
+.L851:
+	b .L847
+.L859:
+	b .L840
+
+	.global avgPooling
+	.type avgPooling , %function
+avgPooling:
+	push {r3, r4, fp, lr}
+	mov fp, sp
+	sub sp, sp, #24
+.L860:
+	str r0, [fp, #-4]
+	str r1, [fp, #-8]
+	ldr r0, =0
+	str r0, [fp, #-16]
+	ldr r0, =0
+	str r0, [fp, #-12]
+	b .L866
+.L866:
+	ldr r1, [fp, #-16]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L867
+	b .L871
+.L867:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-8]
+	sub r0, r0, #1
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L872
+	b .L877
+.L868:
+	ldr r0, addr_n1
+	ldr r1, [r0]
+	ldr r0, [fp, #-8]
+	sub r0, r1, r0
+	add r0, r0, #1
+	str r0, [fp, #-16]
+	b .L900
+.L871:
+	b .L868
+.L872:
+	ldr r3, [fp, #-12]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	add r0, r3, r0
+	str r0, [fp, #-12]
+	b .L874
+.L873:
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-8]
+	sub r0, r0, #1
+	cmp r1, r0
+	moveq r0, #1
+	movne r0, #0
+	beq .L880
+	b .L885
+.L874:
+	ldr r0, [fp, #-16]
+	add r0, r0, #1
+	str r0, [fp, #-16]
+	ldr r1, [fp, #-16]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L867
+	b .L899
+.L877:
+	b .L873
+.L880:
+	ldr r2, [fp, #-4]
+	mov r1, #0
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	str r0, [fp, #-20]
+	ldr r1, [fp, #-12]
+	ldr r0, [fp, #-8]
+	sdiv r3, r1, r0
+	ldr r2, [fp, #-4]
+	mov r1, #0
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	b .L882
+.L881:
+	ldr r3, [fp, #-12]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	add r1, r3, r0
+	ldr r0, [fp, #-20]
+	sub r0, r1, r0
+	str r0, [fp, #-12]
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-8]
+	sub r0, r1, r0
+	add r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	ldr r0, [r0]
+	str r0, [fp, #-20]
+	ldr r1, [fp, #-12]
+	ldr r0, [fp, #-8]
+	sdiv r3, r1, r0
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	ldr r0, [fp, #-8]
+	sub r0, r1, r0
+	add r1, r0, #1
+	mov r0, #4
+	mul r0, r1, r0
+	add r0, r2, r0
+	str r3, [r0]
+	b .L882
+.L882:
+	b .L874
+.L885:
+	b .L881
+.L899:
+	b .L868
+.L900:
+	ldr r1, [fp, #-16]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L901
+	b .L905
+.L901:
+	ldr r2, [fp, #-4]
+	ldr r1, [fp, #-16]
+	mov r0, #4
+	mul r0, r1, r0
+	add r1, r2, r0
+	ldr r0, =0
+	str r0, [r1]
+	ldr r0, [fp, #-16]
+	add r0, r0, #1
+	str r0, [fp, #-16]
+	ldr r1, [fp, #-16]
+	ldr r0, addr_n1
+	ldr r0, [r0]
+	cmp r1, r0
+	movlt r0, #1
+	movge r0, #0
+	blt .L901
+	b .L912
+.L902:
+	mov r0, #0
+	add sp, sp, #24
+	pop {r3, r4, fp, lr}
+	bx lr
+.L905:
+	b .L902
+.L912:
+	b .L902
+
+	.global main
+	.type main , %function
+main:
+	push {r3, r4, fp, lr}
+	mov fp, sp
+	ldr r4, =264
+	sub sp, sp, r4
+.L913:
+	ldr r1, =32
+	ldr r0, addr_n1
+	str r1, [r0]
+	mov r1, #0
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =7
+	str r0, [r1]
+	mov r1, #1
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =23
+	str r0, [r1]
+	mov r1, #2
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =89
+	str r0, [r1]
+	mov r1, #3
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =26
+	str r0, [r1]
+	mov r1, #4
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =282
+	str r0, [r1]
+	mov r1, #5
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =254
+	str r0, [r1]
+	mov r1, #6
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =27
+	str r0, [r1]
+	mov r1, #7
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =5
+	str r0, [r1]
+	mov r1, #8
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =83
+	str r0, [r1]
+	mov r1, #9
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =273
+	str r0, [r1]
+	mov r1, #10
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =574
+	str r0, [r1]
+	mov r1, #11
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =905
+	str r0, [r1]
+	mov r1, #12
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =354
+	str r0, [r1]
+	mov r1, #13
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =657
+	str r0, [r1]
+	mov r1, #14
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =935
+	str r0, [r1]
+	mov r1, #15
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =264
+	str r0, [r1]
+	mov r1, #16
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =639
+	str r0, [r1]
+	mov r1, #17
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =459
+	str r0, [r1]
+	mov r1, #18
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =29
+	str r0, [r1]
+	mov r1, #19
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =68
+	str r0, [r1]
+	mov r1, #20
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =929
+	str r0, [r1]
+	mov r1, #21
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =756
+	str r0, [r1]
+	mov r1, #22
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =452
+	str r0, [r1]
+	mov r1, #23
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =279
+	str r0, [r1]
+	mov r1, #24
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =58
+	str r0, [r1]
+	mov r1, #25
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =87
+	str r0, [r1]
+	mov r1, #26
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =96
+	str r0, [r1]
+	mov r1, #27
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =36
+	str r0, [r1]
+	mov r1, #28
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =39
+	str r0, [r1]
+	mov r1, #29
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =28
+	str r0, [r1]
+	mov r1, #30
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	ldr r0, =1
+	str r0, [r1]
+	mov r1, #31
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, =290
+	str r1, [r0]
+	mov r1, #0
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r3, r0, r1
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	mov r0, r3
+	bl arrCopy
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	bl revert
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-264
+	str r1, [fp, r0]
+	b .L918
+	b .F1
+.LTORG
 addr_n1:
+	.word n
+.F1:
+.L918:
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L919
+	b .L923
+.L919:
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L919
+	b .L929
+.L920:
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	bl bubblesort
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-264
+	str r1, [fp, r0]
+	b .L930
+.L923:
+	b .L920
+.L929:
+	b .L920
+.L930:
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L931
+	b .L935
+.L931:
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L931
+	b .L941
+.L932:
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	bl getMid
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	bl getMost
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	mov r1, #0
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r3, r0, r1
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	mov r0, r3
+	bl arrCopy
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	bl bubblesort
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-264
+	str r1, [fp, r0]
+	b .L942
+.L935:
+	b .L932
+.L941:
+	b .L932
+.L942:
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L943
+	b .L947
+.L943:
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L943
+	b .L953
+	b .F2
+.LTORG
+addr_n2:
+	.word n
+.F2:
+.L944:
+	mov r1, #0
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r3, r0, r1
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	mov r0, r3
+	bl arrCopy
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	bl insertsort
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-264
+	str r1, [fp, r0]
+	b .L954
+.L947:
+	b .L944
+.L953:
+	b .L944
+.L954:
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L955
+	b .L959
+.L955:
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L955
+	b .L965
+.L956:
+	mov r1, #0
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r3, r0, r1
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	mov r0, r3
+	bl arrCopy
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r1, =31
+	ldr r0, =-260
+	str r1, [fp, r0]
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r3, r0, r1
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r0, =-260
+	ldr r2, [fp, r0]
+	mov r0, r3
+	bl QuickSort
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	b .L966
+.L959:
+	b .L956
+.L965:
+	b .L956
+.L966:
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L967
+	b .L971
+.L967:
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L967
+	b .L977
+.L968:
+	mov r1, #0
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r3, r0, r1
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	mov r0, r3
+	bl arrCopy
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	mov r1, #4
+	bl calSum
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-264
+	str r1, [fp, r0]
+	b .L978
+	b .F3
+.LTORG
+addr_n3:
+	.word n
+.F3:
+.L971:
+	b .L968
+.L977:
+	b .L968
+.L978:
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L979
+	b .L983
+.L979:
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L979
+	b .L989
+.L980:
+	mov r1, #0
+	mov r2, #-128
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r3, r0, r1
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r1, r0, r1
+	mov r0, r3
+	bl arrCopy
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	mov r1, #0
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	mov r1, #3
+	bl avgPooling
+	mov r1, r0
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r1, =0
+	ldr r0, =-264
+	str r1, [fp, r0]
+	b .L990
+.L983:
+	b .L980
+.L989:
+	b .L980
+.L990:
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L991
+	b .L995
+.L991:
+	ldr r0, =-264
+	ldr r1, [fp, r0]
+	ldr r2, =-256
+	mov r0, #4
+	mul r1, r1, r0
+	add r0, fp, r2
+	add r0, r0, r1
+	ldr r1, [r0]
+	ldr r0, =-260
+	str r1, [fp, r0]
+	ldr r0, =-260
+	ldr r0, [fp, r0]
+	bl putint
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	add r1, r0, #1
+	ldr r0, =-264
+	str r1, [fp, r0]
+	ldr r0, =-264
+	ldr r0, [fp, r0]
+	cmp r0, #32
+	movlt r0, #1
+	movge r0, #0
+	blt .L991
+	b .L1001
+.L992:
+	mov r0, #0
+	ldr r1, =264
+	add sp, sp, r1
+	pop {r3, r4, fp, lr}
+	bx lr
+.L995:
+	b .L992
+.L1001:
+	b .L992
+
+addr_n4:
 	.word n
 	.ident "ZWJM"

@@ -3,10 +3,15 @@
 void Mem2Reg::execute() {
     this->dom = new dominatorTree(unit);
     this->dom->execute();
-    auto func = unit->begin();
-    while(*func){
-        execute(*func++);
+    // auto func = unit->begin();
+    // while(*func){
+    //     execute(*func++);
+    // }
+    std::vector<Function*> func = unit->get_functions();
+    for(auto f = func.begin(); f != func.end(); f++){
+        execute(*f);
     }
+    // std::cout<<"结束 mem2reg all"<<std::endl;
 }
 
 // 0329m fix: 需要再次构建前驱后继关系
@@ -22,8 +27,8 @@ void Mem2Reg::execute(Function*f) {
                 // 这里有一些判断条件
                 // if (a->sym->dims.empty()) {  // 局部int变量
                 // 先将局部变量放到这里
-                if(!dynamic_cast<IdentifierSymbolEntry*>(dynamic_cast<AllocaInstruction*>(i)->getSymbolEntry())->isGlobal()
-                    && dynamic_cast<IdentifierSymbolEntry*>(dynamic_cast<AllocaInstruction*>(i)->getSymbolEntry())->getType()->isInt()){
+                auto se = dynamic_cast<IdentifierSymbolEntry*>(dynamic_cast<AllocaInstruction*>(i)->getSymbolEntry());
+                if(!se->isGlobal() && se->isLocal() && se->getType()->isInt()){
                     alloca_ids.insert({dynamic_cast<AllocaInstruction*>(i), (int)alloca_ids.size()});
                     allocas.push_back(dynamic_cast<AllocaInstruction*>(i));//se
                     // std::cout<<i->getDef()->toStr()<<"\n";
@@ -129,11 +134,13 @@ void Mem2Reg::execute(Function*f) {
             for (auto i = bb->begin(); i != bb->end();) {
                 // Instruction *next = i->getNext();
                 // 如果是alloca指令, 直接移除
-                if (i->isAlloc() && dynamic_cast<IdentifierSymbolEntry*>(dynamic_cast<AllocaInstruction*>(i)->getSymbolEntry())->getType()->isInt()) {
-                    // 需要先将指令的前驱后继关系都取消
-                    // 但是store和load指令是根据对应的def变量找到的alloca指令
-                    bb->remove(i);
-                    // delete static_cast<AllocaInstruction *>(i);
+                if (i->isAlloc()) {
+                    if(find(allocas.begin(), allocas.end(), dynamic_cast<AllocaInstruction*>(i)) != allocas.end()){
+                        // 需要先将指令的前驱后继关系都取消
+                        // 但是store和load指令是根据对应的def变量找到的alloca指令
+                        bb->remove(i);
+                        // delete static_cast<AllocaInstruction *>(i);
+                    }
 
                 } else if (i->isStore()) {
                     auto x = dynamic_cast<StoreInstruction* >(i);
@@ -180,7 +187,7 @@ void Mem2Reg::execute(Function*f) {
                 i = i->getNext();
                 // //std::cout<<"hhh"<<std::endl;
             }
-            //std::cout<<"mem2reg算法阶段2"<<std::endl;
+            // std::cout<<"mem2reg算法阶段2"<<std::endl;
 
             // 遍历当前块的所有后续块
             // fix: 需要理解phi指令中的src map
@@ -189,6 +196,7 @@ void Mem2Reg::execute(Function*f) {
             // 找的方式是从当前块的后继块开始找
             for (auto x = bb->succ_begin(); x != bb->succ_end(); x++) {
                 // 比如从21块的后继节点开始找: 22
+                // std::cout<<"hhhhhhhhhhhhhhhhh"<<std::endl;
                 if ((*x)) {
                     BasicBlock *succ_bb = *x;
                     worklist2.emplace_back(succ_bb, values);// 将后继块加入到工作集当中
@@ -200,7 +208,7 @@ void Mem2Reg::execute(Function*f) {
                             if (it != phis.end()) {
                                 // 找到前驱块里面的最后一个值赋值给phi
                                 // 前驱块当中有它本身存在
-                                //std::cout<<"values[it->second] = "<<values[it->second]<<"\n";
+                                // std::cout<<"values[it->second] = "<<values[it->second]<<"\n";
                                 //std::cout<<"after p->addSrc\n";
                                 p->addSrc(bb, values[it->second]);
                                 // 这个不清楚是什么意思
@@ -212,7 +220,6 @@ void Mem2Reg::execute(Function*f) {
                     }
                 }
             }
-            
         }
     }
     // 0413m
@@ -220,12 +227,14 @@ void Mem2Reg::execute(Function*f) {
     // 粗略实现: 默认当前块当中的所有phi指令都已经填充完毕了
     // 找到一个块当中的所有phi指令
     // fix3: 还有问题
+    // std::cout<<"mem2reg算法阶段3: 调整phi指令的顺序"<<std::endl;
     std::list<PhiInstruction*> phi_queue;
     for(auto it = f->begin(); it != f->end(); it++){
         auto bb = *it;
         phi_queue.clear();
         for (auto instphi = bb->begin(); instphi != bb->end(); instphi = instphi->getNext()){
-            if(!instphi->isPhi()) break;
+            // std::cout<<"hhhhhhhhhhhhhhhhh"<<instphi<<std::endl;
+            if(!instphi || !instphi->isPhi()) break;
             auto phi = dynamic_cast<PhiInstruction*>(instphi);
             // std::cout<<"\n 输出block内phi指令: "<<phi->getDef()->toStr()<<"\t";
             std::map<BasicBlock*, Operand*> srcs = phi->getSrcs();
@@ -248,4 +257,5 @@ void Mem2Reg::execute(Function*f) {
             bb->insertFront(*phi);
         }
     }
+    // std::cout<<"结束 mem2reg"<<std::endl;
 }

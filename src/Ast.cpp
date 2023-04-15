@@ -882,36 +882,6 @@ void WhileStmt::genCode() {
     // builder->setInsertBB(end_bb);
 
     // tag: 原本版本
-    // Function* func;
-    // BasicBlock *cond_bb, *while_bb, *end_bb, *bb;
-    // bb = builder->getInsertBB();
-    // func = builder->getInsertBB()->getParent();
-    // cond_bb = new BasicBlock(func);
-    // while_bb = new BasicBlock(func);
-    // end_bb = new BasicBlock(func);
-
-    // this->cond_bb = cond_bb;
-    // this->end_bb = end_bb;
-
-    // new UncondBrInstruction(cond_bb, bb);
-
-    // builder->setInsertBB(cond_bb);
-    // cond->genCode();
-    // backPatch(cond->trueList(), while_bb);
-    // backPatch(cond->falseList(), end_bb);
-
-    // builder->setInsertBB(while_bb);
-    // stmt->genCode();
-    // // fix: 这里恢复原来的循环结构
-    // ExprNode* cond1 = cond->copy();
-    // cond1->genCode();
-    // backPatch(cond1->trueList(), while_bb);
-    // backPatch(cond1->falseList(), end_bb);
-
-    // fix: 测试使用
-    // new UncondBrInstruction(cond_bb, while_bb);
-
-    // fix: 原来分支
     Function* func;
     BasicBlock *cond_bb, *while_bb, *end_bb, *bb;
     bb = builder->getInsertBB();
@@ -930,14 +900,44 @@ void WhileStmt::genCode() {
     backPatch(cond->trueList(), while_bb);
     backPatch(cond->falseList(), end_bb);
 
-
     builder->setInsertBB(while_bb);
     stmt->genCode();
+    // fix: 这里恢复原来的循环结构
+    ExprNode* cond1 = cond->copy();
+    cond1->genCode();
+    backPatch(cond1->trueList(), while_bb);
+    backPatch(cond1->falseList(), end_bb);
 
-    while_bb = builder->getInsertBB();
-    new UncondBrInstruction(cond_bb, while_bb);
+    // fix: 测试使用
+    // new UncondBrInstruction(cond_bb, while_bb);
 
-    builder->setInsertBB(end_bb);
+    // fix: 原来分支
+    // Function* func;
+    // BasicBlock *cond_bb, *while_bb, *end_bb, *bb;
+    // bb = builder->getInsertBB();
+    // func = builder->getInsertBB()->getParent();
+    // cond_bb = new BasicBlock(func);
+    // while_bb = new BasicBlock(func);
+    // end_bb = new BasicBlock(func);
+
+    // this->cond_bb = cond_bb;
+    // this->end_bb = end_bb;
+
+    // new UncondBrInstruction(cond_bb, bb);
+
+    // builder->setInsertBB(cond_bb);
+    // cond->genCode();
+    // backPatch(cond->trueList(), while_bb);
+    // backPatch(cond->falseList(), end_bb);
+
+
+    // builder->setInsertBB(while_bb);
+    // stmt->genCode();
+
+    // while_bb = builder->getInsertBB();
+    // new UncondBrInstruction(cond_bb, while_bb);
+
+    // builder->setInsertBB(end_bb);
     // 到这里
 
     // Operand* condoperand = cond->getOperand();

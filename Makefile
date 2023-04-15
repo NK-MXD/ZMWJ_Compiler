@@ -53,6 +53,11 @@ app:$(LEXER) $(PARSER) $(BINARY)
 run:app
 	@$(BINARY) -o example.s -S example.sy -O2
 
+runS:
+	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
+	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
+	echo $$?
+
 ll0:app
 	@$(BINARY) -o example_O2.ll -i -O2 example.sy
 
