@@ -62,44 +62,36 @@ ll0:app
 	@$(BINARY) -o example_O2.ll -i -O2 example.sy
 
 
-run0:app
-	@$(BINARY) -o exampleO2.s -S -O2 example.sy
-	arm-linux-gnueabihf-gcc exampleO2.s $(SYSLIB_PATH)/libsysy.a -o example
-	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
-	echo $$?
-
 
 runO0:app
-	@$(BINARY) -o exampleO0.s -S example.sy
-	@$(BINARY) -o exampleO0.ll -i example.sy
+	@$(BINARY) -o example_O0.s -S example.sy
+	@$(BINARY) -o example_O0.ll -i example.sy
 	arm-linux-gnueabihf-gcc exampleO0.s $(SYSLIB_PATH)/libsysy.a -o example
 	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
 	echo $$?
 
 runO2:app
-	@$(BINARY) -o exampleO2.s -S example.sy -O2
-	@$(BINARY) -o exampleO2.ll -i example.sy -O2
-	arm-linux-gnueabihf-gcc exampleO2.s $(SYSLIB_PATH)/libsysy.a -o example
+	@$(BINARY) -o example_O2.s -S example.sy -O2
+	@$(BINARY) -o example_O2.ll -i example.sy -O2
+	arm-linux-gnueabihf-gcc example_O2.s $(SYSLIB_PATH)/libsysy.a -o example
 	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
 	echo $$?
+
+run0:app
+	arm-linux-gnueabihf-gcc example_O2.s $(SYSLIB_PATH)/libsysy.a -o example
 
 ll:app
 	@$(BINARY) -o example.ll -i example.sy
 
-ll1:app
-	@$(BINARY) -o exampleO.ll -i example.sy -O2
+llO2:app
+	@$(BINARY) -o example_O2.ll -i example.sy -O2
 
-llrun:app
-	@$(BINARY) -o exampleO2.ll -i example.sy -O2
-	clang -o example exampleO2.ll sysyruntimelibrary/sylib.c 
+llrunO2:app
+	@$(BINARY) -o example_O2.ll -i example.sy -O2
+	clang -o example example_O2.ll sysyruntimelibrary/sylib.c 
 	./example <example.in
 	echo $$?
 
-run10:app
-	@$(BINARY) -o example.s -S -O example.sy
-	arm-linux-gnueabihf-gcc example.s $(SYSLIB_PATH)/libsysy.a -o example
-	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example
-	echo $$?
 
 gdb:app
 	@gdb $(BINARY)
