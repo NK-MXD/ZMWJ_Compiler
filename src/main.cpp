@@ -84,7 +84,6 @@ int main(int argc, char* argv[]) {
 
         Mem2Reg mr(&unit);
         mr.execute();
-        // //! 换方法!!!
         SSADestruction ssa(&unit);
         ssa.pass();
     }

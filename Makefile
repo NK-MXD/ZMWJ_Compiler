@@ -79,6 +79,8 @@ runO2:app
 
 run0:app
 	arm-linux-gnueabihf-gcc example_O2.s $(SYSLIB_PATH)/libsysy.a -o example
+	qemu-arm -L /usr/arm-linux-gnueabihf/ ./example <example.in
+	echo $$?
 
 ll:app
 	@$(BINARY) -o example.ll -i example.sy

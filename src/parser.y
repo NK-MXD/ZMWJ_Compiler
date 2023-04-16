@@ -202,7 +202,19 @@ PrimaryExp
         $$ = $2;
     }
     | LVal {
-        $$ = $1;
+        IdentifierSymbolEntry *id = dynamic_cast<IdentifierSymbolEntry*>($1->getSymbolEntry());
+        if(id->getConst()){
+            SymbolEntry *cs;
+            if(id->getType()->isInt()||id->getType()->isFloat()){
+                cs = new ConstantSymbolEntry(id->getType(), id->getValue());
+                $$ = new Constant(cs);
+            }
+            else{
+                $$ = $1;
+            }
+        }else{
+            $$ = $1;
+        }
     }
     | STRING {
         SymbolEntry* se;
@@ -246,57 +258,85 @@ UnaryExp
         } else
         $$ = new CallExpr(se);
     }
-    | ADD UnaryExp {$$ = $2;}
+    | ADD UnaryExp {
+        $$ = $2;
+    }
     | SUB UnaryExp {
         Type* exprType = $2->getType();
-        SymbolEntry* se = new TemporarySymbolEntry(exprType, SymbolTable::getLabel());
-        ExprNode* tmpExpr = new UnaryExpr(se, UnaryExpr::SUB, $2);
-        if (exprType->isFloat()) {
-            $$ = tmpExpr;
-        } else {
-            $$ = tmpExpr->const_fold();
+        if($2->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *se = dynamic_cast<ConstantSymbolEntry*>($2->getSymbolEntry());
+            ConstantSymbolEntry *cs = new ConstantSymbolEntry(exprType,-se->getValue());
+            $$ = new UnaryExpr(cs, UnaryExpr::SUB, $2);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(exprType, SymbolTable::getLabel());
+            $$ = new UnaryExpr(se, UnaryExpr::SUB, $2);
         }
+        // Type* exprType = $2->getType();
+        // SymbolEntry* se = new TemporarySymbolEntry(exprType, SymbolTable::getLabel());
+        // ExprNode* tmpExpr = new UnaryExpr(se, UnaryExpr::SUB, $2);
+        // if (exprType->isFloat()) {
+        //     $$ = tmpExpr;
+        // } else {
+        //     $$ = tmpExpr->const_fold();
+        // }
     }
     | NOT UnaryExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new UnaryExpr(se, UnaryExpr::NOT, $2);
-        ExprNode* tmpExpr;
-        if ($2->getType()->isFloat()) {
-
-            SymbolEntry* zero =
-                new ConstantSymbolEntry(TypeSystem::constFloatType, 0);
-            SymbolEntry* temp = new TemporarySymbolEntry(
-                TypeSystem::boolType, SymbolTable::getLabel());
-            BinaryExpr* cmpZero = new BinaryExpr(temp, BinaryExpr::NOTEQUAL,
-                                                    $2, new Constant(zero));
-
-            $$ = new UnaryExpr(se, UnaryExpr::NOT, cmpZero);
-        } else {
-            tmpExpr = new UnaryExpr(se, UnaryExpr::NOT, $2);
-            $$ = tmpExpr->const_fold();
+        if($2->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *se = dynamic_cast<ConstantSymbolEntry*>($2->getSymbolEntry());
+            ConstantSymbolEntry *cs = new ConstantSymbolEntry(TypeSystem::boolType,!se->getValue());
+            $$ = new UnaryExpr(cs, UnaryExpr::NOT, $2);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new UnaryExpr(se, UnaryExpr::NOT, $2);
         }
     }
     ;
 MulExp
     : UnaryExp {$$ = $1;}
     | MulExp MUL UnaryExp {
-        SymbolEntry* se;
-        if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
-            se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
-        } else {
-            se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            if(ts1->getType()->isFloat() || ts2->getType()->isFloat()){
+                cs = new ConstantSymbolEntry(TypeSystem::floatType,ts1->getValue()*ts2->getValue());
+            }
+            else{
+                cs = new ConstantSymbolEntry(TypeSystem::intType,(int)ts1->getValue()*(int)ts2->getValue());
+            }
+            $$ = new BinaryExpr(cs, BinaryExpr::MUL, $1, $3);
+        }else{
+            SymbolEntry* se;
+            if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
+                se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
+            } else {
+                se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::MUL, $1, $3);
+            }
         }
     }
     | MulExp DIV UnaryExp {
-        SymbolEntry* se;
-        if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
-            se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
-        } else {
-            se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            if(ts1->getType()->isFloat() || ts2->getType()->isFloat()){
+                cs = new ConstantSymbolEntry(TypeSystem::floatType,ts1->getValue()/ts2->getValue());
+            }
+            else{
+                cs = new ConstantSymbolEntry(TypeSystem::intType,(int)ts1->getValue()/(int)ts2->getValue());
+            }
+            $$ = new BinaryExpr(cs, BinaryExpr::DIV, $1, $3);
+        }else{
+            SymbolEntry* se;
+            if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
+                se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
+            } else {
+                se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::DIV, $1, $3);
+            }
         }
     }
     | MulExp MOD UnaryExp {
@@ -305,31 +345,63 @@ MulExp
             // already handled in `ast.cpp`
             fprintf(stderr, "Operands of `mod` must be both integers");
         }
-
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::MOD, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs =new ConstantSymbolEntry(TypeSystem::intType,(int)ts1->getValue() % (int)ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::MOD, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::MOD, $1, $3);
+        }
     }
     ;
 AddExp
     : MulExp {$$ = $1;}
     | AddExp ADD MulExp {
-        SymbolEntry* se;
-        if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
-            se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
-        } else {
-            se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            if(ts1->getType()->isFloat() || ts2->getType()->isFloat()){
+                cs = new ConstantSymbolEntry(TypeSystem::floatType,ts1->getValue() + ts2->getValue());
+            }
+            else{
+                cs = new ConstantSymbolEntry(TypeSystem::intType,(int)ts1->getValue() + (int)ts2->getValue());
+            }
+            $$ = new BinaryExpr(cs, BinaryExpr::ADD, $1, $3);
+        }else{
+            SymbolEntry* se;
+            if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
+                se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
+            } else {
+                se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::ADD, $1, $3);
+            }
         }
     }
     | AddExp SUB MulExp {
-        SymbolEntry* se;
-        if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
-            se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
-        } else {
-            se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
-            $$ = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            if(ts1->getType()->isFloat() || ts2->getType()->isFloat()){
+                cs = new ConstantSymbolEntry(TypeSystem::floatType,ts1->getValue() - ts2->getValue());
+            }
+            else{
+                cs = new ConstantSymbolEntry(TypeSystem::intType,(int)ts1->getValue() - (int)ts2->getValue());
+            }
+            $$ = new BinaryExpr(cs, BinaryExpr::SUB, $1, $3);
+        }else{
+            SymbolEntry* se;
+            if ($1->getType()->isFloat() || $3->getType()->isFloat()) {
+                se = new TemporarySymbolEntry(TypeSystem::floatType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
+            } else {
+                se = new TemporarySymbolEntry(TypeSystem::intType, SymbolTable::getLabel());
+                $$ = new BinaryExpr(se, BinaryExpr::SUB, $1, $3);
+            }
         }
     }
     ;
@@ -338,45 +410,109 @@ RelExp
         $$ = $1;
     }
     | RelExp LESS AddExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::LESS, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() < ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::LESS, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::LESS, $1, $3);
+        }
     }
     | RelExp LESSEQUAL AddExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::LESSEQUAL, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() <= ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::LESSEQUAL, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::LESSEQUAL, $1, $3);
+        }
     }
     | RelExp GREATER AddExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::GREATER, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() > ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::GREATER, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::GREATER, $1, $3);
+        }
     }
     | RelExp GREATEREQUAL AddExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::GREATEREQUAL, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() >= ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::GREATEREQUAL, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::GREATEREQUAL, $1, $3);
+        }
     }
     ;
 EqExp
     : RelExp {$$ = $1;}
     | EqExp EQUAL RelExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::EQUAL, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() == ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::EQUAL, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::EQUAL, $1, $3);
+        }
     }
     | EqExp NOTEQUAL RelExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::NOTEQUAL, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() != ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::NOTEQUAL, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::NOTEQUAL, $1, $3);
+        }
     }
     ;
 LAndExp
     : EqExp {$$ = $1;}
     | LAndExp AND EqExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::AND, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() && ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::AND, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::AND, $1, $3);
+        }
     }
     ;
 LOrExp
     : LAndExp {$$ = $1;}
     | LOrExp OR LAndExp {
-        SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
-        $$ = new BinaryExpr(se, BinaryExpr::OR, $1, $3);
+        if($1->getSymbolEntry()->isConstant()&&$3->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry *ts1 = dynamic_cast<ConstantSymbolEntry*>($1->getSymbolEntry());
+            ConstantSymbolEntry *ts2 = dynamic_cast<ConstantSymbolEntry*>($3->getSymbolEntry());
+            ConstantSymbolEntry *cs;
+            cs = new ConstantSymbolEntry(TypeSystem::boolType,ts1->getValue() || ts2->getValue());
+            $$ = new BinaryExpr(cs, BinaryExpr::OR, $1, $3);
+        }else{
+            SymbolEntry* se = new TemporarySymbolEntry(TypeSystem::boolType, SymbolTable::getLabel());
+            $$ = new BinaryExpr(se, BinaryExpr::OR, $1, $3);
+        }
     }
     ;
 ConstExp

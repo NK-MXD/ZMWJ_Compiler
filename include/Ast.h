@@ -479,4 +479,19 @@ class Ast {
     bool typeCheck(Type* retType = nullptr);
     void genCode(Unit* unit);
 };
+
+class ConstNode : public ExprNode
+{
+protected:
+    Id* id;
+public:
+    ConstNode(Id* id,SymbolEntry *cs):ExprNode(cs), id(id){
+        dst = id->getOperand();
+    };
+    void output(int level);
+    void genCode(){
+        id->genCode();
+        dst = id->getOperand();
+    };
+};
 #endif
