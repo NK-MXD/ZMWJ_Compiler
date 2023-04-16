@@ -178,7 +178,7 @@ class VNegMInstruction : public MachineInstruction {
                      MachineOperand* src);
     void output();
     int latency();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 class FuseMInstruction : public MachineInstruction {
@@ -192,7 +192,7 @@ class FuseMInstruction : public MachineInstruction {
                      MachineOperand* src3);
     void output();
     int latency();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 class BinaryMInstruction : public MachineInstruction {
@@ -217,6 +217,7 @@ class LoadMInstruction : public MachineInstruction {
                      MachineOperand* src2 = nullptr,
                      int cond = MachineInstruction::NONE);
     void output();
+    void output2terminal();
     void setNeedModify() { needModify = true; }
     bool isNeedModify() { return needModify; }
     int pattern_code();
@@ -232,6 +233,7 @@ class StoreMInstruction : public MachineInstruction {
                       MachineOperand* src3 = nullptr,
                       int cond = MachineInstruction::NONE);
     void output();
+    void output2terminal();
     int pattern_code();
 };
 
@@ -254,7 +256,7 @@ class BranchMInstruction : public MachineInstruction {
     BranchMInstruction(MachineBlock *p, int op, MachineOperand *dst,
                        int cond = MachineInstruction::NONE);
     void output();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 class CmpMInstruction : public MachineInstruction {
@@ -266,7 +268,7 @@ class CmpMInstruction : public MachineInstruction {
                     MachineOperand* src2,
                     int cond = MachineInstruction::NONE);
     void output();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 class StackMInstrcuton : public MachineInstruction {
@@ -277,7 +279,7 @@ class StackMInstrcuton : public MachineInstruction {
                      MachineOperand *src1 = nullptr,
                      int cond = MachineInstruction::NONE);
     void output();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 
@@ -290,14 +292,14 @@ class VcvtMInstruction : public MachineInstruction {
                      MachineOperand* src,
                      int cond = MachineInstruction::NONE);
     void output();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 class VmrsMInstruction : public MachineInstruction {
    public:
     VmrsMInstruction(MachineBlock* p);
     void output();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 class MachineBlock {
@@ -449,7 +451,7 @@ class StackMInstruction : public MachineInstruction {
                       MachineOperand* src1 = nullptr,
                       int cond = MachineInstruction::NONE);
     void output();
-    int pattern_code(){return 0x00;}
+    int pattern_code(){return 0xff;}
 };
 
 class SmullMInstruction : public MachineInstruction {
@@ -461,6 +463,6 @@ class SmullMInstruction : public MachineInstruction {
                        MachineOperand* src2,
                        int cond = MachineInstruction::NONE);
     void output();
-    int pattern_code(){}
+    int pattern_code(){return 0xff;}
 };
 #endif

@@ -101,8 +101,8 @@ int main(int argc, char* argv[]) {
     GraphColor.allocateRegisters();
 
     if(optimize){
-        // PeepholeMInstrOpt pmo(&mUnit);
-        // pmo.pass();
+        PeepholeMInstrOpt pmo(&mUnit);
+        pmo.pass();
         
     }
     
