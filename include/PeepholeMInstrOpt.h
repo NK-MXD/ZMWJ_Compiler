@@ -51,27 +51,30 @@ class PeepholeMInstrOpt
         code = (code << 8) + ADD;
         pattern_map[code] = MULADD2MLA_FUNC;
         printf("muladd2mla code = %d\n", code);
+        //std::cout<<"muladd2mla code ="<<code<<"\n";
 
         code = VMUL;
         code = (code << 8) + VADD;
         pattern_map[code] = VMULVADD2VMLAVMOV_FUNC;
         printf("vmulvadd2vmlavmov code = %d\n", code);
+        //std::cout<<"vmulvadd2vmlavmov code ="<<code<<"\n";
 
         code = STR;
         code = (code << 8) + LDR;
         pattern_map[code] = STRLDR2STRMOV_FUNC;
         printf("strldr2strmov code = %d\n", code);
+        //std::cout<<"strldr2strmov code ="<<code<<"\n";
 
         code = LDR;
         code = (code << 8) + LDR;
         pattern_map[code] = LDRLDR2LDRMOV_FUNC;
-        printf("ldrldr2strmov code = %d\n", code);
+        //std::cout<<"ldrldr2strmov code ="<<code<<"\n";
 
         code = LDR;
         code = (code << 8) + VMOV;
         code = (code << 8) + VSUB;
         pattern_map[code] = LDRVMOVVSUB2VNEG_FUNC;
-        printf("ldrvmovvsub2vneg code = %d\n", code);
+        //std::cout<<"ldrvmovvsub2vneg code ="<<code<<"\n";
     }
     void pass();
     //void pass1();
@@ -209,6 +212,9 @@ int PeepholeMInstrOpt::VMulVAdd2VMlaVMov(MachineBlock* block, MachineInstruction
 int PeepholeMInstrOpt::StrLdr2StrMov(MachineBlock* block, MachineInstruction* str_inst, MachineInstruction* ldr_inst, std::set<MachineInstruction*>* instToRemove)
 {
     printf("now in PeepholeMInstrOpt::strldr2strmov\n");
+
+    // ((StoreMInstruction*)str_inst)->output2terminal();
+    // ((LoadMInstruction*)ldr_inst)->output2terminal();
     
     //0405 wzr: str指令有几个参数，ldr指令有几个参数
     //满参数状态下的这两条指令形式如下
@@ -284,7 +290,7 @@ int PeepholeMInstrOpt::StrLdr2StrMov(MachineBlock* block, MachineInstruction* st
         else{
             printf("before str ldr num = 3\n");
             //下面的if里比的是第二个参数的寄存器号和第三个参数的值，因为第三个参数一定是个立即数？？
-            if(stroperand2->getReg() == ldroperand2->getReg() && stroperand3->getVal() == ldroperand3->getVal())
+            if(/*stroperand2 != NULL && stroperand2->getReg() ==*/ ldroperand2->getReg() && stroperand3->getVal() == ldroperand3->getVal())
             {
                 printf("new mov to replace ldr1");
                 MovMInstruction* mov = new MovMInstruction(block, MovMInstruction::MOV, ldroperand1, stroperand1);
@@ -575,15 +581,15 @@ int PeepholeMInstrOpt::instr_pattern_code(int instr_num, std::vector<MachineInst
         return 0;
     }
     uint32_t code = instr_list[0]->pattern_code();
-    // printf("start code = %d\n", code);
-    // printf("now in instr_pattern code, instr_num = %d\n", instr_num);
+    printf("start code = %d\n", code);
+    printf("now in instr_pattern code, instr_num = %d\n", instr_num);
     for(int i = 1; i < size; i ++)
     {
-        //printf("instr_list[i]->pattern_code() = %d\n", instr_list[i]->pattern_code());
-        //printf("instr_list[i]->getNo = %d\n", instr_list[i]->getNo());
+        printf("instr_list[i]->pattern_code() = %d\n", instr_list[i]->pattern_code());
+        printf("instr_list[i]->getNo = %d\n", instr_list[i]->getNo());
         code = code << 8;
         code += instr_list[i]->pattern_code();
-        // printf("code = %d\n", code);
+        printf("code = %d\n", code);
     }
     return code;
 }
