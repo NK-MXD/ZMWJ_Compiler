@@ -33,9 +33,8 @@ B542:                               	; preds = %B541, %B548
   %t549 = load i32*, i32** %t532, align 4
   %t18 = getelementptr inbounds i32, i32* %t549, i32 %t1009
   %t550 = load i32, i32* %t18, align 4
-  %t551 = load i32*, i32** %t532, align 4
   %t20 = add i32 %t1009, 1
-  %t21 = getelementptr inbounds i32, i32* %t551, i32 %t20
+  %t21 = getelementptr inbounds i32, i32* %t549, i32 %t20
   %t552 = load i32, i32* %t21, align 4
   %t22 = icmp sgt i32 %t550, %t552
   br i1 %t22, label %B547, label %B555
@@ -48,15 +47,11 @@ B547:                               	; preds = %B542
   %t26 = add i32 %t1009, 1
   %t27 = getelementptr inbounds i32, i32* %t557, i32 %t26
   %t558 = load i32, i32* %t27, align 4
-  %t559 = load i32*, i32** %t532, align 4
-  %t32 = getelementptr inbounds i32, i32* %t559, i32 %t1009
+  %t32 = getelementptr inbounds i32, i32* %t557, i32 %t1009
   %t560 = load i32, i32* %t32, align 4
-  %t561 = load i32*, i32** %t532, align 4
-  %t29 = add i32 %t1009, 1
-  %t30 = getelementptr inbounds i32, i32* %t561, i32 %t29
+  %t30 = getelementptr inbounds i32, i32* %t557, i32 %t26
   store i32 %t560, i32* %t30, align 4
-  %t562 = load i32*, i32** %t532, align 4
-  %t34 = getelementptr inbounds i32, i32* %t562, i32 %t1009
+  %t34 = getelementptr inbounds i32, i32* %t557, i32 %t1009
   store i32 %t558, i32* %t34, align 4
   %t1019 = add i32 %t558, 0
   br label %B548
@@ -134,9 +129,8 @@ B593:                               	; preds = %B615
   %t604 = load i32*, i32** %t580, align 4
   %t69 = getelementptr inbounds i32, i32* %t604, i32 %t1042
   %t605 = load i32, i32* %t69, align 4
-  %t606 = load i32*, i32** %t580, align 4
   %t66 = add i32 %t1042, 1
-  %t67 = getelementptr inbounds i32, i32* %t606, i32 %t66
+  %t67 = getelementptr inbounds i32, i32* %t604, i32 %t66
   store i32 %t605, i32* %t67, align 4
   %t72 = sub i32 %t1042, 1
   %t608 = sub i32 0, 1
@@ -255,8 +249,7 @@ B681:                               	; preds = %B653
   %t686 = load i32*, i32** %t632, align 4
   %t120 = getelementptr inbounds i32, i32* %t686, i32 %t1075
   %t687 = load i32, i32* %t120, align 4
-  %t688 = load i32*, i32** %t632, align 4
-  %t118 = getelementptr inbounds i32, i32* %t688, i32 %t1055
+  %t118 = getelementptr inbounds i32, i32* %t686, i32 %t1055
   store i32 %t687, i32* %t118, align 4
   %t123 = add i32 %t1055, 1
   %t1062 = add i32 %t123, 0
@@ -297,8 +290,7 @@ B718:                               	; preds = %B691
   %t723 = load i32*, i32** %t632, align 4
   %t141 = getelementptr inbounds i32, i32* %t723, i32 %t1051
   %t724 = load i32, i32* %t141, align 4
-  %t725 = load i32*, i32** %t632, align 4
-  %t139 = getelementptr inbounds i32, i32* %t725, i32 %t1075
+  %t139 = getelementptr inbounds i32, i32* %t723, i32 %t1075
   store i32 %t724, i32* %t139, align 4
   %t144 = sub i32 %t1075, 1
   %t1066 = add i32 %t144, 0
@@ -330,9 +322,8 @@ B739:                               	; preds = %B736
   %t745 = load i32*, i32** %t737, align 4
   %t175 = getelementptr inbounds i32, i32* %t745, i32 %t173
   %t746 = load i32, i32* %t175, align 4
-  %t747 = load i32*, i32** %t737, align 4
   %t177 = sub i32 %t173, 1
-  %t178 = getelementptr inbounds i32, i32* %t747, i32 %t177
+  %t178 = getelementptr inbounds i32, i32* %t745, i32 %t177
   %t748 = load i32, i32* %t178, align 4
   %t179 = add i32 %t746, %t748
   %t180 = sdiv i32 %t179, 2
@@ -444,14 +435,11 @@ B797:                               	; preds = %B796, %B1336
   %t802 = load i32*, i32** %t792, align 4
   %t239 = getelementptr inbounds i32, i32* %t802, i32 %t1130
   %t803 = load i32, i32* %t239, align 4
-  %t804 = load i32*, i32** %t792, align 4
-  %t243 = getelementptr inbounds i32, i32* %t804, i32 %t1136
+  %t243 = getelementptr inbounds i32, i32* %t802, i32 %t1136
   %t805 = load i32, i32* %t243, align 4
-  %t806 = load i32*, i32** %t792, align 4
-  %t241 = getelementptr inbounds i32, i32* %t806, i32 %t1130
+  %t241 = getelementptr inbounds i32, i32* %t802, i32 %t1130
   store i32 %t805, i32* %t241, align 4
-  %t807 = load i32*, i32** %t792, align 4
-  %t245 = getelementptr inbounds i32, i32* %t807, i32 %t1136
+  %t245 = getelementptr inbounds i32, i32* %t802, i32 %t1136
   store i32 %t803, i32* %t245, align 4
   %t249 = add i32 %t1130, 1
   %t252 = sub i32 %t1136, 1
@@ -635,8 +623,7 @@ B880:                               	; preds = %B873
   %t887 = load i32, i32* %t326, align 4
   %t329 = load i32, i32* %t862, align 4
   %t330 = sdiv i32 %t1167, %t329
-  %t888 = load i32*, i32** %t861, align 4
-  %t327 = getelementptr inbounds i32, i32* %t888, i32 0
+  %t327 = getelementptr inbounds i32, i32* %t886, i32 0
   store i32 %t330, i32* %t327, align 4
   %t1185 = add i32 %t887, 0
   %t1162 = add i32 %t1167, 0
@@ -664,20 +651,15 @@ B881:                               	; preds = %B885
   %t890 = load i32, i32* %t334, align 4
   %t335 = add i32 %t1167, %t890
   %t337 = sub i32 %t335, %t1190
-  %t891 = load i32*, i32** %t861, align 4
   %t340 = load i32, i32* %t862, align 4
   %t341 = sub i32 %t1179, %t340
   %t342 = add i32 %t341, 1
-  %t343 = getelementptr inbounds i32, i32* %t891, i32 %t342
+  %t343 = getelementptr inbounds i32, i32* %t889, i32 %t342
   %t892 = load i32, i32* %t343, align 4
   %t350 = load i32, i32* %t862, align 4
   %t351 = sdiv i32 %t337, %t350
-  %t893 = load i32*, i32** %t861, align 4
   %t345 = load i32, i32* %t862, align 4
-  %t346 = sub i32 %t1179, %t345
-  %t347 = add i32 %t346, 1
-  %t348 = getelementptr inbounds i32, i32* %t893, i32 %t347
-  store i32 %t351, i32* %t348, align 4
+  store i32 %t351, i32* %t343, align 4
   %t1185 = add i32 %t892, 0
   %t1162 = add i32 %t337, 0
   br label %B882
@@ -759,11 +741,9 @@ B913:
   store i32 1, i32* %t401, align 4
   %t402 = getelementptr inbounds [32 x i32], [32 x i32]* %t914, i32 0, i32 31
   store i32 290, i32* %t402, align 4
-  %t405 = getelementptr inbounds [32 x i32], [32 x i32]* %t914, i32 0, i32 0
   %t406 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t407 = call i32 @arrCopy(i32* %t405, i32* %t406)
-  %t409 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t410 = call i32 @revert(i32* %t409)
+  %t407 = call i32 @arrCopy(i32* %t371, i32* %t406)
+  %t410 = call i32 @revert(i32* %t406)
   br label %B918
 B918:                               	; preds = %B913
   %t1283 = add i32 0, 0
@@ -821,14 +801,11 @@ B932:                               	; preds = %B935, %B941
   %t436 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
   %t437 = call i32 @getMid(i32* %t436)
   call void @putint(i32 %t437)
-  %t440 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t441 = call i32 @getMost(i32* %t440)
+  %t441 = call i32 @getMost(i32* %t436)
   call void @putint(i32 %t441)
   %t444 = getelementptr inbounds [32 x i32], [32 x i32]* %t914, i32 0, i32 0
-  %t445 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t446 = call i32 @arrCopy(i32* %t444, i32* %t445)
-  %t448 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t449 = call i32 @bubblesort(i32* %t448)
+  %t446 = call i32 @arrCopy(i32* %t444, i32* %t436)
+  %t449 = call i32 @bubblesort(i32* %t436)
   br label %B942
 B942:                               	; preds = %B932
   %t1270 = add i32 0, 0
@@ -858,8 +835,7 @@ B944:                               	; preds = %B947, %B953
   %t461 = getelementptr inbounds [32 x i32], [32 x i32]* %t914, i32 0, i32 0
   %t462 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
   %t463 = call i32 @arrCopy(i32* %t461, i32* %t462)
-  %t465 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t466 = call i32 @insertsort(i32* %t465)
+  %t466 = call i32 @insertsort(i32* %t462)
   br label %B954
 B954:                               	; preds = %B944
   %t1264 = add i32 0, 0
@@ -889,8 +865,7 @@ B956:                               	; preds = %B959, %B965
   %t478 = getelementptr inbounds [32 x i32], [32 x i32]* %t914, i32 0, i32 0
   %t479 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
   %t480 = call i32 @arrCopy(i32* %t478, i32* %t479)
-  %t484 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t487 = call i32 @QuickSort(i32* %t484, i32 0, i32 31)
+  %t487 = call i32 @QuickSort(i32* %t479, i32 0, i32 31)
   br label %B966
 B966:                               	; preds = %B956
   %t1258 = add i32 0, 0
@@ -920,8 +895,7 @@ B968:                               	; preds = %B971, %B977
   %t498 = getelementptr inbounds [32 x i32], [32 x i32]* %t914, i32 0, i32 0
   %t499 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
   %t500 = call i32 @arrCopy(i32* %t498, i32* %t499)
-  %t502 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t503 = call i32 @calSum(i32* %t502, i32 4)
+  %t503 = call i32 @calSum(i32* %t499, i32 4)
   br label %B978
 B978:                               	; preds = %B968
   %t1252 = add i32 0, 0
@@ -951,8 +925,7 @@ B980:                               	; preds = %B983, %B989
   %t515 = getelementptr inbounds [32 x i32], [32 x i32]* %t914, i32 0, i32 0
   %t516 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
   %t517 = call i32 @arrCopy(i32* %t515, i32* %t516)
-  %t519 = getelementptr inbounds [32 x i32], [32 x i32]* %t915, i32 0, i32 0
-  %t520 = call i32 @avgPooling(i32* %t519, i32 3)
+  %t520 = call i32 @avgPooling(i32* %t516, i32 3)
   br label %B990
 B990:                               	; preds = %B980
   %t1246 = add i32 0, 0

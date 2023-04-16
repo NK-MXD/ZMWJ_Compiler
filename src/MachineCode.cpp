@@ -1183,7 +1183,9 @@ void MachineFunction::output() {
     for (auto iter : block_list) {
         iter->output();
         count += iter->getSize();
-        if (count > 160) {
+        // fix: RTFM
+        // fprintf(yyout, "\tcount = %d\n", count);
+        if (count > 100) {
             fprintf(yyout, "\tb .F%d\n", parent->getN());
             fprintf(yyout, ".LTORG\n");
             parent->printGlobal();
