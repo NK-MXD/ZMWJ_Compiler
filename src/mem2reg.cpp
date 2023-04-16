@@ -28,7 +28,7 @@ void Mem2Reg::execute(Function*f) {
                 // if (a->sym->dims.empty()) {  // 局部int变量
                 // 先将局部变量放到这里
                 auto se = dynamic_cast<IdentifierSymbolEntry*>(dynamic_cast<AllocaInstruction*>(i)->getSymbolEntry());
-                if(!se->isGlobal() && se->isLocal() && se->getType()->isInt()){
+                if(se->isLocal() && (se->getType()->isInt()||se->getType()->isFloat())){
                     alloca_ids.insert({dynamic_cast<AllocaInstruction*>(i), (int)alloca_ids.size()});
                     allocas.push_back(dynamic_cast<AllocaInstruction*>(i));//se
                     // std::cout<<i->getDef()->toStr()<<"\n";
@@ -79,19 +79,19 @@ void Mem2Reg::execute(Function*f) {
             // 这里的处理有点粗糙, 暂时先这样
             // fix: done
             // alloca 变量
-            auto operand = allocas[id]->getDef();
+            auto se = allocas[id]->getSymbolEntry();
             // phi 指令需要公共的变量作为最后值的存放位置
-            Operand* temp =new Operand(new TemporarySymbolEntry(((PointerType*)(operand->getType()))->getType(),
+            Operand* temp =new Operand(new TemporarySymbolEntry(se->getType(),
                                                 SymbolTable::getLabel()));
             //遍历定义了alloca变量的块的支配边界
             for (auto y : dom->getDominanceFrontier(x)) {
                 if (!y->isVisited()) {
                     y->setvisit(true);
                     // 这里插入的是i32变量
-                    SymbolEntry* temp = new TemporarySymbolEntry(
-                        TypeSystem::intType, SymbolTable::getLabel());
-                    Operand* dst = new Operand(temp);
-                    PhiInstruction* inst = new PhiInstruction(dst);
+                    // SymbolEntry* temp = new TemporarySymbolEntry(
+                    //     TypeSystem::intType, SymbolTable::getLabel());
+                    // Operand* dst = new Operand(temp);
+                    PhiInstruction* inst = new PhiInstruction(temp);
                     // if(y->begin()->isPhi()){
                     //     std::cout<<inst->getDef()->toStr()<<"\t"
                     //         <<y->begin()->getDef()->toStr()<<"\t";
