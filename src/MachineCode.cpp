@@ -306,7 +306,7 @@ int BinaryMInstruction::pattern_code()
         case MUL:
             return 0x06;
         default:
-            return 0x00;
+            return 0xff;
     }
 }
 void BinaryMInstruction::output() {
@@ -465,11 +465,12 @@ int LoadMInstruction::pattern_code()
         case LDR:
             return 0x08;
         default:
-            return 0x00;
+            return 0xff;
     }
 }
 void LoadMInstruction::output() {
     if (op == LoadMInstruction::LDR) {
+        //fprintf(yyout, "\n\t;NO :%d\n", this->getNo());
         fprintf(yyout, "\tldr ");
         this->def_list[0]->output();
         fprintf(yyout, ", ");
@@ -532,6 +533,71 @@ void LoadMInstruction::output() {
     }
 }
 
+void LoadMInstruction::output2terminal() {
+    if (op == LoadMInstruction::LDR) {
+        //fprintf(yyout, "\n\t;NO :%d\n", this->getNo());
+        printf( "\tldr ");
+        this->def_list[0]->output();
+        printf( ", ");
+
+        // Load immediate num, eg: ldr r1, =8
+        if (this->use_list[0]->isImm()) {
+            if (this->use_list[0]->isFloat()) {
+                float fval = this->use_list[0]->getFVal();
+                uint32_t temp = reinterpret_cast<uint32_t&>(fval);
+                printf( "=%u\n", temp);
+            } else {
+                printf( "=%lld\n", this->use_list[0]->getVal());
+            }
+            return;
+        }
+
+        // Load address
+        if (this->use_list[0]->isReg() || this->use_list[0]->isVReg())
+            printf( "[");
+
+        this->use_list[0]->output();
+        if (this->use_list.size() > 1) {
+            printf( ", ");
+            this->use_list[1]->output();
+        }
+
+        if (this->use_list[0]->isReg() || this->use_list[0]->isVReg())
+            printf( "]");
+        printf( "\n");
+
+    } else if (op == LoadMInstruction::VLDR) {
+        printf( "\tvldr.32 ");
+        this->def_list[0]->output();
+        printf( ", ");
+        // Load immediate num, eg: ldr r1, =8
+        if (this->use_list[0]->isImm()) {
+            if (this->use_list[0]->isFloat()) {
+                float fval = this->use_list[0]->getFVal();
+                uint32_t temp = reinterpret_cast<uint32_t&>(fval);
+                printf( "=%u\n", temp);
+            } else {
+                printf( "=%lld\n", this->use_list[0]->getVal());
+            }
+            return;
+        }
+
+        // Load address
+        if (this->use_list[0]->isReg() || this->use_list[0]->isVReg())
+            printf( "[");
+
+        this->use_list[0]->output();
+        if (this->use_list.size() > 1) {
+            printf( ", ");
+            this->use_list[1]->output();
+        }
+
+        if (this->use_list[0]->isReg() || this->use_list[0]->isVReg())
+            printf( "]");
+        printf( "\n");
+    }
+}
+
 StoreMInstruction::StoreMInstruction(MachineBlock* p,
                                      int op,
                                      MachineOperand* src1,
@@ -559,7 +625,7 @@ int StoreMInstruction::pattern_code()
         case STR:
             return 0x09;
         default:
-            return 0x00;
+            return 0xff;
     }
 }
 void StoreMInstruction::output() {
@@ -597,6 +663,41 @@ void StoreMInstruction::output() {
     }
 }
 
+void StoreMInstruction::output2terminal() {
+    if (op == StoreMInstruction::STR) {
+        printf( "\tstr ");
+        this->use_list[0]->output();
+        printf( ", ");
+        // store address
+        if (this->use_list[1]->isReg() || this->use_list[1]->isVReg())
+            printf( "[");
+        this->use_list[1]->output();
+        if (this->use_list.size() > 2) {
+            printf( ", ");
+            this->use_list[2]->output();
+        }
+        if (this->use_list[1]->isReg() || this->use_list[1]->isVReg())
+            printf( "]");
+        printf( "\n");
+    } else if (op == StoreMInstruction::VSTR) {
+        // TODO
+        printf( "\tvstr.32 ");
+        this->use_list[0]->output();
+        printf( ", ");
+        // store address
+        if (this->use_list[1]->isReg() || this->use_list[1]->isVReg())
+            printf( "[");
+        this->use_list[1]->output();
+        if (this->use_list.size() > 2) {
+            printf( ", ");
+            this->use_list[2]->output();
+        }
+        if (this->use_list[1]->isReg() || this->use_list[1]->isVReg())
+            printf( "]");
+        printf( "\n");
+    }
+}
+
 MovMInstruction::MovMInstruction(MachineBlock* p,
                                  int op,
                                  MachineOperand* dst,
@@ -628,7 +729,7 @@ int MovMInstruction::pattern_code()
         case VMOV:
             return 0x0b;
         default:
-            return 0x00;
+            return 0xff;
     }
 }
 void MovMInstruction::output() {

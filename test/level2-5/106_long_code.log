@@ -1,0 +1,3 @@
+test/level2-5/106_long_code.s: Assembler messages:
+test/level2-5/106_long_code.s:21: Error: bad immediate value for offset (4200)
+test/level2-5/106_long_code.s:48: Error: bad immediate value for offset (4108)
