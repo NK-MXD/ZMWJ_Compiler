@@ -372,24 +372,30 @@ void BinaryExpr::genCode() {
             if(cs->getValue()){
                 new UncondBrInstruction(trueBB, bb);
             }else{
-                expr1->falseList().push_back(new UncondBrInstruction(trueBB, bb));
+                BasicBlock *falsebb, *tempbb;
+                falsebb = new BasicBlock(func);
+                tempbb = new BasicBlock(func);
+                expr1->falseList().push_back(new UncondBrInstruction(falsebb, tempbb));
             }
         }else{
             expr1->genCode();
+            backPatch(expr1->trueList(), trueBB);
         }
-        backPatch(expr1->trueList(), trueBB);
         builder->setInsertBB(trueBB);
         // expr2->genCode();
-        // if(expr2->getSymbolEntry()->isConstant()){
-        //     ConstantSymbolEntry* cs = dynamic_cast<ConstantSymbolEntry*>(expr2->getSymbolEntry());
-        //     if(cs->getValue()){
-        //         expr1->trueList().push_back(new UncondBrInstruction(trueBB, bb));
-        //     }else{
-        //         expr1->falseList().push_back(new UncondBrInstruction(trueBB, bb));
-        //     }
-        // }else{
-        //     expr2->genCode();
-        // }
+        if(expr2->getSymbolEntry()->isConstant()){
+            ConstantSymbolEntry* cs = dynamic_cast<ConstantSymbolEntry*>(expr2->getSymbolEntry());
+            if(cs->getValue()){
+                expr2->trueList().push_back(new UncondBrInstruction(trueBB, builder->getInsertBB()));
+            }else{
+                BasicBlock *falsebb, *tempbb;
+                falsebb = new BasicBlock(func);
+                tempbb = new BasicBlock(func);
+                expr2->falseList().push_back(new UncondBrInstruction(falsebb, tempbb));
+            }
+        }else{
+            expr2->genCode();
+        }
         true_list = expr2->trueList();
         false_list = merge(expr1->falseList(), expr2->falseList());
     } else if (op == OR) {
@@ -623,15 +629,17 @@ void IfStmt::genCode() {
     if(cond->getSymbolEntry()->isConstant()){
         ConstantSymbolEntry* cs = dynamic_cast<ConstantSymbolEntry*>(cond->getSymbolEntry());
         if(cs->getValue()){
-            cond->trueList().push_back(new UncondBrInstruction(then_bb, builder->getInsertBB()));
+            //cond->trueList().push_back(new UncondBrInstruction(then_bb, builder->getInsertBB()));
+            new UncondBrInstruction(then_bb, builder->getInsertBB());
         }else{
-            cond->falseList().push_back(new UncondBrInstruction(end_bb, builder->getInsertBB()));
+            //cond->falseList().push_back(new UncondBrInstruction(end_bb, builder->getInsertBB()));
+            new UncondBrInstruction(end_bb, builder->getInsertBB());
         }
     }else{
         cond->genCode();
+        backPatch(cond->trueList(), then_bb);
+        backPatch(cond->falseList(), end_bb);
     }
-    backPatch(cond->trueList(), then_bb);
-    backPatch(cond->falseList(), end_bb);
 
     builder->setInsertBB(then_bb);
     thenStmt->genCode();
