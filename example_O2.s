@@ -24,7 +24,7 @@ set_a:
 	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
-.L47:
+.L57:
 	str r0, [fp, #-4]
 	mov r1, r0
 	ldr r0, addr_a0
@@ -41,7 +41,7 @@ set_b:
 	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
-.L49:
+.L59:
 	str r0, [fp, #-4]
 	mov r1, r0
 	ldr r0, addr_b0
@@ -58,7 +58,7 @@ set_d:
 	push {r3, r4, fp, lr}
 	mov fp, sp
 	sub sp, sp, #8
-.L51:
+.L61:
 	str r0, [fp, #-4]
 	mov r1, r0
 	ldr r0, addr_d0
@@ -74,7 +74,7 @@ set_d:
 main:
 	push {r3, r4, fp, lr}
 	mov fp, sp
-.L53:
+.L63:
 	ldr r1, =2
 	ldr r0, addr_a0
 	str r1, [r0]
@@ -86,11 +86,11 @@ main:
 	cmp r0, #0
 	movne r0, #1
 	moveq r0, #0
-	bne .L56
-	b .L58
-.L54:
-	b .L55
-.L55:
+	bne .L66
+	b .L68
+.L64:
+	b .L65
+.L65:
 	ldr r0, addr_a0
 	ldr r0, [r0]
 	bl putint
@@ -112,23 +112,23 @@ main:
 	cmp r0, #0
 	movne r0, #1
 	moveq r0, #0
-	bne .L65
-	b .L67
-.L56:
+	bne .L75
+	b .L77
+.L66:
 	mov r0, #1
 	bl set_b
 	cmp r0, #0
 	movne r0, #1
 	moveq r0, #0
-	bne .L54
-	b .L61
-.L58:
-	b .L55
-.L61:
-	b .L55
-.L63:
-	b .L64
-.L64:
+	bne .L64
+	b .L71
+.L68:
+	b .L65
+.L71:
+	b .L65
+.L73:
+	b .L74
+.L74:
 	ldr r0, addr_a0
 	ldr r0, [r0]
 	bl putint
@@ -142,6 +142,50 @@ main:
 	ldr r1, =2
 	ldr r0, addr_d0
 	str r1, [r0]
+	b .L85
+.L75:
+	mov r0, #1
+	bl set_b
+	cmp r0, #0
+	movne r0, #1
+	moveq r0, #0
+	bne .L73
+	b .L80
+.L77:
+	b .L74
+.L80:
+	b .L74
+.L83:
+	b .L84
+.L84:
+	ldr r0, addr_d0
+	ldr r0, [r0]
+	bl putint
+	mov r0, #32
+	bl putch
+	mov r0, #3
+	bl set_d
+	cmp r0, #0
+	movne r0, #1
+	moveq r0, #0
+	bne .L91
+	b .L93
+.L85:
+	mov r0, #3
+	bl set_d
+	cmp r0, #0
+	movne r0, #1
+	moveq r0, #0
+	bne .L83
+	b .L87
+.L87:
+	b .L84
+.L89:
+	ldr r1, =2
+	ldr r0, addr_d0
+	str r1, [r0]
+	b .L90
+.L90:
 	mov r0, #3
 	bl set_d
 	cmp r0, #0
@@ -152,50 +196,8 @@ main:
 	cmp r0, #0
 	movne r0, #1
 	moveq r0, #0
-	bne .L73
-	b .L77
-.L65:
-	mov r0, #1
-	bl set_b
-	cmp r0, #0
-	movne r0, #1
-	moveq r0, #0
-	bne .L63
-	b .L70
-.L67:
-	b .L64
-.L70:
-	b .L64
-.L73:
-	b .L74
-.L74:
-	ldr r0, addr_d0
-	ldr r0, [r0]
-	bl putint
-	mov r0, #32
-	bl putch
-	b .L81
-.L77:
-	b .L74
-.L79:
-	b .L80
-.L80:
-	ldr r0, addr_d0
-	ldr r0, [r0]
-	bl putint
-	mov r0, #32
-	bl putch
-	mov r0, #0
-	pop {r3, r4, fp, lr}
-	bx lr
-.L81:
-	mov r0, #3
-	bl set_d
-	cmp r0, #0
-	movne r0, #1
-	moveq r0, #0
-	bne .L79
-	b .L83
+	bne .L98
+	b .L103
 	b .F0
 .LTORG
 addr_a0:
@@ -205,8 +207,42 @@ addr_b0:
 addr_d0:
 	.word d
 .F0:
-.L83:
-	b .L80
+.L91:
+	ldr r0, =1
+	cmp r0, #0
+	movne r0, #1
+	moveq r0, #0
+	bne .L89
+	b .L96
+.L93:
+	b .L90
+.L96:
+	b .L90
+.L98:
+	ldr r1, =4
+	ldr r0, addr_d1
+	str r1, [r0]
+	b .L99
+.L99:
+	ldr r0, addr_d1
+	ldr r0, [r0]
+	bl putint
+	mov r0, #10
+	bl putch
+	mov r0, #0
+	pop {r3, r4, fp, lr}
+	bx lr
+.L100:
+	ldr r0, =1
+	cmp r0, #0
+	movne r0, #1
+	moveq r0, #0
+	bne .L98
+	b .L106
+.L103:
+	b .L100
+.L106:
+	b .L99
 
 addr_a1:
 	.word a

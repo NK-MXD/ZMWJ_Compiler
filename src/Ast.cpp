@@ -382,20 +382,22 @@ void BinaryExpr::genCode() {
             backPatch(expr1->trueList(), trueBB);
         }
         builder->setInsertBB(trueBB);
-        // expr2->genCode();
-        if(expr2->getSymbolEntry()->isConstant()){
-            ConstantSymbolEntry* cs = dynamic_cast<ConstantSymbolEntry*>(expr2->getSymbolEntry());
-            if(cs->getValue()){
-                expr2->trueList().push_back(new UncondBrInstruction(trueBB, builder->getInsertBB()));
-            }else{
-                BasicBlock *falsebb, *tempbb;
-                falsebb = new BasicBlock(func);
-                tempbb = new BasicBlock(func);
-                expr2->falseList().push_back(new UncondBrInstruction(falsebb, tempbb));
-            }
-        }else{
-            expr2->genCode();
-        }
+        expr2->genCode();
+        // m0419
+        // fix: 处理 if (set_d(3) && c) 这种情况, 不处理也行
+        // if(expr2->getSymbolEntry()->isConstant()){
+        //     ConstantSymbolEntry* cs = dynamic_cast<ConstantSymbolEntry*>(expr2->getSymbolEntry());
+        //     if(cs->getValue()){
+        //         expr2->trueList().push_back(new UncondBrInstruction(trueBB, builder->getInsertBB()));
+        //     }else{
+        //         BasicBlock *falsebb, *tempbb;
+        //         falsebb = new BasicBlock(func);
+        //         tempbb = new BasicBlock(func);
+        //         expr2->falseList().push_back(new UncondBrInstruction(falsebb, tempbb));
+        //     }
+        // }else{
+        //     expr2->genCode();
+        // }
         true_list = expr2->trueList();
         false_list = merge(expr1->falseList(), expr2->falseList());
     } else if (op == OR) {
@@ -410,18 +412,10 @@ void BinaryExpr::genCode() {
         }else{
             expr1->genCode();
         }
+        // expr1->genCode();
         backPatch(expr1->falseList(), trueBB);
         builder->setInsertBB(trueBB);
-        // if(expr2->getSymbolEntry()->isConstant()){
-        //     ConstantSymbolEntry* cs = dynamic_cast<ConstantSymbolEntry*>(expr2->getSymbolEntry());
-        //     if(cs->getValue()){
-        //         expr1->trueList().push_back(new UncondBrInstruction(trueBB, bb));
-        //     }else{
-        //         expr1->trueList().push_back(new UncondBrInstruction(trueBB, bb));
-        //     }
-        // }else{
-        //     expr2->genCode();
-        // }
+        // fix: 这里不管了, 没啥大问题
         expr2->genCode();
         true_list = merge(expr1->trueList(), expr2->trueList());
         false_list = expr2->falseList();
