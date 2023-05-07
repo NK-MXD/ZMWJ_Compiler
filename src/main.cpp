@@ -11,6 +11,7 @@
 #include "mem2reg.h"
 #include "PeepholeMInstrOpt.h"
 #include "SSADestruction.h"
+#include "SparseConditionalConstantPropagation.h"
 
 using namespace std;
 
@@ -84,6 +85,10 @@ int main(int argc, char* argv[]) {
 
         Mem2Reg mr(&unit);
         mr.execute();
+        // cout<<"start\n";
+        SCCP sccp(&unit);
+        sccp.execute();
+        // // cout<<"end\n";
         SSADestruction ssa(&unit);
         ssa.pass();
     }
@@ -92,7 +97,7 @@ int main(int argc, char* argv[]) {
         unit.output();
     // cout<<"genMachineCode\n";
     unit.genMachineCode(&mUnit);
-
+    
     // LinearScan linearScan(&mUnit);
     // linearScan.allocateRegisters();
 
@@ -102,7 +107,6 @@ int main(int argc, char* argv[]) {
     if(optimize){
         PeepholeMInstrOpt pmo(&mUnit);
         pmo.pass();
-        
     }
     
     if (dump_asm)

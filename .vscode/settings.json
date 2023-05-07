@@ -98,6 +98,9 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "*.inc": "cpp",
-        "xhash": "cpp"
-    }
+        "xhash": "cpp",
+        "shared_mutex": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

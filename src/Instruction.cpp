@@ -979,6 +979,7 @@ RetInstruction::RetInstruction(Operand* src, BasicBlock* insert_bb)
     : Instruction(RET, insert_bb) {
     if (src != nullptr) {
         operands.push_back(src);
+        // std::cout<<"return"<<src->toStr()<<std::endl;
         src->addUse(this);
     }
 }
@@ -988,6 +989,7 @@ void RetInstruction::replaceUse(Operand* old, Operand* new_) {
         operands[0]->removeUse(this);
         operands[0] = new_;
         new_->addUse(this);
+        // std::cout<<"returtru"<<new_->toStr()<<std::endl;
     }
 }
 
@@ -1879,7 +1881,7 @@ void FptosiInstruction::genMachineCode(AsmBuilder* builder) {
 SitofpInstruction::SitofpInstruction(Operand* dst,
                                      Operand* src,
                                      BasicBlock* insert_bb)
-    : Instruction(FPTOSI, insert_bb), dst(dst), src(src) {
+    : Instruction(SITOFP, insert_bb), dst(dst), src(src) {
     operands.push_back(dst);
     operands.push_back(src);
     dst->setDef(this);

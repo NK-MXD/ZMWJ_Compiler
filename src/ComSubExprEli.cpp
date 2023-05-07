@@ -1,4 +1,4 @@
-#include "../include/ComSubExprEli.h"
+#include "ComSubExprEli.h"
 #include <set>
 #include <algorithm>
 
@@ -10,7 +10,7 @@
 #define printCse(str) //
 #endif
 
-bool cmp_inst::operator()(Instruction *a, Instruction *b)
+bool cmp_inst::operator()(Instruction *a, Instruction *b) const
     {
         auto aops = a->getOpse();
         auto bops = b->getOpse();

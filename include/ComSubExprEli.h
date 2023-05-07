@@ -27,7 +27,7 @@
 
 struct cmp_inst
 {
-    bool operator()(Instruction *a, Instruction *b);
+    bool operator()(Instruction *a, Instruction *b) const;
 };
 
 class ComSubExprEli

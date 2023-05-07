@@ -25,10 +25,12 @@ void Operand::removeDef(Instruction* inst) {
 }
 
 void Operand::replaceAllUseWith(Operand *op) {
-
-    for(int i = 0; i < uses.size(); i++){
+    // use是动态变换的
+    std::vector<Instruction *> temp(uses);
+    for(int i = 0; i < temp.size(); i++){
         // fix: 让所有使用该operand的指令替换为op
         Instruction* inst = uses[i];
+        // std::cout<<inst->getInstName()<<"替换"<<this->toStr()<<" "<<op->toStr()<<std::endl;
         inst->replaceUse(this, op);
     }
 }

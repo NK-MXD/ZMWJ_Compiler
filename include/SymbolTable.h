@@ -72,6 +72,10 @@ class ConstantSymbolEntry : public SymbolEntry {
     ConstantSymbolEntry(Type* type);
     virtual ~ConstantSymbolEntry(){};
     double getValue() const;
+    void setValue(double v){ 
+        value = v;
+    };
+    void setType(Type* type) { this->type = type; };
     std::string getStrValue() const;
     std::string toStr();
     // You can add any function you need here.

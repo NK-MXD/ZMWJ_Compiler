@@ -1,5 +1,13 @@
 #include"mem2reg.h"
 
+#define DEBUG_SWITCH_M2R 0
+#if DEBUG_SWITCH_M2R
+#define printmr(str) \
+    std::cout << str << "\n";
+#else
+#define printmr(str) //
+#endif
+
 void Mem2Reg::execute() {
     this->dom = new dominatorTree(unit);
     this->dom->execute();
@@ -9,9 +17,12 @@ void Mem2Reg::execute() {
     // }
     std::vector<Function*> func = unit->get_functions();
     for(auto f = func.begin(); f != func.end(); f++){
+        printmr("=========start func mem2reg=========");
+        printmr((*f)->getSymPtr()->toStr());
         execute(*f);
+        printmr("=========end func mem2reg=========");
     }
-    // std::cout<<"结束 mem2reg all"<<std::endl;
+    printmr("==========end all=========");
 }
 
 // 0329m fix: 需要再次构建前驱后继关系
@@ -20,6 +31,7 @@ void Mem2Reg::execute(Function*f) {
     std::unordered_map<AllocaInstruction*, int> alloca_ids;  // 把alloca映射到整数，后面有好几个vector用这个做下标
     std::vector<AllocaInstruction*> allocas;
 
+    printmr("=========找到所有的alloca指令=========");
     // 找到所有的alloca指令
     for (auto it = f->begin(); it != f->end(); it++) {
         for (auto i = (*it)->begin(); i != (*it)->end(); i = i->getNext()) {
@@ -39,9 +51,9 @@ void Mem2Reg::execute(Function*f) {
             }
         }
     }
-    // std::cout<<"找到所有的alloca指令"<<std::endl;
-    // std::cout<<"allocas的大小: "<<allocas.size()<<std::endl;
+    printmr("allocas的大小: "<< allocas.size());
    
+    printmr("=========找到所有的store指令=========");
     // 找到所有的store指令
     std::vector<std::vector<BasicBlock *>> alloca_defs(alloca_ids.size());
     for (auto it = f->begin(); it != f->end(); it++) {
@@ -53,14 +65,14 @@ void Mem2Reg::execute(Function*f) {
                 // Instruction* storealloc = ;
                 // std::cout<<dynamic_cast<StoreInstruction*>(i)->getSrc()->toStr()<<"\n";
                 // std::cout<<dynamic_cast<StoreInstruction*>(i)->getDef()->getDef()<<"\n";
-                auto it = alloca_ids.find(dynamic_cast<AllocaInstruction*>(dynamic_cast<StoreInstruction*>(i)->getDef()->getDef())); //addr
+                auto it = alloca_ids.find(dynamic_cast<AllocaInstruction*>(dynamic_cast<StoreInstruction*>(i)->getAddr()->getDef())); //addr
                 if (it != alloca_ids.end()) {
                     alloca_defs[it->second].push_back(bb);//将每一个alloca对应的块插入
                 }//alloca_defs存储的是每一个alloca变量定义的块
             }
         }
     }
-    // std::cout<<"找到所有的store指令"<<std::endl;
+    printmr("=========mem2reg算法阶段1：放置phi节点=========");
 
     // mem2reg算法阶段1：放置phi节点
     // worklist定义在循环外面，只是为了减少申请内存的次数
@@ -116,9 +128,7 @@ void Mem2Reg::execute(Function*f) {
             }
         }
     } 
-
-    // std::cout<<"mem2reg算法阶段1：放置phi节点"<<std::endl;
-
+    printmr("=========mem2reg算法阶段2：变量重命名=========");
     // mem2reg算法阶段2：变量重命名，即删除Load，把对Load结果的引用换成对寄存器的引用，把Store改成寄存器赋值
     std::vector<std::pair<BasicBlock *, std::vector<Operand* >>> worklist2{
       {f->getEntry(), std::vector<Operand* >(alloca_ids.size(), new Operand(new ConstantSymbolEntry(TypeSystem::intType, 0)))}};// 这里暂时处理为nullptr, 之后将其进行更改为对应的未定义类
@@ -146,7 +156,7 @@ void Mem2Reg::execute(Function*f) {
                     auto x = dynamic_cast<StoreInstruction* >(i);
                     // fix: done
                     // std::cout<<dynamic_cast<StoreInstruction*>(i)->getDef()->getDef()<<"\n";
-                    auto it = alloca_ids.find(dynamic_cast<AllocaInstruction*>(dynamic_cast<StoreInstruction*>(i)->getDef()->getDef())); //addr
+                    auto it = alloca_ids.find(dynamic_cast<AllocaInstruction*>(dynamic_cast<StoreInstruction*>(i)->getAddr()->getDef())); //addr
                     if (it != alloca_ids.end()) {
                         // 将对应的alloca的变量/地址, 替换为store的新变量/地址
                         // fix: done
@@ -227,7 +237,7 @@ void Mem2Reg::execute(Function*f) {
     // 粗略实现: 默认当前块当中的所有phi指令都已经填充完毕了
     // 找到一个块当中的所有phi指令
     // fix3: 还有问题
-    // std::cout<<"mem2reg算法阶段3: 调整phi指令的顺序"<<std::endl;
+    printmr("=========mem2reg算法阶段3: 调整phi指令的顺序=========");
     std::list<PhiInstruction*> phi_queue;
     for(auto it = f->begin(); it != f->end(); it++){
         auto bb = *it;

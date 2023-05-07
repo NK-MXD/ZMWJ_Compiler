@@ -8,13 +8,7 @@
 #include "dominatorTree.h"
 #include "Instruction.h"
 
-// #define DEBUG_SWITCH_M2R 1
-// #if DEBUG_SWITCH_M2R
-// #define printmr(str) \
-//     std::cout << str << "\n";
-// #else
-// #define printmr(str) //
-// #endif
+
 
 class Mem2Reg
 {
